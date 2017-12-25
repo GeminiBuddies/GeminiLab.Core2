@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon />
+    <Win32Resource />
+    <Description>GeminiLab Corelib</Description>
+    <Authors>Gemini Laboratory</Authors>
+    <Company>Gemini Laboratory</Company>
+    <Product>GeminiLab.Core2</Product>
+    <AssemblyVersion>0.9.*</AssemblyVersion>
+    <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
+    <Copyright>Copyright © Gemini Laboratory 2017</Copyright>
+    <FileVersion>0.9.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System">
+      <HintPath>System</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
