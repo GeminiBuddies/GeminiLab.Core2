@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace GeminiLab.Core2.Collections {
-    public static class Ext {
+namespace GeminiLab.Core2 {
+    public static class Extensions {
         public static IEnumerable<T> Times<T>(this int v, Func<T> fn) {
             if (fn == null) throw new ArgumentNullException(nameof(fn));
             if (v < 0) throw new ArgumentOutOfRangeException(nameof(v));

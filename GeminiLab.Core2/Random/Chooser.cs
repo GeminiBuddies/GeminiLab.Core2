@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GeminiLab.Core2.Random {
     // It's an infinity sequence, be careful when using it as IEnumerable
@@ -47,5 +48,13 @@ namespace GeminiLab.Core2.Random {
     public class Chooser<TValue> : Chooser<TValue, Mt19937S> {
         public Chooser(IList<TValue> values) : base(values) { }
         public Chooser(IList<TValue> values, int seed) : base(values, seed) { }
+    }
+
+    public static class Chooser {
+        public static Chooser<T> Make<T>(IEnumerable<T> value) {
+            if (value == null) throw new System.ArgumentNullException(nameof(value));
+
+            return value is IList<T> ilist ? new Chooser<T>(ilist) : new Chooser<T>(value.ToArray());
+        }
     }
 }
