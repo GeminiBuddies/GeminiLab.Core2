@@ -5,10 +5,6 @@ using SR = System.Random;
 
 namespace GeminiLab.Core2.Random {
     public static class RandomExtensions {
-        private static readonly SR _defaultSr = new SR(
-            Environment.CurrentManagedThreadId ^ (Environment.TickCount << 16) ^ DateTime.UtcNow.ToString("fffssmmHHyyyyMMdd").GetHashCode()
-        );
-
         public static double NextDouble(this IRNG<uint> rng) => rng.Next() * (1.0 / uint.MaxValue);
         public static double NextDouble(this IRNG<int> rng) => unchecked((uint)rng.Next()) * (1.0 / uint.MaxValue);
         public static double NextDouble(this IRNG<ulong> rng) => rng.Next() * (1.0 / ulong.MaxValue);
@@ -154,10 +150,6 @@ namespace GeminiLab.Core2.Random {
             var rv = new byte[count];
             rng.Fill(rv);
             return rv;
-        }
-
-        public static T Choose<T>(this IList<T> source) {
-            return source[_defaultSr.Next(0, source.Count)];
         }
     }
 }

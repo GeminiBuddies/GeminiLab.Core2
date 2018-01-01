@@ -3,45 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace GeminiLab.Core2.Random {
-    // It's an infinity sequence, be careful when using it as IEnumerable
-    // Do not try getting and keeping more than one enumerators of any instance of this class.
-    // Do not reset enumerators of any instance of this class. It does not works.
-    // Use an instance of this class as IEnumerable<TValue> only when you do not use this instance directly.
-    public class Chooser<TValue, TRNG> : IPRNG<TValue, int>, IEnumerable<TValue> where TRNG : IPRNG<int>, new() {
-        private readonly TRNG _rng;
+    public class Chooser<TValue, TRNG> : IPRNG<TValue, int>, IInfiniteEnumerable<TValue> where TRNG : IPRNG<int>, new() {
+        private int _seed;
         private readonly IList<TValue> _values;
         private readonly int _count;
+        private readonly ChooserEnumerator _defaultEnumerator;
 
-        public Chooser(IList<TValue> values) {
-            _rng = new TRNG();
+        public Chooser(IList<TValue> values) : this(values, DefaultSr.Sr.Next(int.MinValue, int.MaxValue)) { }
+        public Chooser(IList<TValue> values, int seed) {
+            _seed = seed;
             _values = values;
             _count = values.Count;
+
+            _defaultEnumerator = new ChooserEnumerator(this);
         }
 
-        public Chooser(IList<TValue> values, int seed) : this(values) {
-            Seed(seed);
+        public IInfiniteEnumerator<TValue> GetEnumerator() => new ChooserEnumerator(this);
+
+        public TValue Next() => _defaultEnumerator.GetNext();
+        public void Reset() => _defaultEnumerator.Reset();
+
+        public void Seed(int seed) {
+            _seed = seed;
+            _defaultEnumerator.Reset();
         }
 
-        public IEnumerator<TValue> GetEnumerator() => new ChooserEnumerator { Mother = this };
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        private class ChooserEnumerator : IInfiniteEnumerator<TValue> {
+            private readonly Chooser<TValue, TRNG> _mother;
+            private readonly TRNG _rng;
 
-        public TValue Next() => _values[_rng.Next(_count)];
-        public void Seed(int seed) => _rng.Seed(seed);
+            internal ChooserEnumerator(Chooser<TValue, TRNG> mother) {
+                _mother = mother;
 
-        private class ChooserEnumerator : IEnumerator<TValue> {
-            private TValue _v;
-            public Chooser<TValue, TRNG> Mother;
-
-            public TValue Current => _v;
-            object IEnumerator.Current => Current;
-
-            public bool MoveNext() {
-                _v = Mother.Next();
-                return true;
+                _rng = new TRNG();
+                _rng.Seed(_mother._seed);
             }
 
-            public void Reset() { }
-            public void Dispose() { }
+            public TValue GetNext() => _mother._values[_rng.Next(_mother._count)];
+            public void Reset() => _rng.Seed(_mother._seed);
         }
     }
 
@@ -55,6 +54,10 @@ namespace GeminiLab.Core2.Random {
             if (value == null) throw new System.ArgumentNullException(nameof(value));
 
             return value is IList<T> ilist ? new Chooser<T>(ilist) : new Chooser<T>(value.ToArray());
+        }
+
+        public static T Choose<T>(this IList<T> source) {
+            return source[DefaultSr.Sr.Next(0, source.Count)];
         }
     }
 }
