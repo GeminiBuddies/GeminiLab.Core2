@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GeminiLab.Core2 {
-    #region "support classes"
+    #region support classes
     internal class InfiniteEnumerableSelect<TSource, TResult> : IInfiniteEnumerable<TResult> {
         internal IInfiniteEnumerable<TSource> Source;
         internal Func<TSource, TResult> Selector;
@@ -81,6 +82,35 @@ namespace GeminiLab.Core2 {
             }
         }
     }
+
+    internal class InfiniteEnumerableSwap<T> : IInfiniteEnumerable<IEnumerable<T>> {
+        internal IInfiniteEnumerable<T>[] Source;
+
+        public IInfiniteEnumerator<IEnumerable<T>> GetEnumerator() => new InfiniteEnumerableSwapEnumerator(this);
+
+        public class InfiniteEnumerableSwapEnumerator : IInfiniteEnumerator<IEnumerable<T>> {
+            private readonly InfiniteEnumerableSwap<T> _mother;
+            private readonly IInfiniteEnumerator<T>[] _en;
+            private readonly int _sourceLength;
+
+            public IEnumerable<T> GetNext() {
+                for (int i = 0; i < _sourceLength; ++i) yield return _en[i].GetNext();
+            }
+
+            public void Reset() {
+                for (int i = 0; i < _sourceLength; ++i) _en[i] = _mother.Source[i].GetEnumerator();
+            }
+
+            internal InfiniteEnumerableSwapEnumerator(InfiniteEnumerableSwap<T> mother) {
+                _mother = mother;
+                
+                _sourceLength = _mother.Source.Length;
+                _en = new IInfiniteEnumerator<T>[_sourceLength];
+
+                Reset();
+            }
+        }
+    }
     #endregion
 
     public static class InfiniteEnumerable {
@@ -110,6 +140,13 @@ namespace GeminiLab.Core2 {
             if (content == null) throw new ArgumentNullException(nameof(content));
 
             return new InfiniteEnumerableAppendHead<T> { Source = seq, Head = content };
+        }
+
+        public static IInfiniteEnumerable<IEnumerable<T>> Swap<T>(this IEnumerable<IInfiniteEnumerable<T>> source) {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            var sourceArray = source as IInfiniteEnumerable<T>[] ?? source.ToArray();
+
+            return new InfiniteEnumerableSwap<T> { Source = sourceArray };
         }
     }
 }

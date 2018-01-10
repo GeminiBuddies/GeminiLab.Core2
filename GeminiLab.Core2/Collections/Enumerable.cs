@@ -59,12 +59,14 @@ namespace GeminiLab.Core2.Collections {
             var en = source.GetEnumerator();
 
             for (int i = 0; i < start; ++i) {
-                if (!en.MoveNext()) yield break;
+                if (en.MoveNext()) continue;
+
+                en.Dispose(); yield break;
             }
 
             for (int i = 0; i < length; ++i) {
-                if (!en.MoveNext()) yield break;
-                yield return en.Current;
+                if (en.MoveNext()) yield return en.Current;
+                else { en.Dispose(); yield break; }
             }
         }
 
