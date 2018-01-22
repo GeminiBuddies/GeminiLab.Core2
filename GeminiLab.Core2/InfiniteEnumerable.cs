@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace GeminiLab.Core2 {
@@ -103,10 +104,44 @@ namespace GeminiLab.Core2 {
 
             internal InfiniteEnumerableSwapEnumerator(InfiniteEnumerableSwap<T> mother) {
                 _mother = mother;
-                
+
                 _sourceLength = _mother.Source.Length;
                 _en = new IInfiniteEnumerator<T>[_sourceLength];
 
+                Reset();
+            }
+        }
+    }
+
+    internal class InfiniteEnumerablePrefixSum<T> : IInfiniteEnumerable<T> {
+        internal IInfiniteEnumerable<T> Source;
+        internal Func<T, T, T> Adder;
+
+        public IInfiniteEnumerator<T> GetEnumerator() => new InfiniteEnumerablePrefixSumEnumerator(Source, Adder);
+
+        public class InfiniteEnumerablePrefixSumEnumerator : IInfiniteEnumerator<T> {
+            private bool _first;
+            private T _accumulator;
+            private IInfiniteEnumerator<T> _en;
+            private readonly IInfiniteEnumerable<T> _source;
+            private readonly Func<T, T, T> _adder;
+
+            public T GetNext() {
+                if (!_first) return _accumulator = _adder(_accumulator, _en.GetNext());
+
+                _first = false;
+                return _accumulator = _en.GetNext();
+            }
+
+            public void Reset() {
+                _first = true;
+                _accumulator = default(T);
+                _en = _source.GetEnumerator();
+            }
+
+            public InfiniteEnumerablePrefixSumEnumerator(IInfiniteEnumerable<T> source, Func<T, T, T> adder) {
+                _source = source ?? throw new ArgumentNullException(nameof(source));
+                _adder = adder ?? throw new ArgumentNullException(nameof(adder));
                 Reset();
             }
         }
@@ -147,6 +182,10 @@ namespace GeminiLab.Core2 {
             var sourceArray = source as IInfiniteEnumerable<T>[] ?? source.ToArray();
 
             return new InfiniteEnumerableSwap<T> { Source = sourceArray };
+        }
+
+        public static IInfiniteEnumerable<T> PrefixSum<T>(this IInfiniteEnumerable<T> source, Func<T, T, T> adder) {
+            return new InfiniteEnumerablePrefixSum<T> { Source = source, Adder = adder };
         }
     }
 }
