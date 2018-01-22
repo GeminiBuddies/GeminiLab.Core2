@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -59,5 +58,7 @@ namespace GeminiLab.Core2.Random {
         public static T Choose<T>(this IList<T> source) {
             return source[DefaultSr.Sr.Next(0, source.Count)];
         }
+
+        public static Chooser<T> MakeChooser<T>(this IEnumerable<T> source) => Make(source);
     }
 }
