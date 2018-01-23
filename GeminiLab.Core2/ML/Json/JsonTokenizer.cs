@@ -1,6 +1,4 @@
 #define LITERAL_CASE_INSENSITIVE
-#define FLOAT_SUPPORT
-// #define HEX_SUPPORT
 
 using System.Collections.Generic;
 
@@ -56,18 +54,6 @@ namespace GeminiLab.Core2.ML.Json {
         public static bool IsLiteralCaseInsensitive = false;
 #endif
 
-#if FLOAT_SUPPORT
-        public static bool IsFloatSupported = true;
-#else
-        public static bool IsFloatSupported = false;
-#endif
-
-#if HEX_SUPPORT
-        public static bool IsHexSupported = true;
-#else
-        public static bool IsHexSupported = false;
-#endif
-
         // contract: a token with type "JsonTokenType.Error" is always the last token returned.
         public static IEnumerable<JsonToken> GetTokens(string src) {
             int len = src.Length;
@@ -111,12 +97,7 @@ namespace GeminiLab.Core2.ML.Json {
                         else if (tokenStr == "true") yield return new JsonToken(JsonTokenType.LiteralTrue, tokenStr, r, lastc);
                         else if (tokenStr == "false") yield return new JsonToken(JsonTokenType.LiteralFalse, tokenStr, r, lastc);
 #endif
-
-#if FLOAT_SUPPORT
                         else if (int.TryParse(tokenStr, out int _) || double.TryParse(tokenStr, out double _)) {
-#else 
-                        else if (int.TryParse(tokenStr, out int _)) {
-#endif
                             yield return new JsonToken(JsonTokenType.Number, tokenStr, r, lastc);
                         } else {
                             yield return new JsonToken(JsonTokenType.Error, tokenStr, r, lastc);
@@ -166,6 +147,4 @@ namespace GeminiLab.Core2.ML.Json {
             }
         }
     }
-
-
 }
