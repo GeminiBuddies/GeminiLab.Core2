@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
+
 using GeminiLab.Core2.Collections;
 
 namespace GeminiLab.Core2.ML.Json {
@@ -23,7 +21,7 @@ namespace GeminiLab.Core2.ML.Json {
 
     public sealed class JsonObject : JsonValue {
         public IEnumerable<JsonObjectKeyValuePair> Values { get; }
-        
+
         // some (and clr) don't like tuples, make them happy
         public JsonObject(IEnumerable<JsonObjectKeyValuePair> values) {
             Values = values;
@@ -68,12 +66,12 @@ namespace GeminiLab.Core2.ML.Json {
         }
 
         internal JsonNumber(string value) {
-            if (value.Contains(".")) {
+            if (int.TryParse(value, out int vint)) {
+                IsFloat = false;
+                ValueInt = vint;
+            } else {
                 IsFloat = true;
                 ValueFloat = double.Parse(value);
-            } else {
-                IsFloat = false;
-                ValueInt = int.Parse(value);
             }
         }
 
