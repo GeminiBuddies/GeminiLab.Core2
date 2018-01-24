@@ -3,10 +3,7 @@
 using System.Collections.Generic;
 
 namespace GeminiLab.Core2.ML.Json {
-    public static partial class JsonTokenizer { }
-    public sealed partial class JsonToken { }
-
-    public enum JsonTokenType {
+    internal enum JsonTokenType {
         LBrace, // {
         RBrace, // }
         LBracket, // [
@@ -21,7 +18,7 @@ namespace GeminiLab.Core2.ML.Json {
         Error
     }
 
-    partial class JsonToken {
+    internal sealed class JsonToken {
         public JsonTokenType Type;
         public string Value;
         public int Row;
@@ -39,7 +36,7 @@ namespace GeminiLab.Core2.ML.Json {
         }
     }
 
-    partial class JsonTokenizer {
+    internal static class JsonTokenizer {
 #if LITERAL_CASE_INSENSITIVE
         public static bool IsLiteralCaseInsensitive = true;
 #else
