@@ -3,18 +3,10 @@
 using System.Collections.Generic;
 
 namespace GeminiLab.Core2.ML.Json {
-
-#if DEBUG
     public static partial class JsonTokenizer { }
     public sealed partial class JsonToken { }
 
     public enum JsonTokenType {
-#else
-    internal static partial class JsonTokenizer { }
-    internal sealed partial class JsonToken { }
-
-    internal enum JsonTokenType {
-#endif
         LBrace, // {
         RBrace, // }
         LBracket, // [
