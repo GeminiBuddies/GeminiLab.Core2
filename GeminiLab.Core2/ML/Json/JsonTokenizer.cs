@@ -59,7 +59,7 @@ namespace GeminiLab.Core2.ML.Json {
                         yield break;
                     }
 
-                    if (curr == '\"') {
+                    if (curr == '\"' && src[i - 1] != '\\') {
                         yield return new JsonToken(JsonTokenType.String, src.Substring(lastpos + 1, i - lastpos - 1), r, lastc);
 
                         inString = false;

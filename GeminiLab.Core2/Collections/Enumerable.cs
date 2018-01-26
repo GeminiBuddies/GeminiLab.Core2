@@ -80,6 +80,18 @@ namespace GeminiLab.Core2.Collections {
             int count = startIndex;
             return source.ToDictionary(any => count++);
         }
+
+        public static IEnumerable<T> Slice<T>(this T[] source, int start, int length) {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            int arrayLength = source.Length;
+            if (start < 0 || start >= arrayLength) throw new ArgumentOutOfRangeException(nameof(start));
+            if (length <= 0 || start + length > arrayLength) throw new ArgumentOutOfRangeException(nameof(length));
+
+            for (int i = 0; i < length; ++i) yield return source[start + length];
+        }
+         
+        public static IEnumerable<T> Slice<T>(this T[] source, int start) => Slice(source, start, source.Length - start);
     }
 
     public static class EnumerableOfString {
