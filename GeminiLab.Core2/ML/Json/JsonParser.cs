@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
-
 
 namespace GeminiLab.Core2.ML.Json {
     public static class JsonParser {
@@ -23,7 +20,7 @@ namespace GeminiLab.Core2.ML.Json {
             case JsonTokenType.LiteralNull:
                 return new JsonNull();
             case JsonTokenType.String:
-                return new JsonString(tok.Value); // Todo: escape chars
+                return new JsonString(JsonEscapeCharsConverter.Decode(tok.Value));
             case JsonTokenType.Number:
                 return new JsonNumber(tok.Value);
             /*
@@ -87,7 +84,7 @@ namespace GeminiLab.Core2.ML.Json {
         private static JsonString parseJsonString(JsonTokenQueue queue) {
             var tok = queue.ReadNoErrorOrEof();
             if (tok.Type != JsonTokenType.String) throw new JsonParsingUnexpectedTokenException(tok);
-            return new JsonString(tok.Value); // Todo: escape chars
+            return new JsonString(JsonEscapeCharsConverter.Decode(tok.Value));
         }
 
         public static JsonValue Parse(string value) {
