@@ -4,55 +4,55 @@ using System.Linq;
 
 namespace GeminiLab.Core2.ML.Json {
     internal static class JsonEscapeCharsConverter {
-        internal static string Decode(string src) {
-            int length = src.Length;
-            var sourceArray = src.ToCharArray();
+        private static readonly byte[] DecodeTable = {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x22, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2f,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5c, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x00,
+            0x00, 0x00, 0x0d, 0x00, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        };
+
+        private static readonly byte[] EncodeTable = {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x62, 0x74, 0x6e, 0x00, 0x66, 0x72, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x22, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2f,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5c, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        };
+
+        internal static string Decode(string source) {
+            int length = source.Length;
             var sb = new StringBuilder(length / 4); // not so likely to be shorter than this.
 
             for (int i = 0; i < length; ++i) {
-                if (sourceArray[i] == '\\') {
+                if (source[i] == '\\') {
                     if (i + 1 == length) throw new Exception(); // todo: write a new exception class
 
-                    switch (sourceArray[i + 1]) {
-                    case '\"':
-                    case '\\':
-                    case '/':
-                        sb.Append(sourceArray[i + 1]);
-                        break;
-                    case 'b':
-                        sb.Append('\b');
-                        break;
-                    case 'f':
-                        sb.Append('\f');
-                        break;
-                    case 'n':
-                        sb.Append('\n');
-                        break;
-                    case 'r':
-                        sb.Append('\r');
-                        break;
-                    case 't':
-                        sb.Append('\t');
-                        break;
-                    case 'u':
+                    if (source[i + 1] < 128 && DecodeTable[source[i + 1]] != 0) {
+                        sb.Append((char)DecodeTable[source[i + 1]]);
+                        i += 1;
+                    } else if (source[i + 1] == 'u') {
                         if (i + 5 >= length) throw new Exception();
 
                         int unicode = 0;
                         for (int it = i + 2; it < i + 6; ++it) {
-                            if (!Strings.DigitHex.Contains(sourceArray[it])) throw new Exception();
-                            unicode = unicode * 16 + (sourceArray[it] < '9' ? sourceArray[it] - '0' : (sourceArray[it] & 0xDF) - 'A' + 10);
+                            if (!Strings.DigitHex.Contains(source[it])) throw new Exception();
+                            unicode = unicode * 16 + (source[it] < '9' ? source[it] - '0' : (source[it] & 0xDF) - 'A' + 10);
                         }
 
-                        sb.Append((char) unicode);
-                        break;
-                    default:
+                        sb.Append((char)unicode);
+                        i += 5;
+                    } else {
                         throw new Exception();
                     }
-
-                    if (sourceArray[i + 1] == 'u') i += 5;
-                    else i += 1;
                 } else {
-                    sb.Append(sourceArray[i]);
+                    sb.Append(source[i]);
                 }
             }
 
@@ -60,11 +60,37 @@ namespace GeminiLab.Core2.ML.Json {
         }
 
         internal static string Encode(string source) {
-            throw new NotImplementedException();
+            int length = source.Length;
+            var sb = new StringBuilder(length);
+
+            for (int i = 0; i < length; ++i) {
+                if (source[i] > 128 || EncodeTable[source[i]] == 0) sb.Append(source[i]);
+                else {
+                    sb.Append('\\');
+                    sb.Append((char)EncodeTable[source[i]]);
+                }
+            }
+
+            return sb.ToString();
         }
 
         internal static string EncodeToAscii(string source) {
-            throw new NotImplementedException();
+            int length = source.Length;
+            var sb = new StringBuilder(length);
+
+            for (int i = 0; i < length; ++i) {
+                if (source[i] > 128) {
+                    sb.Append("\\u");
+                    sb.Append(string.Format("{0:x4}", source[i]));
+                } else if (EncodeTable[source[i]] == 0) {
+                    sb.Append(source[i]);
+                } else {
+                    sb.Append('\\');
+                    sb.Append((char)EncodeTable[source[i]]);
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }
