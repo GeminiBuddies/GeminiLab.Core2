@@ -18,7 +18,7 @@ namespace GeminiLab.Core2.ML.Json {
     }
 
     public abstract class JsonValue {
-        internal abstract void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target);
+        internal abstract void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target);
 
         internal static void MakeIndent(StringBuilder sb, int cnt) => sb.Append(' ', cnt * 4);
 
@@ -55,7 +55,7 @@ namespace GeminiLab.Core2.ML.Json {
             Values = values;
         }
 
-        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
             if (!Values.Any()) {
                 target.Append("{}");
                 return;
@@ -100,7 +100,7 @@ namespace GeminiLab.Core2.ML.Json {
             Values = values;
         }
 
-        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
             if (!Values.Any()) {
                 target.Append("[]");
                 return;
@@ -139,7 +139,7 @@ namespace GeminiLab.Core2.ML.Json {
             Value = value;
         }
 
-        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
             target.Append('\"');
             target.Append(asciiOnly ? JsonEscapeCharsConverter.EncodeToAscii(Value) : JsonEscapeCharsConverter.Encode(Value));
             target.Append('\"');
@@ -171,7 +171,7 @@ namespace GeminiLab.Core2.ML.Json {
             }
         }
 
-        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
             if (IsFloat) target.Append(ValueFloat);
             else target.Append(ValueInt);
         }
@@ -184,13 +184,13 @@ namespace GeminiLab.Core2.ML.Json {
             Value = value;
         }
 
-        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
             target.Append(Value ? "true" : "false");
         }
     }
 
     public sealed class JsonNull : JsonValue {
-        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
             target.Append("null");
         }
     }
