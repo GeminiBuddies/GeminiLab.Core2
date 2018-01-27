@@ -1,21 +1,49 @@
 using System.Collections.Generic;
 using System.Linq;
-
-using GeminiLab.Core2.Collections;
+using System.Text;
 
 namespace GeminiLab.Core2.ML.Json {
-    public abstract class JsonValue {
-        /// <summary>output the minimized string.</summary>
-        public abstract override string ToString();
+    public struct JsonStringifyConfig {
+        public bool Spaces;
+        public bool ExpandObjects;
+
+        public JsonStringifyConfig(bool spaces, bool expandObjects) {
+            Spaces = spaces;
+            ExpandObjects = expandObjects;
+        }
+
+        public static JsonStringifyConfig Minimized { get; } = new JsonStringifyConfig(false, false);
+        public static JsonStringifyConfig SingleLine { get; } = new JsonStringifyConfig(true, false);
+        public static JsonStringifyConfig Prettified { get; } = new JsonStringifyConfig(true, true);
     }
 
-    public struct JsonObjectKeyValuePair {
-        public JsonString Key { get; }
-        public JsonValue Value { get; }
+    public abstract class JsonValue {
+        internal abstract void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target);
 
-        public JsonObjectKeyValuePair(JsonString key, JsonValue value) {
-            Key = key;
-            Value = value;
+        internal static void MakeIndent(StringBuilder sb, int cnt) => sb.Append(' ', cnt * 4);
+
+        public sealed override string ToString() => ToString(false);
+
+        public string ToString(bool asciiOnly) {
+            var sb = new StringBuilder();
+
+            Stringify(JsonStringifyConfig.SingleLine, asciiOnly, 0, sb);
+            return sb.ToString();
+        }
+
+        public string ToStringPrettified(bool asciiOnly) {
+            var sb = new StringBuilder();
+
+            Stringify(JsonStringifyConfig.Prettified, asciiOnly, 0, sb);
+            sb.Append('\n');
+            return sb.ToString();
+        }
+
+        public string ToStringMinimized(bool asciiOnly) {
+            var sb = new StringBuilder();
+
+            Stringify(JsonStringifyConfig.Minimized, asciiOnly, 0, sb);
+            return sb.ToString();
         }
     }
 
@@ -27,7 +55,42 @@ namespace GeminiLab.Core2.ML.Json {
             Values = values;
         }
 
-        public override string ToString() => "{" + Values.Select(val => val.Key.ToString() + ":" + val.Value.ToString()).JoinBy(",") + "}";
+        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+            if (!Values.Any()) {
+                target.Append("{}");
+                return;
+            }
+            
+            string head = config.Spaces ? "{ " : "{";
+            string seperator = config.Spaces ? ", " : ",";
+            string colon = config.Spaces ? ": " : ":";
+            string tail = config.Spaces ? " }" : "}";
+
+            target.Append(config.ExpandObjects ? "{\n" : head);
+            
+            bool first = true;
+            foreach (var i in Values) {
+                if (!first) {
+                    target.Append(config.ExpandObjects ? ",\n" : seperator);
+                } else {
+                    first = false;
+                }
+
+                if (config.ExpandObjects) MakeIndent(target, indent + 1);
+
+                i.Key.Stringify(config, asciiOnly, indent, target);
+                target.Append(colon);
+                i.Value.Stringify(config, asciiOnly, indent + 1, target);
+            }
+
+            if (config.ExpandObjects) {
+                target.Append('\n');
+                MakeIndent(target, indent);
+                target.Append('}');
+            } else {
+                target.Append(tail);
+            }
+        }
     }
 
     public sealed class JsonArray : JsonValue {
@@ -37,7 +100,36 @@ namespace GeminiLab.Core2.ML.Json {
             Values = values;
         }
 
-        public override string ToString() => "[" + Values.Select(val => val.ToString()).JoinBy(",") + "]";
+        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+            if (!Values.Any()) {
+                target.Append("[]");
+                return;
+            }
+
+            bool expandIt = config.ExpandObjects && Values.Any(x => x is JsonObject);
+
+            string head = config.Spaces ? "[ " : "[";
+            string seperator = config.Spaces ? ", " : ",";
+            string tail = config.Spaces ? " ]" : "]";
+
+            target.Append(expandIt ? "[\n" : head);
+
+            bool first = true;
+            foreach (var i in Values) {
+                if (first) first = false; else target.Append(expandIt ? ",\n" : seperator);
+
+                if (expandIt) MakeIndent(target, indent + 1);
+                i.Stringify(config, asciiOnly, indent + 1, target);
+            }
+
+            if (expandIt) {
+                target.Append('\n');
+                MakeIndent(target, indent);
+                target.Append(']');
+            } else {
+                target.Append(tail);
+            }
+        }
     }
 
     public sealed class JsonString : JsonValue {
@@ -47,7 +139,11 @@ namespace GeminiLab.Core2.ML.Json {
             Value = value;
         }
 
-        public override string ToString() => "\"" + Value + "\"";
+        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+            target.Append('\"');
+            target.Append(asciiOnly ? JsonEscapeCharsConverter.EncodeToAscii(Value) : JsonEscapeCharsConverter.Encode(Value));
+            target.Append('\"');
+        }
     }
 
     public sealed class JsonNumber : JsonValue {
@@ -75,7 +171,10 @@ namespace GeminiLab.Core2.ML.Json {
             }
         }
 
-        public override string ToString() => IsFloat ? ValueFloat.ToString() : ValueInt.ToString();
+        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+            if (IsFloat) target.Append(ValueFloat);
+            else target.Append(ValueInt);
+        }
     }
 
     public sealed class JsonBool : JsonValue {
@@ -85,10 +184,14 @@ namespace GeminiLab.Core2.ML.Json {
             Value = value;
         }
 
-        public override string ToString() => Value ? "true" : "false";
+        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+            target.Append(Value ? "true" : "false");
+        }
     }
 
     public sealed class JsonNull : JsonValue {
-        public override string ToString() => "null";
+        internal override void Stringify(in JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+            target.Append("null");
+        }
     }
 }

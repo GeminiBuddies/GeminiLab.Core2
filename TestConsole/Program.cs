@@ -4,13 +4,12 @@ using GeminiLab.Core2.ML.Json;
 namespace TestConsole {
     class Program {
         public static void Main(string[] args) {
-            Console.WriteLine(JsonParser.Parse("{\"a\":\"\\u00ec\"}"));
-
-            /*
             var str = Console.In.ReadToEnd();
 
-            Console.WriteLine(JsonParser.Parse(str).ToString());
-            */
+            var jsonValue = JsonParser.Parse(str);
+            Console.WriteLine(jsonValue.ToString());
+            Console.WriteLine(jsonValue.ToStringMinimized(false));
+            Console.WriteLine(jsonValue.ToStringPrettified(false));
         }
     }
 }
