@@ -1,6 +1,5 @@
-using System;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace GeminiLab.Core2.ML.Json {
     internal static class JsonEscapeCharsConverter {
@@ -32,24 +31,24 @@ namespace GeminiLab.Core2.ML.Json {
 
             for (int i = 0; i < length; ++i) {
                 if (source[i] == '\\') {
-                    if (i + 1 == length) throw new Exception(); // todo: write a new exception class
+                    if (i + 1 == length) throw new JsonInvalidEscapeSequenceException("\\");
 
                     if (source[i + 1] < 128 && DecodeTable[source[i + 1]] != 0) {
                         sb.Append((char)DecodeTable[source[i + 1]]);
                         i += 1;
                     } else if (source[i + 1] == 'u') {
-                        if (i + 5 >= length) throw new Exception();
+                        if (i + 5 >= length) throw new JsonInvalidEscapeSequenceException(source.Substring(i));
 
                         int unicode = 0;
                         for (int it = i + 2; it < i + 6; ++it) {
-                            if (!Strings.DigitHex.Contains(source[it])) throw new Exception();
+                            if (!Strings.DigitHex.Contains(source[it])) throw new JsonInvalidEscapeSequenceException(source.Substring(i, 4));
                             unicode = unicode * 16 + (source[it] < '9' ? source[it] - '0' : (source[it] & 0xDF) - 'A' + 10);
                         }
 
                         sb.Append((char)unicode);
                         i += 5;
                     } else {
-                        throw new Exception();
+                        throw new JsonInvalidEscapeSequenceException(source.Substring(i, 2));
                     }
                 } else {
                     sb.Append(source[i]);
@@ -81,7 +80,7 @@ namespace GeminiLab.Core2.ML.Json {
             for (int i = 0; i < length; ++i) {
                 if (source[i] > 128) {
                     sb.Append("\\u");
-                    sb.Append(string.Format("{0:x4}", source[i]));
+                    sb.Append(string.Format("{0:x4}", (int)source[i]));
                 } else if (EncodeTable[source[i]] == 0) {
                     sb.Append(source[i]);
                 } else {
