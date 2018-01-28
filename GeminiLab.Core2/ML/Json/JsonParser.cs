@@ -95,5 +95,8 @@ namespace GeminiLab.Core2.ML.Json {
             if (!(rv is JsonArray || rv is JsonObject)) throw new Exception(); // todo: exception class
             return rv;
         }
+
+        public static string Prettify(string source) => Parse(source).ToStringPrettified();
+        public static string Minimize(string source) => Parse(source).ToStringMinimized();
     }
 }
