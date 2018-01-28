@@ -3,46 +3,37 @@ using System.Linq;
 using System.Text;
 
 namespace GeminiLab.Core2.ML.Json {
-    public struct JsonStringifyConfig {
-        public bool Spaces;
-        public bool ExpandObjects;
-
-        public JsonStringifyConfig(bool spaces, bool expandObjects) {
-            Spaces = spaces;
-            ExpandObjects = expandObjects;
-        }
-
-        public static JsonStringifyConfig Minimized { get; } = new JsonStringifyConfig(false, false);
-        public static JsonStringifyConfig SingleLine { get; } = new JsonStringifyConfig(true, false);
-        public static JsonStringifyConfig Prettified { get; } = new JsonStringifyConfig(true, true);
-    }
-
     public abstract class JsonValue {
-        internal abstract void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target);
+        internal abstract void Stringify(JsonStringifyConfig config, int indent, StringBuilder target);
 
         internal static void MakeIndent(StringBuilder sb, int cnt) => sb.Append(' ', cnt * 4);
-
-        public sealed override string ToString() => ToString(false);
-
-        public string ToString(bool asciiOnly) {
+        
+        public sealed override string ToString() {
             var sb = new StringBuilder();
 
-            Stringify(JsonStringifyConfig.SingleLine, asciiOnly, 0, sb);
+            Stringify(JsonStringifyConfig.SingleLine, 0, sb);
             return sb.ToString();
         }
 
-        public string ToStringPrettified(bool asciiOnly) {
+        public string ToStringPrettified() {
             var sb = new StringBuilder();
 
-            Stringify(JsonStringifyConfig.Prettified, asciiOnly, 0, sb);
+            Stringify(JsonStringifyConfig.Prettified, 0, sb);
             sb.Append('\n');
             return sb.ToString();
         }
 
-        public string ToStringMinimized(bool asciiOnly) {
+        public string ToStringMinimized() {
             var sb = new StringBuilder();
 
-            Stringify(JsonStringifyConfig.Minimized, asciiOnly, 0, sb);
+            Stringify(JsonStringifyConfig.Minimized, 0, sb);
+            return sb.ToString();
+        }
+
+        public string ToStringForNetwork() {
+            var sb = new StringBuilder();
+
+            Stringify(JsonStringifyConfig.Network, 0, sb);
             return sb.ToString();
         }
     }
@@ -55,35 +46,38 @@ namespace GeminiLab.Core2.ML.Json {
             Values = values;
         }
 
-        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             if (!Values.Any()) {
                 target.Append("{}");
                 return;
             }
             
-            string head = config.Spaces ? "{ " : "{";
-            string seperator = config.Spaces ? ", " : ",";
-            string colon = config.Spaces ? ": " : ":";
-            string tail = config.Spaces ? " }" : "}";
+            bool compact = config.Contains(JsonStringifyConfig.Compact);
+            bool expandObjects = config.Contains(JsonStringifyConfig.ExpandObjects);
 
-            target.Append(config.ExpandObjects ? "{\n" : head);
+            string head = compact ? "{" : "{ ";
+            string seperator = compact ? "," : ", ";
+            string colon = compact ? ":" : ": ";
+            string tail = compact ? "}" : " }";
+
+            target.Append(expandObjects ? "{\n" : head);
             
             bool first = true;
             foreach (var i in Values) {
                 if (!first) {
-                    target.Append(config.ExpandObjects ? ",\n" : seperator);
+                    target.Append(expandObjects ? ",\n" : seperator);
                 } else {
                     first = false;
                 }
 
-                if (config.ExpandObjects) MakeIndent(target, indent + 1);
+                if (expandObjects) MakeIndent(target, indent + 1);
 
-                i.Key.Stringify(config, asciiOnly, indent, target);
+                i.Key.Stringify(config, indent, target);
                 target.Append(colon);
-                i.Value.Stringify(config, asciiOnly, indent + 1, target);
+                i.Value.Stringify(config, indent + 1, target);
             }
 
-            if (config.ExpandObjects) {
+            if (expandObjects) {
                 target.Append('\n');
                 MakeIndent(target, indent);
                 target.Append('}');
@@ -100,17 +94,20 @@ namespace GeminiLab.Core2.ML.Json {
             Values = values;
         }
 
-        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             if (!Values.Any()) {
                 target.Append("[]");
                 return;
             }
 
-            bool expandIt = config.ExpandObjects && Values.Any(x => x is JsonObject);
+            bool compact = config.Contains(JsonStringifyConfig.Compact);
+            bool expandObjects = config.Contains(JsonStringifyConfig.ExpandObjects);
 
-            string head = config.Spaces ? "[ " : "[";
-            string seperator = config.Spaces ? ", " : ",";
-            string tail = config.Spaces ? " ]" : "]";
+            bool expandIt = expandObjects && Values.Any(x => x is JsonObject);
+
+            string head = compact ? "[" : "[ ";
+            string seperator = compact ? "," : ", ";
+            string tail = compact ? "]" : " ]";
 
             target.Append(expandIt ? "[\n" : head);
 
@@ -119,7 +116,7 @@ namespace GeminiLab.Core2.ML.Json {
                 if (first) first = false; else target.Append(expandIt ? ",\n" : seperator);
 
                 if (expandIt) MakeIndent(target, indent + 1);
-                i.Stringify(config, asciiOnly, indent + 1, target);
+                i.Stringify(config, indent + 1, target);
             }
 
             if (expandIt) {
@@ -139,9 +136,9 @@ namespace GeminiLab.Core2.ML.Json {
             Value = value;
         }
 
-        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             target.Append('\"');
-            target.Append(asciiOnly ? JsonEscapeCharsConverter.EncodeToAscii(Value) : JsonEscapeCharsConverter.Encode(Value));
+            target.Append(config.Contains(JsonStringifyConfig.AsciiOnly) ? JsonEscapeCharsConverter.EncodeToAscii(Value) : JsonEscapeCharsConverter.Encode(Value));
             target.Append('\"');
         }
     }
@@ -171,7 +168,7 @@ namespace GeminiLab.Core2.ML.Json {
             }
         }
 
-        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             if (IsFloat) target.Append(ValueFloat);
             else target.Append(ValueInt);
         }
@@ -184,13 +181,13 @@ namespace GeminiLab.Core2.ML.Json {
             Value = value;
         }
 
-        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             target.Append(Value ? "true" : "false");
         }
     }
 
     public sealed class JsonNull : JsonValue {
-        internal override void Stringify(JsonStringifyConfig config, bool asciiOnly, int indent, StringBuilder target) {
+        internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             target.Append("null");
         }
     }

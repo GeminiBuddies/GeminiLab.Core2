@@ -8,8 +8,9 @@ namespace TestConsole {
 
             var jsonValue = JsonParser.Parse(str);
             Console.WriteLine(jsonValue.ToString());
-            Console.WriteLine(jsonValue.ToStringMinimized(false));
-            Console.WriteLine(jsonValue.ToStringPrettified(false));
+            Console.WriteLine(jsonValue.ToStringMinimized());
+            Console.WriteLine(jsonValue.ToStringForNetwork());
+            Console.WriteLine(jsonValue.ToStringPrettified());
         }
     }
 }
