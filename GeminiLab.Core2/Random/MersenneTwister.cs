@@ -21,29 +21,33 @@ namespace GeminiLab.Core2.Random {
         private ulong _index;
 
         public Mt19937X64(ulong seed) => Seed(seed);
-        public Mt19937X64() : this((ulong)DefaultSr.Sr.Next()) { }
+        public Mt19937X64() : this(DefaultSr.GetNextULong()) { }
 
         public void Seed(ulong seed) {
-            _index = N;
-            _mt[0] = seed;
+            lock (this) {
+                _index = N;
+                _mt[0] = seed;
 
-            for (ulong i = 1; i < N; ++i) {
-                _mt[i] = (F * (_mt[i - 1] ^ (_mt[i - 1] >> (W - 2))) + i);
+                for (ulong i = 1; i < N; ++i) {
+                    _mt[i] = (F * (_mt[i - 1] ^ (_mt[i - 1] >> (W - 2))) + i);
+                }
             }
         }
 
         public ulong Next() {
-            if (_index >= N) twist();
+            lock (this) {
+                if (_index >= N) twist();
 
-            ulong y = _mt[_index];
-            y = y ^ ((y >> U) & D);
-            y = y ^ ((y << S) & B);
-            y = y ^ ((y << T) & C);
-            y = y ^ (y >> L);
+                ulong y = _mt[_index];
+                y = y ^ ((y >> U) & D);
+                y = y ^ ((y << S) & B);
+                y = y ^ ((y << T) & C);
+                y = y ^ (y >> L);
 
-            ++_index;
+                ++_index;
 
-            return y;
+                return y;
+            }
         }
 
         private void twist() {
@@ -82,29 +86,33 @@ namespace GeminiLab.Core2.Random {
         private uint _index;
 
         public Mt19937(uint seed) => Seed(seed);
-        public Mt19937() : this((uint)DefaultSr.Sr.Next()) { }
+        public Mt19937() : this((uint)DefaultSr.GetNext()) { }
 
         public void Seed(uint seed) {
-            _index = N;
-            _mt[0] = seed;
+            lock (this) {
+                _index = N;
+                _mt[0] = seed;
 
-            for (uint i = 1; i < N; ++i) {
-                _mt[i] = (F * (_mt[i - 1] ^ (_mt[i - 1] >> (W - 2))) + i);
+                for (uint i = 1; i < N; ++i) {
+                    _mt[i] = (F * (_mt[i - 1] ^ (_mt[i - 1] >> (W - 2))) + i);
+                }
             }
         }
 
         public uint Next() {
-            if (_index >= N) twist();
+            lock (this) {
+                if (_index >= N) twist();
 
-            uint y = _mt[_index];
-            y = y ^ ((y >> U) & D);
-            y = y ^ ((y << S) & B);
-            y = y ^ ((y << T) & C);
-            y = y ^ (y >> L);
+                uint y = _mt[_index];
+                y = y ^ ((y >> U) & D);
+                y = y ^ ((y << S) & B);
+                y = y ^ ((y << T) & C);
+                y = y ^ (y >> L);
 
-            ++_index;
+                ++_index;
 
-            return y;
+                return y;
+            }
         }
 
         private void twist() {
@@ -125,7 +133,7 @@ namespace GeminiLab.Core2.Random {
         private readonly Mt19937 _gen;
 
         public Mt19937S(int seed) => _gen = new Mt19937(unchecked((uint)seed));
-        public Mt19937S() : this(DefaultSr.Sr.Next()) { }
+        public Mt19937S() : this(DefaultSr.GetNext()) { }
 
         public void Seed(int seed) => _gen.Seed(unchecked((uint)seed));
         public int Next() => unchecked((int)_gen.Next());
@@ -135,7 +143,7 @@ namespace GeminiLab.Core2.Random {
         private readonly Mt19937X64 _gen;
 
         public Mt19937X64S(long seed) => _gen = new Mt19937X64(unchecked((ulong)seed));
-        public Mt19937X64S() : this(DefaultSr.Sr.Next()) { }
+        public Mt19937X64S() : this(DefaultSr.GetNext()) { }
 
         public void Seed(long seed) => _gen.Seed(unchecked((ulong)seed));
         public long Next() => unchecked((long)_gen.Next());

@@ -17,10 +17,15 @@ namespace GeminiLab.Core2.Random {
         }
 
         public LCG(uint seed) : this(A, C, seed) { }
-        public LCG() : this((uint) DefaultSr.Sr.Next()) { }
+        public LCG() : this((uint) DefaultSr.GetNext()) { }
 
-        public void Seed(uint seed) => _x = seed;
-        public uint Next() => _x = unchecked(_a * _x + _c);
+        public void Seed(uint seed) {
+            lock (this) _x = seed;
+        }
+
+        public uint Next() {
+            lock (this) return _x = unchecked(_a * _x + _c);
+        }
     }
 
     public sealed class LCG64 : IPRNG<ulong> {
@@ -39,9 +44,14 @@ namespace GeminiLab.Core2.Random {
         }
 
         public LCG64(ulong seed) : this(A, C, seed) { }
-        public LCG64() : this((ulong) DefaultSr.Sr.Next()) { } // not so good, but who cares
+        public LCG64() : this(DefaultSr.GetNextULong()) { } // better now
 
-        public void Seed(ulong seed) => _x = seed;
-        public ulong Next() => _x = unchecked(_a * _x + _c);
+        public void Seed(ulong seed) {
+            lock (this) _x = seed;
+        }
+
+        public ulong Next() {
+            lock (this) return _x = unchecked(_a * _x + _c);
+        }
     }
 }
