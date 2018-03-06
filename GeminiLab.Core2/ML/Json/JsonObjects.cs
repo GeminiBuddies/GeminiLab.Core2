@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ namespace GeminiLab.Core2.ML.Json {
         internal abstract void Stringify(JsonStringifyConfig config, int indent, StringBuilder target);
 
         internal static void MakeIndent(StringBuilder sb, int cnt) => sb.Append(' ', cnt * 4);
-        
+
         public sealed override string ToString() {
             var sb = new StringBuilder();
 
@@ -39,11 +40,78 @@ namespace GeminiLab.Core2.ML.Json {
     }
 
     public sealed class JsonObject : JsonValue {
-        public IEnumerable<JsonObjectKeyValuePair> Values { get; }
+        private struct JsonObjectKeyComparer : IComparer<string> {
+            public JsonObject Father;
 
-        // some (and clr) don't like tuples, make them happy
+            public int Compare(string x, string y) {
+                int xv = Father._keyOrder.ContainsKey(x) ? Father._keyOrder[x] : -1;
+                int yv = Father._keyOrder.ContainsKey(y) ? Father._keyOrder[y] : -1;
+
+                return xv.CompareTo(yv);
+            }
+        }
+
+        private readonly Dictionary<string, int> _keyOrder;
+        private readonly SortedDictionary<string, JsonValue> _values;
+
+        public IEnumerable<JsonObjectKeyValuePair> Values {
+            get {
+                foreach (var i in _values) yield return new JsonObjectKeyValuePair(new JsonString(i.Key), i.Value);
+            }
+        }
+
+        public JsonValue this[JsonString str] {
+            get => this[str?.Value ?? throw new ArgumentNullException(nameof(str))];
+            set => this[str?.Value ?? throw new ArgumentNullException(nameof(str))] = value;
+        }
+
+        public JsonValue this[string str] {
+            get {
+                if (str == null) throw new ArgumentNullException(nameof(str));
+                if (!_values.ContainsKey(str)) throw new KeyNotFoundException();
+
+                return _values[str];
+            }
+            set {
+                if (str == null) throw new ArgumentNullException(nameof(str));
+                if (value == null) throw new ArgumentNullException(nameof(value));
+
+                if (!_values.ContainsKey(str)) {
+                    _keyOrder[str] = _keyOrder.Count;
+                }
+
+                _values[str] = value;
+            }
+        }
+
+        public void Append(JsonString key, JsonValue value) {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+            if (value == null) throw new ArgumentNullException(nameof(value));
+
+            if (_values.ContainsKey(key.Value)) throw new ArgumentOutOfRangeException(nameof(key));
+            this[key] = value;
+        }
+
+        public void Remove(JsonString key) {
+            if (key == null) throw new ArgumentNullException(nameof(key));
+
+            if (!_values.ContainsKey(key.Value)) throw new KeyNotFoundException();
+            _keyOrder[key.Value] = -1;
+            _values.Remove(key.Value);
+        }
+
+        public JsonObject() {
+            _keyOrder = new Dictionary<string, int>();
+            _values = new SortedDictionary<string, JsonValue>(new JsonObjectKeyComparer { Father = this });
+        }
+
         public JsonObject(IEnumerable<JsonObjectKeyValuePair> values) {
-            Values = values;
+            _keyOrder = new Dictionary<string, int>();
+            _values = new SortedDictionary<string, JsonValue>(new JsonObjectKeyComparer { Father = this });
+
+            foreach (var i in values) {
+                Append(i.Key, i.Value);
+            }
         }
 
         internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
@@ -51,7 +119,7 @@ namespace GeminiLab.Core2.ML.Json {
                 target.Append("{}");
                 return;
             }
-            
+
             bool compact = config.Contains(JsonStringifyConfig.Compact);
             bool expandObjects = config.Contains(JsonStringifyConfig.ExpandObjects);
 
@@ -61,7 +129,7 @@ namespace GeminiLab.Core2.ML.Json {
             string tail = compact ? "}" : " }";
 
             target.Append(expandObjects ? "{\n" : head);
-            
+
             bool first = true;
             foreach (var i in Values) {
                 if (!first) {
@@ -88,10 +156,14 @@ namespace GeminiLab.Core2.ML.Json {
     }
 
     public sealed class JsonArray : JsonValue {
-        public IEnumerable<JsonValue> Values { get; }
+        public List<JsonValue> Values { get; }
+
+        public JsonArray() {
+            Values = new List<JsonValue>();
+        }
 
         public JsonArray(IEnumerable<JsonValue> values) {
-            Values = values;
+            Values = new List<JsonValue>(values);
         }
 
         internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
@@ -162,9 +234,11 @@ namespace GeminiLab.Core2.ML.Json {
             if (int.TryParse(value, out int vint)) {
                 IsFloat = false;
                 ValueInt = vint;
-            } else {
+            } else if (double.TryParse(value, out double vfloat)) {
                 IsFloat = true;
-                ValueFloat = double.Parse(value);
+                ValueFloat = vfloat;
+            } else {
+                throw new ArgumentOutOfRangeException(nameof(value));
             }
         }
 

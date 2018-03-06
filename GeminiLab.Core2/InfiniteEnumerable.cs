@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace GeminiLab.Core2 {
@@ -135,7 +134,7 @@ namespace GeminiLab.Core2 {
 
             public void Reset() {
                 _first = true;
-                _accumulator = default(T);
+                _accumulator = default;
                 _en = _source.GetEnumerator();
             }
 
