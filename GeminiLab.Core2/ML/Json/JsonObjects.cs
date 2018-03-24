@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,20 +38,16 @@ namespace GeminiLab.Core2.ML.Json {
             Stringify(JsonStringifyConfig.Network, 0, sb);
             return sb.ToString();
         }
+
+        public string Stringify(JsonStringifyConfig config) {
+            var sb = new StringBuilder();
+            Stringify(config, 0, sb);
+            return sb.ToString();
+        }
     }
 
-    public sealed class JsonObject : JsonValue {
-        private struct JsonObjectKeyComparer : IComparer<string> {
-            public JsonObject Father;
-
-            public int Compare(string x, string y) {
-                int xv = Father._keyOrder.ContainsKey(x) ? Father._keyOrder[x] : -1;
-                int yv = Father._keyOrder.ContainsKey(y) ? Father._keyOrder[y] : -1;
-
-                return xv.CompareTo(yv);
-            }
-        }
-
+    // implement IDictionary<,> ? noway
+    public sealed class JsonObject : JsonValue , IComparer<string> {
         private readonly Dictionary<string, int> _keyOrder;
         private readonly SortedDictionary<string, JsonValue> _values;
 
@@ -60,9 +57,13 @@ namespace GeminiLab.Core2.ML.Json {
             }
         }
 
+        private string unpackJsonString(JsonString str) {
+            return str?.Value ?? throw new ArgumentNullException();
+        }
+
         public JsonValue this[JsonString str] {
-            get => this[str?.Value ?? throw new ArgumentNullException(nameof(str))];
-            set => this[str?.Value ?? throw new ArgumentNullException(nameof(str))] = value;
+            get => this[unpackJsonString(str)];
+            set => this[unpackJsonString(str)] = value;
         }
 
         public JsonValue this[string str] {
@@ -85,29 +86,63 @@ namespace GeminiLab.Core2.ML.Json {
         }
 
         public void Append(JsonString key, JsonValue value) {
-            if (key == null) throw new ArgumentNullException(nameof(key));
-            if (value == null) throw new ArgumentNullException(nameof(value));
+            Append(unpackJsonString(key), value);
+        }
 
-            if (_values.ContainsKey(key.Value)) throw new ArgumentOutOfRangeException(nameof(key));
-            this[key] = value;
+        public void Append(string key, JsonValue value) {
+            if (_values.ContainsKey(key ?? throw new ArgumentNullException(nameof(key)))) throw new ArgumentOutOfRangeException(nameof(key));
+
+            this[key] = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public void Remove(JsonString key) {
-            if (key == null) throw new ArgumentNullException(nameof(key));
+            Remove(unpackJsonString(key));
+        }
 
-            if (!_values.ContainsKey(key.Value)) throw new KeyNotFoundException();
-            _keyOrder[key.Value] = -1;
-            _values.Remove(key.Value);
+        public void Remove(string key) {
+            if (!TryRemove(key)) throw new KeyNotFoundException();
+        }
+
+        public bool TryRemove(JsonString key) {
+            return TryRemove(unpackJsonString(key));
+        }
+
+        public bool TryRemove(string key) {
+            if (!_values.ContainsKey(key ?? throw new ArgumentNullException(nameof(key)))) return false;
+
+            _keyOrder[key] = -1;
+            _values.Remove(key);
+            return true;
+        }
+
+        public bool ContainsKey(JsonString key) {
+            return ContainsKey(unpackJsonString(key));
+        }
+
+        public bool ContainsKey(string key) {
+            return _values.ContainsKey(key ?? throw new ArgumentNullException(nameof(key)));
+        }
+
+        public bool TryGetValue(string key, out JsonValue value) {
+            value = null;
+            if (!ContainsKey(key)) return false;
+
+            value = this[key];
+            return true;
+        }
+
+        public bool TryGetValue(JsonString key, out JsonValue value) {
+            return TryGetValue(unpackJsonString(key), out value);
         }
 
         public JsonObject() {
             _keyOrder = new Dictionary<string, int>();
-            _values = new SortedDictionary<string, JsonValue>(new JsonObjectKeyComparer { Father = this });
+            _values = new SortedDictionary<string, JsonValue>(this);
         }
 
         public JsonObject(IEnumerable<JsonObjectKeyValuePair> values) {
             _keyOrder = new Dictionary<string, int>();
-            _values = new SortedDictionary<string, JsonValue>(new JsonObjectKeyComparer { Father = this });
+            _values = new SortedDictionary<string, JsonValue>(this);
 
             foreach (var i in values) {
                 Append(i.Key, i.Value);
@@ -153,9 +188,17 @@ namespace GeminiLab.Core2.ML.Json {
                 target.Append(tail);
             }
         }
+
+        // key comparer
+        public int Compare(string x, string y) {
+            int xv = _keyOrder.ContainsKey(x) ? _keyOrder[x] : -1;
+            int yv = _keyOrder.ContainsKey(y) ? _keyOrder[y] : -1;
+
+            return xv.CompareTo(yv);
+        }
     }
 
-    public sealed class JsonArray : JsonValue {
+    public sealed class JsonArray : JsonValue, IList<JsonValue> {
         public List<JsonValue> Values { get; }
 
         public JsonArray() {
@@ -165,6 +208,30 @@ namespace GeminiLab.Core2.ML.Json {
         public JsonArray(IEnumerable<JsonValue> values) {
             Values = new List<JsonValue>(values);
         }
+
+        #region interface implemention
+        //IEnumerable
+        public IEnumerator<JsonValue> GetEnumerator() => Values.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
+
+        // ICollectiom
+        public void Add(JsonValue item) => Values.Add(item);
+        public void Clear() => Values.Clear();
+        public bool Contains(JsonValue item) => Values.Contains(item);
+        public void CopyTo(JsonValue[] array, int arrayIndex) => Values.CopyTo(array, arrayIndex);
+        public bool Remove(JsonValue item) => Values.Remove(item);
+        public int Count => Values.Count;
+        public bool IsReadOnly => false;
+
+        // IList
+        public int IndexOf(JsonValue item) => Values.IndexOf(item);
+        public void Insert(int index, JsonValue item) => Values.Insert(index, item);
+        public void RemoveAt(int index) => Values.RemoveAt(index);
+        public JsonValue this[int index] {
+            get => Values[index];
+            set => Values[index] = value;
+        }
+        #endregion
 
         internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             if (!Values.Any()) {
@@ -201,7 +268,7 @@ namespace GeminiLab.Core2.ML.Json {
         }
     }
 
-    public sealed class JsonString : JsonValue {
+    public sealed class JsonString : JsonValue, IEquatable<JsonString> {
         public string Value { get; }
 
         public JsonString(string value) {
@@ -213,9 +280,32 @@ namespace GeminiLab.Core2.ML.Json {
             target.Append(config.Contains(JsonStringifyConfig.AsciiOnly) ? JsonEscapeCharsConverter.EncodeToAscii(Value) : JsonEscapeCharsConverter.Encode(Value));
             target.Append('\"');
         }
+
+        public static implicit operator string(JsonString str) {
+            return str.Value;
+        }
+
+        public bool Equals(JsonString other) {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(Value, other.Value);
+        }
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is JsonString s && Equals(s);
+        }
+
+        public override int GetHashCode() {
+            return (Value != null ? Value.GetHashCode() : 0);
+        }
+
+        public static bool operator ==(JsonString a, JsonString b) => a?.Equals(b) ?? b is null;
+        public static bool operator !=(JsonString a, JsonString b) => !(a == b);
     }
 
-    public sealed class JsonNumber : JsonValue {
+    public sealed class JsonNumber : JsonValue, IEquatable<JsonNumber> {
         public bool IsFloat { get; }
         public int ValueInt { get; }
         public double ValueFloat { get; }
@@ -246,9 +336,30 @@ namespace GeminiLab.Core2.ML.Json {
             if (IsFloat) target.Append(ValueFloat);
             else target.Append(ValueInt);
         }
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (!(obj is JsonNumber num)) return false;
+            return Equals(num);
+        }
+
+        public override int GetHashCode() {
+            return IsFloat ? ValueFloat.GetHashCode() : ValueInt.GetHashCode();
+        }
+
+        public bool Equals(JsonNumber other) {
+            if (other == null) return false;
+            if (other.IsFloat ^ IsFloat) return false;
+
+            return IsFloat ? ValueFloat.Equals(other.ValueFloat) : ValueInt.Equals(other.ValueInt);
+        }
+
+        public static bool operator ==(JsonNumber a, JsonNumber b) => a?.Equals(b) ?? b is null;
+        public static bool operator !=(JsonNumber a, JsonNumber b) => !(a == b);
     }
 
-    public sealed class JsonBool : JsonValue {
+    public sealed class JsonBool : JsonValue, IEquatable<JsonBool> {
         public bool Value { get; }
 
         public JsonBool(bool value) {
@@ -258,11 +369,40 @@ namespace GeminiLab.Core2.ML.Json {
         internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             target.Append(Value ? "true" : "false");
         }
+        
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj is JsonBool b && Equals(b);
+        }
+
+        public override int GetHashCode() {
+            return Value.GetHashCode();
+        }
+
+        public bool Equals(JsonBool other) {
+            return other?.Value == Value;
+        }
+
+        public static bool operator ==(JsonBool a, JsonBool b) => a?.Equals(b) ?? b is null;
+        public static bool operator !=(JsonBool a, JsonBool b) => !(a == b);
     }
 
-    public sealed class JsonNull : JsonValue {
+    public sealed class JsonNull : JsonValue, IEquatable<JsonNull> {
         internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             target.Append("null");
         }
+
+        public bool Equals(JsonNull other) => true;
+
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) return true;
+            return obj is JsonNull;
+        }
+
+        public override int GetHashCode() => 0;
+
+        public static bool operator ==(JsonNull a, JsonNull b) => true;
+        public static bool operator !=(JsonNull a, JsonNull b) => false;
     }
 }

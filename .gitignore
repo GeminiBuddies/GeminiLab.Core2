@@ -271,3 +271,7 @@ __pycache__/
 
 # resharper
 *.DotSettings
+
+# key
+keys/geminilab.snk
+geminilab.snk

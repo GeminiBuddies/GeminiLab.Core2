@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Text;
 
 namespace GeminiLab.Core2 {
     public static class Base64Extensions {
-        public static string Base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        public static readonly string Base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-        private static byte[] decodeTable = {
+        private static readonly byte[] DecodeTable = {
             0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
             0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
             0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x3E, 0xFF, 0xFF, 0xFF, 0x3F,
@@ -69,9 +68,9 @@ namespace GeminiLab.Core2 {
                 int val = 0;
                 for (int j = 0; j < 4; ++j) {
                     int chr;
-                    if ((chr = source[i * 4 + j]) >= 0x80 || chr < 0 || decodeTable[chr] >= 0x40) throw new ArgumentException(nameof(source));
+                    if ((chr = source[i * 4 + j]) >= 0x80 || chr < 0 || DecodeTable[chr] >= 0x40) throw new ArgumentException(nameof(source));
 
-                    val = (val << 6) | decodeTable[chr];
+                    val = (val << 6) | DecodeTable[chr];
                 }
 
                 if (i == groups - 1) {
@@ -94,8 +93,8 @@ namespace GeminiLab.Core2 {
             return rv;
         }
 
-        public static string DecodeBase64EncodedString(this string source) => source.DecodeBase64EncodedString(Encoding.UTF8);
+        public static string DecodeBase64(this string source) => source.DecodeBase64(Encoding.UTF8);
 
-        public static string DecodeBase64EncodedString(this string source, Encoding encoding) => encoding.GetString(source.AsBase64());
+        public static string DecodeBase64(this string source, Encoding encoding) => encoding.GetString(source.AsBase64());
     }
 }
