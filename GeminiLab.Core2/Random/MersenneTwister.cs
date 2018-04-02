@@ -127,6 +127,8 @@ namespace GeminiLab.Core2.Random {
 
             _index = 0;
         }
+
+        public static Mt19937 Global { get; } = new Mt19937();
     }
 
     public class Mt19937S : IPRNG<int> {
