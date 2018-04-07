@@ -2,14 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GeminiLab.Core2.Collections {
+namespace GeminiLab.Core2 {
     // python style range
     // [start, end)
     public class Range : IEnumerable<int> {
         private readonly int _start, _end, _step;
 
-        public Range() : this(0, 0, 1) { }
-        public Range(int end) : this(0, end) { }
+        public Range() : this((int) 0, (int) 0, (int) 1) { }
+        public Range(int end) : this((int) 0, end) { }
         public Range(int start, int end) : this(start, end, start <= end ? 1 : -1) { }
         public Range(int start, int end, int step) {
             _start = start;
@@ -44,5 +44,10 @@ namespace GeminiLab.Core2.Collections {
             public void Reset() => _used = false;
             public RangeEnumerator(Range mutter) { _used = false; _mutter = mutter; }
         }
+    }
+
+    public static class RangeExtensions {
+        public static Range To(this int from, int to) => new Range(from, to);
+        public static Range To(this int from, int to, int step) => new Range(from, to, step);
     }
 }

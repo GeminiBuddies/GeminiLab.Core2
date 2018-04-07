@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using GeminiLab.Core2;
 using GeminiLab.Core2.Collections;
+using GeminiLab.Core2.Collections.HeapBase;
 using GeminiLab.Core2.ML.Json;
 
 namespace TestConsole {
@@ -16,10 +17,10 @@ namespace TestConsole {
 
         public static void Main(string[] args) {
             Console.WriteLine("6Iuf5Yip5Zu95a6255Sf5q275Lul".DecodeBase64());
-            
-            var pq = new PriorityQueue<int>();
-            pq.AddRange(new int[] { 9, 2, 3, 1, 6, 4, 8, 0, 7, 5 });
-            var l = pq.AsList();
+
+            var a = new int[10] {9, 2, 3, 1, 6, 4, 8, 0, 7, 5};
+            a.MakeHeap(10);
+            a.SortHeap(10);
         }
     }
 }

@@ -13,7 +13,7 @@
     <FileVersion>0.9.3.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>0.9.3-d5</Version>
+    <Version>0.9.3-d6</Version>
     <PackageLicenseUrl>https://github.com/GeminiLab/GeminiLab.Core2/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
     <LangVersion>latest</LangVersion>

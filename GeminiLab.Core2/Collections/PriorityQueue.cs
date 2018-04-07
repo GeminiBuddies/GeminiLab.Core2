@@ -1,12 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+
+using GeminiLab.Core2.Collections.HeapBase;
 
 namespace GeminiLab.Core2.Collections {
     // just a heap
-    // not thread-safe now
-    // implementing ICollection<T> is too complex
+    // not thread-safe
+    // won't implement interfaces like IEnumerable<T>, ICollection<T>, etc.
     public class PriorityQueue<T> {
         private const long DefaultItemsLength = 16;
 
@@ -17,37 +18,45 @@ namespace GeminiLab.Core2.Collections {
 
         public long Count => _size;
         public long Capacity => _cap;
-
-        private PriorityQueue(long size, long cap, T[] items, IComparer<T> comp) {
-            _size = size;
-            _cap = cap;
-            _items = new T[items.Length];
-            Array.Copy(items, _items, items.Length);
-            _comp = comp;
-        }
-
+        
         public PriorityQueue() {
-            _size = 0;
-            _cap = DefaultItemsLength;
-
-            _items = new T[DefaultItemsLength];
             _comp = Comparer<T>.Default;
+            initWithoutArray();
         }
 
         public PriorityQueue(IComparer<T> comparer) {
+            _comp = comparer ?? Comparer<T>.Default;
+            initWithoutArray();
+        }
+
+        public PriorityQueue(IEnumerable<T> items) {
+            _comp = Comparer<T>.Default;
+
+            var arr = items as T[] ?? items.ToArray();
+            initWithArray(arr);
+        }
+
+        public PriorityQueue(IEnumerable<T> items, IComparer<T> comparer) {
+            _comp = comparer ?? Comparer<T>.Default;
+
+            var arr = items as T[] ?? items.ToArray();
+            initWithArray(arr);
+        }
+
+        private void initWithoutArray() {
             _size = 0;
             _cap = DefaultItemsLength;
 
             _items = new T[DefaultItemsLength];
-            _comp = comparer ?? Comparer<T>.Default;
         }
 
-        public PriorityQueue(IEnumerable<T> items) : this() {
-            AddRange(items);
-        }
+        private void initWithArray(T[] array) {
+            _size = array.Length;
+            _cap = _size < DefaultItemsLength ? DefaultItemsLength : ceil2(_size);
 
-        public PriorityQueue(IEnumerable<T> items, IComparer<T> comparer) : this(comparer) {
-            AddRange(items);
+            _items = new T[_cap];
+            Array.Copy(array, _items, _size);
+            _items.MakeHeap(_size, _comp);
         }
 
         private void doubleRange() {
@@ -60,16 +69,10 @@ namespace GeminiLab.Core2.Collections {
         }
 
         public void Add(T item) {
-            if (_size == (_cap - 1)) doubleRange();
+            if (_size == _cap) doubleRange();
 
-            ++_size;
-            long ptr = _size;
-            while (ptr > 1 && _comp.Compare(item, _items[ptr >> 1]) < 0) {
-                _items[ptr] = _items[ptr >> 1];
-                ptr >>= 1;
-            }
-
-            _items[ptr] = item;
+            _items[_size++] = item;
+            _items.PushHeap(_size, _comp);
         }
 
         public void AddRange(IEnumerable<T> items) {
@@ -77,52 +80,38 @@ namespace GeminiLab.Core2.Collections {
         }
 
         public void RemoveHead() {
-            if (_size <= 0) throw new InvalidOperationException();
-
-            if (_size != 1) {
-                --_size;
-
-                long ptr = 1;
-                T last = _items[_size + 1];
-                while (true) {
-                    if (ptr << 1 > _size) break;
-
-                    if (_comp.Compare(_items[ptr << 1], last) < 0) {
-                        if ((ptr << 1) + 1 <= _size && _comp.Compare(_items[(ptr << 1) + 1], _items[ptr << 1]) < 0) {
-                            _items[ptr] = _items[(ptr << 1) + 1]; ptr = (ptr << 1) + 1;
-                        } else {
-                            _items[ptr] = _items[ptr << 1]; ptr <<= 1;
-                        }
-                    } else if ((ptr << 1) + 1 <= _size && _comp.Compare(_items[(ptr << 1) + 1], last) < 0) {
-                        _items[ptr] = _items[(ptr << 1) + 1]; ptr = (ptr << 1) + 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                _items[ptr] = last;
-            } else {
-                _size = 0;
-            }
+            Pop();
         }
 
         public T Peek() {
-            return _size > 0 ? _items[1] : throw new InvalidOperationException();
+            return _size > 0 ? _items[0] : throw new InvalidOperationException();
         }
 
         public T Pop() {
-            T rv = Peek();
-            RemoveHead();
+            if (_size == 0) throw new InvalidOperationException();
+
+            _items.PopHeap(_size, _comp);
+            var rv = _items[--_size];
+            _items[_size] = default;
             return rv;
         }
 
         // caution! very slow.
         public List<T> AsList() {
-            var newQueue = new PriorityQueue<T>(_size, _cap, _items, _comp);
-            var rv = new List<T>((int)_size);
+            if (_size == 0) return new List<T>();
 
-            for (int i = 0; i < _size; ++i) rv.Add(newQueue.Pop());
-            return rv;
+            var rv = new T[_size];
+            Array.Copy(_items, rv, _size);
+            rv.SortHeap(_size, _comp);
+            return new List<T>(rv);
+        }
+
+        private static long ceil2(long v) {
+            if (v <= 0) return 1;
+            if ((v & (v - 1)) == 0) return v;
+
+            while ((v & (v - 1)) != 0) v &= (v - 1);
+            return v << 1;
         }
     }
 }
