@@ -68,6 +68,10 @@ namespace GeminiLab.Core2.Collections {
             _cap = newCap;
         }
 
+        public void Clear() => initWithoutArray();
+
+        public void Reinitialize(IEnumerable<T> items) => initWithArray(items as T[] ?? items.ToArray());
+
         public void Add(T item) {
             if (_size == _cap) doubleRange();
 
@@ -79,9 +83,7 @@ namespace GeminiLab.Core2.Collections {
             foreach (var i in items) Add(i);
         }
 
-        public void RemoveHead() {
-            Pop();
-        }
+        public void RemoveHead() => Pop();
 
         public T Peek() {
             return _size > 0 ? _items[0] : throw new InvalidOperationException();
@@ -97,16 +99,18 @@ namespace GeminiLab.Core2.Collections {
         }
 
         // caution! very slow.
-        public List<T> AsList() {
-            if (_size == 0) return new List<T>();
+        public T[] ToArray() {
+            if (_size == 0) return new T[0];
 
             var rv = new T[_size];
             Array.Copy(_items, rv, _size);
             rv.SortHeap(_size, _comp);
-            return new List<T>(rv);
+            return rv;
         }
 
-        private static long ceil2(long v) {
+        public List<T> ToList() => new List<T>(ToArray());
+
+        private static long ceil2(long v) { // Todo: move to a better place
             if (v <= 0) return 1;
             if ((v & (v - 1)) == 0) return v;
 
