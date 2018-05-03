@@ -18,16 +18,20 @@ namespace GeminiLab.Core2.Random {
             _count = values.Count;
             _version = 0;
 
-            _defaultEnumerator = GetEnumeratorPrivate();
+            _defaultEnumerator = getEnumeratorPrivate();
         }
 
-        private ChooserEnumerator GetEnumeratorPrivate() {
+        public Chooser(IEnumerable<TValue> values) : this(values is IList<TValue> ? (IList<TValue>)values : values.ToArray()) { }
+
+        public Chooser(IEnumerable<TValue> values, int seed) : this(values is IList<TValue> ? (IList<TValue>) values : values.ToArray(), seed) { }
+
+        private ChooserEnumerator getEnumeratorPrivate() {
             lock (this) {
                 return new ChooserEnumerator(this, _version);
             }
         }
 
-        public IInfiniteEnumerator<TValue> GetEnumerator() => GetEnumeratorPrivate();
+        public IInfiniteEnumerator<TValue> GetEnumerator() => getEnumeratorPrivate();
 
         public TValue Next() => _defaultEnumerator.GetNext();
         public void Reset() => _defaultEnumerator.Reset();
@@ -71,6 +75,8 @@ namespace GeminiLab.Core2.Random {
     public class Chooser<TValue> : Chooser<TValue, Mt19937S> {
         public Chooser(IList<TValue> values) : base(values) { }
         public Chooser(IList<TValue> values, int seed) : base(values, seed) { }
+        public Chooser(IEnumerable<TValue> values) : base(values) { }
+        public Chooser(IEnumerable<TValue> values, int seed) : base(values, seed) { }
     }
 
     public static class Chooser {
