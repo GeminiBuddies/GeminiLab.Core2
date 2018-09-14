@@ -151,5 +151,22 @@ namespace GeminiLab.Core2.Random {
             rng.Fill(rv);
             return rv;
         }
+
+        public static void Shuffle<T>(this T[] array) {
+            Shuffle(array, DefaultRNG.GetInstance());
+        }
+
+        public static void Shuffle<T>(this T[] array, IRNG<int> rng) {
+            int l = array.Length;
+
+            for (int i = 0; i < l - 1; ++i) {
+                var j = rng.Next(i, l);
+
+                if (i == j) continue;
+                var tmp = array[i];
+                array[i] = array[j];
+                array[j] = tmp;
+            }
+        }
     }
 }

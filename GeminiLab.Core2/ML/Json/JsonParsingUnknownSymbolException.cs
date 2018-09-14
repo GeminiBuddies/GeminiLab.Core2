@@ -4,8 +4,7 @@ namespace GeminiLab.Core2.ML.Json {
         public int Row { get; }
         public int Column { get; }
 
-        internal JsonParsingUnknownSymbolException(JsonToken tok) : this(tok.Value, tok.Row, tok.Column) {
-        }
+        internal JsonParsingUnknownSymbolException(JsonToken tok) : this(tok.Value, tok.Row, tok.Column) {}
 
         public JsonParsingUnknownSymbolException(string symbol, int row, int column) {
             Symbol = symbol;

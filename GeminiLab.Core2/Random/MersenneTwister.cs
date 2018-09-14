@@ -21,7 +21,7 @@ namespace GeminiLab.Core2.Random {
         private ulong _index;
 
         public Mt19937X64(ulong seed) => Seed(seed);
-        public Mt19937X64() : this(DefaultSr.GetNextULong()) { }
+        public Mt19937X64() : this(DefaultRNG.GetNextULong()) { }
 
         public void Seed(ulong seed) {
             lock (this) {
@@ -86,7 +86,7 @@ namespace GeminiLab.Core2.Random {
         private uint _index;
 
         public Mt19937(uint seed) => Seed(seed);
-        public Mt19937() : this((uint)DefaultSr.GetNext()) { }
+        public Mt19937() : this((uint)DefaultRNG.GetNext()) { }
 
         public void Seed(uint seed) {
             lock (this) {
@@ -127,15 +127,13 @@ namespace GeminiLab.Core2.Random {
 
             _index = 0;
         }
-
-        public static Mt19937 Global { get; } = new Mt19937();
     }
 
     public class Mt19937S : IPRNG<int> {
         private readonly Mt19937 _gen;
 
         public Mt19937S(int seed) => _gen = new Mt19937(unchecked((uint)seed));
-        public Mt19937S() : this(DefaultSr.GetNext()) { }
+        public Mt19937S() : this(DefaultRNG.GetNext()) { }
 
         public void Seed(int seed) => _gen.Seed(unchecked((uint)seed));
         public int Next() => unchecked((int)_gen.Next());
@@ -145,7 +143,7 @@ namespace GeminiLab.Core2.Random {
         private readonly Mt19937X64 _gen;
 
         public Mt19937X64S(long seed) => _gen = new Mt19937X64(unchecked((ulong)seed));
-        public Mt19937X64S() : this(DefaultSr.GetNext()) { }
+        public Mt19937X64S() : this(DefaultRNG.GetNext()) { }
 
         public void Seed(long seed) => _gen.Seed(unchecked((ulong)seed));
         public long Next() => unchecked((long)_gen.Next());

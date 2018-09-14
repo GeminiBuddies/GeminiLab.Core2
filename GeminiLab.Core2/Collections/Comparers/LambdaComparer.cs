@@ -6,7 +6,7 @@ namespace GeminiLab.Core2.Collections.Comparers {
         private readonly Func<T, T, int> _lambdaInt;
 
         public LambdaComparer(Func<T, T, int> lambda) {
-            _lambdaInt = lambda ?? throw new ArgumentNullException();
+            _lambdaInt = lambda ?? throw new ArgumentNullException(nameof(lambda));
         }
 
         public LambdaComparer(Func<T, T, bool> lessThan) {

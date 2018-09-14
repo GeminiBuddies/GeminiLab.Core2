@@ -17,7 +17,7 @@ namespace GeminiLab.Core2.Random {
         }
 
         public LCG(uint seed) : this(A, C, seed) { }
-        public LCG() : this((uint) DefaultSr.GetNext()) { }
+        public LCG() : this((uint)DefaultRNG.GetNext()) { }
 
         public void Seed(uint seed) {
             lock (this) _x = seed;
@@ -44,7 +44,7 @@ namespace GeminiLab.Core2.Random {
         }
 
         public LCG64(ulong seed) : this(A, C, seed) { }
-        public LCG64() : this(DefaultSr.GetNextULong()) { } // better now
+        public LCG64() : this(DefaultRNG.GetNextULong()) { } // better now
 
         public void Seed(ulong seed) {
             lock (this) _x = seed;

@@ -44,10 +44,15 @@ namespace GeminiLab.Core2.ML.Json {
             Stringify(config, 0, sb);
             return sb.ToString();
         }
+
+        public static implicit operator JsonValue(string str) => (JsonString)str;
+        public static implicit operator JsonValue(int val) => (JsonNumber)val;
+        public static implicit operator JsonValue(double val) => (JsonNumber)val;
+        public static implicit operator JsonValue(bool val) => (JsonBool)val;
     }
 
     // implement IDictionary<,> ? noway
-    public sealed class JsonObject : JsonValue , IComparer<string> {
+    public sealed class JsonObject : JsonValue, IComparer<string> {
         private readonly Dictionary<string, int> _keyOrder;
         private readonly SortedDictionary<string, JsonValue> _values;
 
@@ -115,10 +120,6 @@ namespace GeminiLab.Core2.ML.Json {
             return true;
         }
 
-        public bool ContainsKey(JsonString key) {
-            return ContainsKey(unpackJsonString(key));
-        }
-
         public bool ContainsKey(string key) {
             return _values.ContainsKey(key ?? throw new ArgumentNullException(nameof(key)));
         }
@@ -131,8 +132,61 @@ namespace GeminiLab.Core2.ML.Json {
             return true;
         }
 
-        public bool TryGetValue(JsonString key, out JsonValue value) {
-            return TryGetValue(unpackJsonString(key), out value);
+        public bool TryGetJsonString(string key, out JsonString result) {
+            if (TryGetValue(key, out var value) && value is JsonString s) {
+                result = s;
+                return true;
+            } else {
+                result = null;
+                return false;
+            }
+        }
+
+        public bool TryGetJsonObject(string key, out JsonObject result) {
+            if (TryGetValue(key, out var value) && value is JsonObject o) {
+                result = o;
+                return true;
+            } else {
+                result = null;
+                return false;
+            }
+        }
+
+        public bool TryGetJsonNumber(string key, out JsonNumber result) {
+            if (TryGetValue(key, out var value) && value is JsonNumber number) {
+                result = number;
+                return true;
+            } else {
+                result = null;
+                return false;
+            }
+        }
+        
+        public bool TryGetJsonBool(string key, out JsonBool result) {
+            if (TryGetValue(key, out var value) && value is JsonBool b) {
+                result = b;
+                return true;
+            } else {
+                result = null;
+                return false;
+            }
+        }
+
+        public bool TryReadInt(string key, out int num) {
+            num = 0;
+            if (!TryGetValue(key, out var value)) return false;
+
+            if (value is JsonNumber number && !number.IsFloat) {
+                num = number.ValueInt;
+                return true;
+            }
+
+            if (value is JsonString str && int.TryParse(str, out var result)) {
+                num = result;
+                return true;
+            }
+
+            return false;
         }
 
         public JsonObject() {
@@ -191,8 +245,8 @@ namespace GeminiLab.Core2.ML.Json {
 
         // key comparer
         public int Compare(string x, string y) {
-            int xv = _keyOrder.ContainsKey(x) ? _keyOrder[x] : -1;
-            int yv = _keyOrder.ContainsKey(y) ? _keyOrder[y] : -1;
+            int xv = _keyOrder.ContainsKey(x ?? throw new ArgumentNullException(nameof(x))) ? _keyOrder[x] : -1;
+            int yv = _keyOrder.ContainsKey(y ?? throw new ArgumentNullException(nameof(y))) ? _keyOrder[y] : -1;
 
             return xv.CompareTo(yv);
         }
@@ -281,10 +335,6 @@ namespace GeminiLab.Core2.ML.Json {
             target.Append('\"');
         }
 
-        public static implicit operator string(JsonString str) {
-            return str.Value;
-        }
-
         public bool Equals(JsonString other) {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -303,6 +353,9 @@ namespace GeminiLab.Core2.ML.Json {
 
         public static bool operator ==(JsonString a, JsonString b) => a?.Equals(b) ?? b is null;
         public static bool operator !=(JsonString a, JsonString b) => !(a == b);
+
+        public static implicit operator string(JsonString str) => str.Value;
+        public static implicit operator JsonString(string str) => new JsonString(str);
     }
 
     public sealed class JsonNumber : JsonValue, IEquatable<JsonNumber> {
@@ -357,6 +410,10 @@ namespace GeminiLab.Core2.ML.Json {
 
         public static bool operator ==(JsonNumber a, JsonNumber b) => a?.Equals(b) ?? b is null;
         public static bool operator !=(JsonNumber a, JsonNumber b) => !(a == b);
+
+        public static implicit operator JsonNumber(int val) => new JsonNumber(val);
+        public static implicit operator JsonNumber(double val) => new JsonNumber(val);
+        public static implicit operator double(JsonNumber val) => val.IsFloat ? val.ValueFloat : val.ValueInt;
     }
 
     public sealed class JsonBool : JsonValue, IEquatable<JsonBool> {
@@ -369,7 +426,7 @@ namespace GeminiLab.Core2.ML.Json {
         internal override void Stringify(JsonStringifyConfig config, int indent, StringBuilder target) {
             target.Append(Value ? "true" : "false");
         }
-        
+
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -386,6 +443,9 @@ namespace GeminiLab.Core2.ML.Json {
 
         public static bool operator ==(JsonBool a, JsonBool b) => a?.Equals(b) ?? b is null;
         public static bool operator !=(JsonBool a, JsonBool b) => !(a == b);
+
+        public static implicit operator JsonBool(bool val) => new JsonBool(val);
+        public static implicit operator bool(JsonBool val) => val.Value;
     }
 
     public sealed class JsonNull : JsonValue, IEquatable<JsonNull> {
