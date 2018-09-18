@@ -273,5 +273,6 @@ __pycache__/
 *.DotSettings
 
 # key
-keys/geminilab.snk
+keys/
+!keys/geminilab_pub.snk
 geminilab.snk

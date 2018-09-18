@@ -40,7 +40,10 @@ namespace GeminiLab.Core2.ML.Json {
             var cache = new List<JsonObjectKeyValuePair>();
 
             var tok = queue.PeekNoErrorOrEof();
-            if (tok.Type == JsonTokenType.RBrace) return new JsonObject(cache);
+            if (tok.Type == JsonTokenType.RBrace) {
+                queue.Read();
+                return new JsonObject(cache);
+            }
 
             while (true) {
                 var key = parseJsonString(queue);
@@ -65,7 +68,10 @@ namespace GeminiLab.Core2.ML.Json {
             var cache = new List<JsonValue>();
 
             var tok = queue.PeekNoErrorOrEof();
-            if (tok.Type == JsonTokenType.RBracket) return new JsonArray(cache);
+            if (tok.Type == JsonTokenType.RBracket) {
+                queue.Read();
+                return new JsonArray(cache);
+            }
 
             while (true) {
 

@@ -152,6 +152,16 @@ namespace GeminiLab.Core2.ML.Json {
             }
         }
 
+        public bool TryGetJsonArray(string key, out JsonArray result) {
+            if (TryGetValue(key, out var value) && value is JsonArray arr) {
+                result = arr;
+                return true;
+            } else {
+                result = null;
+                return false;
+            }
+        }
+
         public bool TryGetJsonNumber(string key, out JsonNumber result) {
             if (TryGetValue(key, out var value) && value is JsonNumber number) {
                 result = number;

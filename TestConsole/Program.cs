@@ -21,6 +21,8 @@ namespace TestConsole {
             var a = new int[10] {9, 2, 3, 1, 6, 4, 8, 0, 7, 5};
             a.MakeHeap(10);
             a.SortHeap(10);
+
+            Console.WriteLine(JsonParser.Parse("{\"module\":\"dockerop\",\"command\":\"psall\",\"token\":3009795,\"args\":{}}").GetType().Name);
         }
     }
 }

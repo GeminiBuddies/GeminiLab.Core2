@@ -8,12 +8,12 @@
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2</Product>
-    <AssemblyVersion>0.9.3.11</AssemblyVersion>
+    <AssemblyVersion>0.9.3.13</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2018</Copyright>
     <FileVersion>0.9.3.0</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>0.9.3-pre-20180914-11</Version>
+    <Version>0.9.3-pre-20180918-13</Version>
     <PackageLicenseUrl>https://github.com/GeminiLab/GeminiLab.Core2/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
