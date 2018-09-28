@@ -2,7 +2,7 @@ using System;
 using System.Text;
 
 namespace GeminiLab.Core2 {
-    public static class Base64Extensions {
+    public static class Base64 {
         public static readonly string Base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
         private static readonly byte[] DecodeTable = {
@@ -67,8 +67,8 @@ namespace GeminiLab.Core2 {
             for (int i = 0; i < groups; ++i) {
                 int val = 0;
                 for (int j = 0; j < 4; ++j) {
-                    int chr;
-                    if ((chr = source[i * 4 + j]) >= 0x80 || chr < 0 || DecodeTable[chr] >= 0x40) throw new ArgumentException(nameof(source));
+                    int chr = source[i * 4 + j];
+                    if (chr >= 0x80 || chr < 0 || DecodeTable[chr] >= 0x40) throw new ArgumentException(nameof(source));
 
                     val = (val << 6) | DecodeTable[chr];
                 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GeminiLab.Core2.Collections {
+namespace GeminiLab.Core2.Enumerable {
     public static class Enumerable {
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             if (source == null) throw new ArgumentNullException(nameof(source));
@@ -92,15 +92,5 @@ namespace GeminiLab.Core2.Collections {
         }
          
         public static IEnumerable<T> Slice<T>(this T[] source, int start) => Slice(source, start, source.Length - start);
-    }
-
-    public static class EnumerableOfString {
-        public static string JoinBy(this IEnumerable<string> value, string separator) => string.Join(separator, value);
-        public static string JoinBy(this IEnumerable<char> value, string separator) => string.Join(separator, value);
-
-        public static string Join(this IEnumerable<string> value) => string.Join("", value);
-        public static string Join(this IEnumerable<char> value) => string.Join("", value);
-
-        public static string Join(this string separator, IEnumerable<string> value) => string.Join(separator, value);
     }
 }
