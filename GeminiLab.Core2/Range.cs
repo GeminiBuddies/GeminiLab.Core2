@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -29,8 +28,13 @@ namespace GeminiLab.Core2 {
             _invalid = (Start == End) || (Step == 0) || ((step > 0) ^ (end > start));
         }
 
-        public IEnumerator<int> GetEnumerator() => _invalid ? EmptyEnumerator<int>.Instance : (IEnumerator<int>)new RangeEnumerator(this);
-        IEnumerator IEnumerable.GetEnumerator() => _invalid ? EmptyEnumerator<int>.Instance : (IEnumerator<int>)new RangeEnumerator(this);
+        public IEnumerator<int> GetEnumerator() {
+            if (_invalid) return EmptyEnumerator<int>.Instance;
+
+            return new RangeEnumerator(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         
         private class RangeEnumerator : IEnumerator<int> {
             private bool _used;

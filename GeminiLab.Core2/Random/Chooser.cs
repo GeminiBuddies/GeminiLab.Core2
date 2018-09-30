@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace GeminiLab.Core2.Random {
-    public class Chooser<TValue, TRNG> : IPRNG<TValue, int>, IInfiniteEnumerable<TValue> where TRNG : IPRNG<int>, new() {
+    public class Chooser<TValue, TRNG> : IPRNG<TValue, int> where TRNG : IPRNG<int>, new() {
         private int _seed;
         private readonly IList<TValue> _values;
         private readonly int _count;
@@ -31,7 +31,6 @@ namespace GeminiLab.Core2.Random {
             }
         }
 
-        public IInfiniteEnumerator<TValue> GetEnumerator() => getEnumeratorPrivate();
 
         public TValue Next() => _defaultEnumerator.GetNext();
         public void Reset() => _defaultEnumerator.Reset();
@@ -43,7 +42,7 @@ namespace GeminiLab.Core2.Random {
             }
         }
 
-        private class ChooserEnumerator : IInfiniteEnumerator<TValue> {
+        private class ChooserEnumerator {
             private readonly Chooser<TValue, TRNG> _mother;
             private readonly TRNG _rng;
             private readonly int _version;

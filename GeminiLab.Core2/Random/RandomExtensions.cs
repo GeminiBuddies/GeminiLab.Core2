@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using SR = System.Random;
-
 namespace GeminiLab.Core2.Random {
     public static class RandomExtensions {
         public static double NextDouble(this IRNG<uint> rng) => rng.Next() * (1.0 / uint.MaxValue);
@@ -153,7 +151,7 @@ namespace GeminiLab.Core2.Random {
         }
 
         public static void Shuffle<T>(this T[] array) {
-            Shuffle(array, DefaultRNG.GetInstance());
+            Shuffle(array, DefaultRNG.Instance);
         }
 
         public static void Shuffle<T>(this T[] array, IRNG<int> rng) {

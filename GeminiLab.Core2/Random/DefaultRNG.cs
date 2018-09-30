@@ -26,18 +26,10 @@ namespace GeminiLab.Core2.Random {
                 return (high << 32) | low;
             }
         }
-        
-        private static DefaultIntRNG _instance;
-        public static IRNG<int> GetInstance() {
-            lock (_instance) {
-                return _instance ?? (_instance = new DefaultIntRNG());
-            }
-        }
 
-        private static Coin _coin;
-        public static IRNG<bool> GetCoin() {
-            return _coin ?? (_coin = new Coin());
-        }
+        public static IRNG<int> Instance { get; } = new DefaultIntRNG();
+
+        private static Coin Coin { get; } = new Coin();
     }
 
     internal class DefaultIntRNG : IRNG<int> {
