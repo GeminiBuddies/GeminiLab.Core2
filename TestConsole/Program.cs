@@ -16,13 +16,9 @@ namespace TestConsole {
         }
 
         public static void Main(string[] args) {
-            Console.WriteLine("6Iuf5Yip5Zu95a6255Sf5q275Lul".DecodeBase64());
-
-            var a = new int[10] {9, 2, 3, 1, 6, 4, 8, 0, 7, 5};
-            a.MakeHeap(10);
-            a.SortHeap(10);
-
-            Console.WriteLine(JsonParser.Parse("{\"module\":\"dockerop\",\"command\":\"psall\",\"token\":3009795,\"args\":{}}").GetType().Name);
+            int a = 0;
+            var l = Yielder.Repeat(1).Map(x => ++a).Take(20);
+            var v = l.Select(i => i % 3 == 2, i => $"{i}").ToList();
         }
     }
 }
