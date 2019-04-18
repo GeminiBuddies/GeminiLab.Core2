@@ -1,7 +1,7 @@
 language: csharp
 mono: none
-dotnet: 2.0.3
-dist: xenial
+dotnet: 2.1.506
+dist: bionic
 script:
  - dotnet restore
- - dotnet build -c Debug
+ - dotnet build -c Debug GeminiLab.Core2.sln

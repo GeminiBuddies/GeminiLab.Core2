@@ -16,9 +16,12 @@ namespace TestConsole {
         }
 
         public static void Main(string[] args) {
+            PrintAssembly(typeof(Yielder).Assembly);
+
             int a = 0;
-            var l = Yielder.Repeat(1).Map(x => ++a).Take(20);
+            var l = Yielder.Iterate(() => ++a).Take(20);
             var v = l.Select(i => i % 3 == 2, i => $"{i}").ToList();
+            Console.Write($"{v.JoinBy(", ")}");
         }
     }
 }

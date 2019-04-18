@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
 
 namespace GeminiLab.Core2 {
     internal class YielderMapper<TSource, TResult> : IYielder<TResult> {
@@ -134,7 +136,7 @@ namespace GeminiLab.Core2 {
             return rv;
         }
     }
-
+    
     internal class ConstYielder<T> : IYielder<T> {
         private readonly T _val;
 
@@ -147,6 +149,18 @@ namespace GeminiLab.Core2 {
         }
     }
 
+    internal class IterateYielder<T> : IYielder<T> {
+        private readonly Func<T> _iterator;
+
+        public IterateYielder(Func<T> iterator) {
+            _iterator = iterator;
+        }
+
+        public T GetNext() {
+            return _iterator();
+        }
+    }
+
     // return default(TResult) if not accepted
     public delegate TResult Selector<in TSource, out TResult>(TSource s, out bool accepted);
 
@@ -154,7 +168,11 @@ namespace GeminiLab.Core2 {
         public static IYielder<T> Repeat<T>(T val) {
             return new ConstYielder<T>(val);
         }
-        
+
+        public static IYielder<T> Iterate<T>(Func<T> iterator) {
+            return new IterateYielder<T>(iterator);
+        }
+
         public static IYielder<TResult> Map<TSource, TResult>(this IYielder<TSource> source, Func<TSource, TResult> fun) {
             return new YielderMapper<TSource, TResult>(source, fun);
         }
