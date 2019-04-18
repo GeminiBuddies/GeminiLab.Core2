@@ -3,5 +3,5 @@ mono: none
 dotnet: 2.1.603
 dist: bionic
 script:
- - dotnet restore
+ - dotnet restore GeminiLab.Core2.sln
  - dotnet build -c Debug GeminiLab.Core2.sln
