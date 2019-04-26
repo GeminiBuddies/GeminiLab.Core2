@@ -66,7 +66,7 @@ namespace GeminiLab.Core2 {
 
         public T GetNext() {
             if (_first) {
-                _count.Times(_source.GetNext);
+                for (int i = 0; i < _count; ++i) _source.GetNext();
                 _first = false;
             }
 

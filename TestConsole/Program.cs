@@ -5,6 +5,8 @@ using GeminiLab.Core2.Collections;
 using GeminiLab.Core2.Collections.HeapBase;
 using GeminiLab.Core2.ML.Json;
 
+using Console = GeminiLab.Core2.Exconsole;
+
 namespace TestConsole {
     class Program {
         public static void PrintAssembly(Assembly ass) {
@@ -16,12 +18,12 @@ namespace TestConsole {
         }
 
         public static void Main(string[] args) {
-            PrintAssembly(typeof(Yielder).Assembly);
+            // PrintAssembly(typeof(Yielder).Assembly);
 
             int a = 0;
             var l = Yielder.Iterate(() => ++a).Take(20);
             var v = l.Select(i => i % 3 == 2, i => $"{i}").ToList();
-            Console.Write($"{v.JoinBy(", ")}");
+            Console.Write($"@v@g{v.JoinBy(", @^")}");
         }
     }
 }
