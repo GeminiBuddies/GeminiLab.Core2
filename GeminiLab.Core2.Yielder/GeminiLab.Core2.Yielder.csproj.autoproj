@@ -24,4 +24,8 @@
     <AssemblyOriginatorKeyFile>geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+  </ItemGroup>
 </Project>
