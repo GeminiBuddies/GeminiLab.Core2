@@ -6,7 +6,7 @@ namespace GeminiLab.Core2.Random {
     }
 
     // contract:
-    // everyclass has a constructor like ".ctor()" to initialize it with a runtime-randomly-choosed seed
+    // every class has a constructor like ".ctor()" to initialize it with a runtime-randomly-chosen seed
     public interface IPRNG<out TResult, in TSeed> : IRNG<TResult> {
         void Seed(TSeed seed);
     }

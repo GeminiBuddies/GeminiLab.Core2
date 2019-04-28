@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GeminiLab.Core2.Logger\GeminiLab.Core2.Logger.csproj" />
     <ProjectReference Include="..\GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj" />
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>

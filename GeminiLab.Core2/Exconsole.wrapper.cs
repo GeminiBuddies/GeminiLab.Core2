@@ -179,6 +179,17 @@ namespace GeminiLab.Core2 {
 
         public static void Write(ulong value) => Console.Write(value);
 
+        public static void Write(string value) => Console.Write(value);
+
+        public static void Write(string format, object arg0) => Console.Write(format, arg0);
+
+        public static void Write(string format, object arg0, object arg1) => Console.Write(format, arg0, arg1);
+
+        public static void Write(string format, object arg0, object arg1, object arg2) => Console.Write(format, arg0, arg1, arg2);
+
+        public static void Write(string format, params object[] arg) => Console.Write(format, arg);
+
+        public static void WriteLine() => Console.WriteLine();
 
         public static void WriteLine(bool value) => Console.WriteLine(value);
 
@@ -203,6 +214,16 @@ namespace GeminiLab.Core2 {
         public static void WriteLine(uint value) => Console.WriteLine(value);
 
         public static void WriteLine(ulong value) => Console.WriteLine(value);
+
+        public static void WriteLine(string value) => Console.WriteLine(value);
+
+        public static void WriteLine(string format, object arg0) => Console.WriteLine(format, arg0);
+
+        public static void WriteLine(string format, object arg0, object arg1) => Console.WriteLine(format, arg0, arg1);
+
+        public static void WriteLine(string format, object arg0, object arg1, object arg2) => Console.WriteLine(format, arg0, arg1, arg2);
+
+        public static void WriteLine(string format, params object[] arg) => Console.WriteLine(format, arg);
 
         public static event System.ConsoleCancelEventHandler CancelKeyPress {
             add => Console.CancelKeyPress += value;

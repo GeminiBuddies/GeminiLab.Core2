@@ -1,37 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Text;
 
 namespace GeminiLab.Core2 {
+    // following are things you really need
     public static partial class Exconsole {
-
-        public static void Write(string value) {
-            if (UseColorfulOutput) {
-                WriteColorful(value);
-            } else {
-                WriteRaw(value);
-            }
+        public static void WriteLineColor(string value, ConsoleColor? foregroundColor = null,
+            ConsoleColor? backgroundColor = null) {
+            WriteColor(value, foregroundColor, backgroundColor);
+            Console.WriteLine();
         }
 
-        public static void Write(string format, params object[] arg) {
-            Write(string.Format(format, arg));
+        public static void WriteColor(string value, ConsoleColor? foregroundColor = null,
+            ConsoleColor? backgroundColor = null) {
+            var fore = foregroundColor ?? ForegroundColor;
+            var back = backgroundColor ?? BackgroundColor;
+
+            ConsoleColor oldFore = ForegroundColor, oldBack = BackgroundColor;
+            Console.ForegroundColor = fore;
+            Console.BackgroundColor = back;
+
+            Console.Write(value);
+
+            Console.ForegroundColor = oldFore;
+            Console.BackgroundColor = oldBack;
         }
 
-        public static void WriteLine(string value) {
-            Write(value);
-            Console.Write(Console.Out.NewLine);
+        public static void WriteLineColorEscaped(string content) {
+            WriteColorEscaped(content);
+            Console.WriteLine();
         }
 
-        public static void WriteLine(string format, params object[] arg) { 
-            WriteLine(string.Format(format, arg));
-        }
-
-        // following are things you really need
-        public static bool UseColorfulOutput { get; set; } = true;
-
-        public static void WriteRaw(string value) => Console.Write(value);
-
-        public static void WriteColorful(string content) {
+        public static void WriteColorEscaped(string content) {
             int len = content.Length;
             char[] buffer = new char[len];
             int ptr = 0;
@@ -116,6 +117,41 @@ namespace GeminiLab.Core2 {
         public const char CharBackColorDarkGray = 'X';
         public const char CharPushColor = 'v';
         public const char CharPopColor = '^';
+
+        public const string SetForeColorBlack = "@k";
+        public const string SetForeColorRed = "@r";
+        public const string SetForeColorGreen = "@g";
+        public const string SetForeColorBlue = "@b";
+        public const string SetForeColorCyan = "@c";
+        public const string SetForeColorMagenta = "@m";
+        public const string SetForeColorYellow = "@y";
+        public const string SetForeColorGray = "@a";
+        public const string SetForeColorWhite = "@w";
+        public const string SetForeColorDarkRed = "@d";
+        public const string SetForeColorDarkGreen = "@e";
+        public const string SetForeColorDarkBlue = "@u";
+        public const string SetForeColorDarkCyan = "@n";
+        public const string SetForeColorDarkMagenta = "@t";
+        public const string SetForeColorDarkYellow = "@l";
+        public const string SetForeColorDarkGray = "@x";
+        public const string SetBackColorBlack = "@K";
+        public const string SetBackColorRed = "@R";
+        public const string SetBackColorGreen = "@G";
+        public const string SetBackColorBlue = "@B";
+        public const string SetBackColorCyan = "@C";
+        public const string SetBackColorMagenta = "@M";
+        public const string SetBackColorYellow = "@Y";
+        public const string SetBackColorGray = "@A";
+        public const string SetBackColorWhite = "@W";
+        public const string SetBackColorDarkRed = "@D";
+        public const string SetBackColorDarkGreen = "@E";
+        public const string SetBackColorDarkBlue = "@U";
+        public const string SetBackColorDarkCyan = "@N";
+        public const string SetBackColorDarkMagenta = "@T";
+        public const string SetBackColorDarkYellow = "@L";
+        public const string SetBackColorDarkGray = "@X";
+        public const string PushColor = "@v";
+        public const string PopColor = "@^";
 
         private static bool tryGetColorByChar(char chr, out bool fore, out ConsoleColor color) {
             switch (chr) {

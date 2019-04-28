@@ -6,7 +6,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiLab.Core2", "GeminiLa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "TestConsole\TestConsole.csproj", "{E7F34464-52BF-4450-8AA5-A1E7119FC60D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeminiLab.Core2.Yielder", "GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj", "{0BF6C884-7747-4A11-B447-4FFD5A5AE528}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiLab.Core2.Yielder", "GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj", "{0BF6C884-7747-4A11-B447-4FFD5A5AE528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeminiLab.Core2.Logger", "GeminiLab.Core2.Logger\GeminiLab.Core2.Logger.csproj", "{FDEA367A-73A8-42C3-A28C-2B3BE7FCC265}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{0BF6C884-7747-4A11-B447-4FFD5A5AE528}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BF6C884-7747-4A11-B447-4FFD5A5AE528}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BF6C884-7747-4A11-B447-4FFD5A5AE528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDEA367A-73A8-42C3-A28C-2B3BE7FCC265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDEA367A-73A8-42C3-A28C-2B3BE7FCC265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDEA367A-73A8-42C3-A28C-2B3BE7FCC265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDEA367A-73A8-42C3-A28C-2B3BE7FCC265}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
