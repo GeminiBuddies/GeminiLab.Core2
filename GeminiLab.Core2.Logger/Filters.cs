@@ -1,4 +1,4 @@
-﻿namespace GeminiLab.Core2.Logger {
+namespace GeminiLab.Core2.Logger {
     public static class Filters {
         public static Filter DenyFilter => (_, __, ___) => false;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 
 namespace GeminiLab.Core2.Logger.Layouts {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace GeminiLab.Core2.Logger.Appenders {
     public class StderrAppender : IAppender {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using GeminiLab.Core2;
 
 namespace GeminiLab.Core2.Logger.Appenders {
