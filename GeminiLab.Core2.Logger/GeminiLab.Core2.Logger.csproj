@@ -8,23 +8,24 @@
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2.Logger</Product>
-    <AssemblyVersion>0.9.3.22</AssemblyVersion>
+    <AssemblyVersion>0.9.3.52</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
     <FileVersion>0.9.3.0</FileVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>0.9.3-pre-20190429-22</Version>
-    <PackageLicenseUrl>https://github.com/GeminiLab/GeminiLab.Core2/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
+    <Version>0.9.3-pre-20190429-52</Version>
     <LangVersion>latest</LangVersion>
+    <Configurations>Release;Debug;Publish</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+  <PropertyGroup Condition="'$(Configuration)'=='Publish'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>

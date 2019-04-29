@@ -11,15 +11,16 @@
     <AssemblyVersion><~ version ~>.<~ build ~></AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - <~ now yyyy ~></Copyright>
     <FileVersion><~ version ~>.0</FileVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Version><~ version ~>-pre-<~ now yyyyMMdd ~>-<~ build ~></Version>
-    <PackageLicenseUrl>https://github.com/GeminiLab/GeminiLab.Core2/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
     <LangVersion>latest</LangVersion>
+    <Configurations>Release;Debug;Publish</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+  <PropertyGroup Condition="'$(Configuration)'=='Publish'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
