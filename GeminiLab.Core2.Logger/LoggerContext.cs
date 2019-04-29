@@ -21,7 +21,7 @@ namespace GeminiLab.Core2.Logger {
             _appenders.Add(name, appender);
         }
 
-        public bool Connect(string category, string appender, params IFilter[] filter) {
+        public bool Connect(string category, string appender, params Filter[] filter) {
             if (!_categories.TryGetValue(category, out var categoryItem)) return false;
             if (!_appenders.TryGetValue(appender, out var appenderItem)) return false;
 

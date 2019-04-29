@@ -36,6 +36,8 @@ namespace TestConsole {
 
             if (type.IsEnum) {
                 Console.WriteColor("E", ConsoleColor.DarkCyan);
+            } else if (type.IsSubclassOf(typeof(Delegate))) {
+                Console.WriteColor("D", ConsoleColor.Yellow);
             } else if (type.IsInterface) {
                 Console.WriteColor("I", ConsoleColor.Red);
             } else if (type.IsAbstract && type.IsSealed) {
@@ -82,6 +84,7 @@ namespace TestConsole {
             PrintAssembly(typeof(Console).Assembly);
             PrintAssembly(typeof(System.Console).Assembly);
             PrintAssembly(typeof(int).Assembly);
+            PrintAssembly(typeof(Logger).Assembly);
 
             int a = 0;
             var l = Yielder.Iterate(() => ++a).Take(20);

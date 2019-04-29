@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using GeminiLab.Core2;
 
 namespace GeminiLab.Core2.Logger.Layouts {
     internal class ColorfulConsoleLayout : ILayout {
