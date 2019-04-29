@@ -8,10 +8,10 @@
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2.Logger</Product>
-    <AssemblyVersion>0.9.3.52</AssemblyVersion>
+    <AssemblyVersion>0.9.3.56</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
     <FileVersion>0.9.3.0</FileVersion>
-    <Version>0.9.3-pre-20190429-52</Version>
+    <Version>0.9.3-pre-20190429-56</Version>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
   </PropertyGroup>
