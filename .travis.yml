@@ -6,10 +6,12 @@ env:
   global:
     - secure: "BqTsbk/D/6wKM8SaJzzceeCBBQYmlarbpF/vrVUYP/estCTIeFSlDJJIGzrpQJGzordhZuWXkhrIHtjxMGCW3IX1s7qz+TmiR8q1UbszEMiAGN/xljZeu0oO8FEtnVNDweJVfBfRwELV/h4GQ6f2uz4HZoZ1vREMc11p1GoHrc2otDctnMO/XWWKT0acXTFYAcY626roIf0Pv7PKOkl6HjvzVbhUW0UADDC5KJbm4q9iuxwzgqF2ICcW8mvYElHF//a9mv4MzUVnFeCwzyyKpsOQBcH/5q3lwCz/SCwJMT92nAS2zV/9bFxmdhoaF11ppKaS9tTEYZyywqt53+OkiJ8xpIcExSm2m62hCpazwMkLd6DqJv0M08i6uMjo/ulOAc+niDGaf1hWlnlm6+oawKWTeP0Mo1YJ6XC+fdZLRDB3Ha8uSftFSadAzLlaGubpaAb4fMY9JOxGCBLaUCg36J/PhMx1tz78xF+gLOH7NsWdrt0R2vLhczB8TkbUiWguo5MgxO/jGmr7mD5AYQsrZwAd4bbOjBygNjmoIIpNRZvXyddQtWLQ77X0Z4rxIC7fdNeJZGWUBHW6aAsUteTYuWVq1EeHHvz215MitHFGQfSN0kFejWJHIlm+gTqNOISII5krZBsMPk9VCvJrGj3oQA0gWHAkKNjmyn3hgBd+vB8="
 script:
- - mkdir tools
- - dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
- - make mode=debug
- - make mode=release
- - make test
- - echo --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
- - ./tools/csmacnz.Coveralls --opencover -i 'coverage.opencover.xml' --treatUploadErrorsAsWarnings --useRelativePaths --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
+  - mkdir tools
+  - dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
+  - make mode=debug
+  - make mode=release
+  - make test
+  - REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
+  - REPO_COMMIT_AUTHOR_EMAIL=$(git show -s --pretty=format:"%ce")
+  - REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
+  - ./tools/csmacnz.Coveralls --opencover -i 'coverage.opencover.xml' --treatUploadErrorsAsWarnings --useRelativePaths --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
