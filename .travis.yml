@@ -11,4 +11,4 @@ script:
  - make mode=debug
  - make mode=release
  - make test
- - make coveralls coveralls=./tools/csmacnz.coveralls
+ - make coveralls coveralls=./tools/csmacnz.Coveralls
