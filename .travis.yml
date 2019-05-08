@@ -11,4 +11,4 @@ script:
  - make mode=debug
  - make mode=release
  - make test
- - make coveralls coveralls=./tools/csmacnz.Coveralls
+ - ./tools/csmacnz.Coveralls --opencover -i 'coverage.opencover.xml' --treatUploadErrorsAsWarnings --useRelativePaths --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci"  --useRelativePaths
