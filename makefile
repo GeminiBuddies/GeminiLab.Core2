@@ -40,4 +40,7 @@ run_test:
 	@$(dotnet) run -p TestConsole$(/)TestConsole.csproj
 
 test:
-	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover XUnitTester$(/)XUnitTester.csproj
+	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:CoverletOutputDirectory=.. XUnitTester$(/)XUnitTester.csproj
+
+coveralls:
+	@$(coveralls) --opencover -i 'coverage.opencover.xml' --treatUploadErrorsAsWarnings --useRelativePaths
