@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 
-namespace GeminiLab.Core2 {
+namespace GeminiLab.Core2.Yielder {
     internal class YielderMapper<TSource, TResult> : IYielder<TResult> {
         private readonly IYielder<TSource> _source;
         private readonly Func<TSource, TResult> _fun;
@@ -179,15 +179,6 @@ namespace GeminiLab.Core2 {
 
         public static IYielder<T> Filter<T>(this IYielder<T> source, Predicate<T> predicate) {
             return new YielderFilter<T>(source, predicate);
-        }
-
-        public static IYielder<TResult> Select<TSource, TResult>(this IYielder<TSource> source, Predicate<TSource> filter, Func<TSource, TResult> map) {
-            // ReSharper disable once AssignmentInConditionalExpression
-            return new YielderSelector<TSource, TResult>(source, (TSource s, out bool accepted) => (accepted = filter(s)) ? map(s) : default);
-        }
-
-        public static IYielder<TResult> Select<TSource, TResult>(this IYielder<TSource> source, Selector<TSource, TResult> selector) {
-            return new YielderSelector<TSource, TResult>(source, selector);
         }
 
         public static IYielder<T> Skip<T>(this IYielder<T> source, int count) {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GeminiLab.Core2 {
+namespace GeminiLab.Core2.Yielder {
     internal class FiniteYielderMapper<TSource, TResult> : IFiniteYielder<TResult> {
         private readonly IFiniteYielder<TSource> _source;
         private readonly Func<TSource, TResult> _fun;
