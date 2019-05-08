@@ -210,7 +210,7 @@ namespace GeminiLab.Core2.Yielder {
 
     public static class FiniteYielder {
         public static IFiniteYielder<T> Repeat<T>(T val, int count) {
-            return Yielder.Repeat(val).Take(count);
+            return Yielder.Const(val).Take(count);
         }
 
         public static bool All<T>(this IFiniteYielder<T> source, Predicate<T> predicate) {
@@ -262,11 +262,7 @@ namespace GeminiLab.Core2.Yielder {
             // ReSharper disable once AssignmentInConditionalExpression
             return new FiniteYielderSelector<TSource, TResult>(source, (TSource s, out bool accepted) => (accepted = filter(s)) ? map(s) : default);
         }
-
-        public static IFiniteYielder<TResult> Select<TSource, TResult>(this IFiniteYielder<TSource> source, Selector<TSource, TResult> selector) {
-            return new FiniteYielderSelector<TSource, TResult>(source, selector);
-        }
-
+        
         public static IFiniteYielder<T> Skip<T>(this IFiniteYielder<T> source, int count) {
             return new FiniteYielderSkipper<T>(source, count);
         }

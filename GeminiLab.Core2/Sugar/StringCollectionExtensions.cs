@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace GeminiLab.Core2.Sugar {
     public static class StringCollectionExtensions {

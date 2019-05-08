@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using GeminiLab.Core2;
 using GeminiLab.Core2.Sugar;
 using Xunit;
@@ -10,7 +10,7 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
     public class YielderTest {
         [Fact]
         public void YielderBase() {
-            var yielder = Yielder.Repeat(7);
+            var yielder = Yielder.Const(7);
 
             Assert.Equal(7, yielder.GetNext());
             Assert.Equal(7, yielder.GetNext());
@@ -18,7 +18,7 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(7, yielder.GetNext());
 
             int x = 1;
-            yielder = Yielder.Iterate(() => x *= 2);
+            yielder = Yielder.Repeat(() => x *= 2);
             Assert.Equal(2, yielder.GetNext());
             Assert.Equal(4, yielder.GetNext());
             Assert.Equal(8, yielder.GetNext());
@@ -28,7 +28,7 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
         [Fact]
         public void YielderExtensionFilter() {
             int x = 1;
-            var yielder = Yielder.Iterate(() => x += 2);
+            var yielder = Yielder.Repeat(() => x += 2);
             var filtered = yielder.Filter(v => v % 3 == 0);
             Assert.Equal(3, filtered.GetNext());
             Assert.Equal(9, filtered.GetNext());
@@ -38,8 +38,7 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
 
         [Fact]
         public void YielderExtensionMap() {
-            int x = 1;
-            var yielder = Yielder.Iterate(() => x += 2);
+            var yielder = Yielder.NaturalNumber().Map(v => v * 2 + 3);
             var mapped = yielder.Map(v => v % 3);
             Assert.Equal(0, mapped.GetNext());
             Assert.Equal(2, mapped.GetNext());
@@ -49,8 +48,7 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
 
         [Fact]
         public void YielderExtensionFilterAndMap() {
-            int x = 1;
-            var yielder = Yielder.Iterate(() => x += 2);
+            var yielder = Yielder.NaturalNumber().Map(v => v * 2 + 3);
             var selected = yielder.Filter(v => v % 3 < 2).Map(v => v + 4);
             Assert.Equal(7, selected.GetNext());
             Assert.Equal(11, selected.GetNext());
@@ -63,7 +61,7 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             bool v = true;
             int x = 0;
             // ReSharper disable once AssignmentInConditionalExpression
-            var yielder = Yielder.Iterate(() => ((v = !v)) ? (Base)new A { Num = x++ } : new B() { Str = $"{x++}" });
+            var yielder = Yielder.Repeat(() => ((v = !v)) ? (Base)new A { Num = x++ } : new B() { Str = $"{x++}" });
 
             var aYielder = yielder.OfType<Base, A>();
             Assert.Equal(1, aYielder.GetNext().Num);
@@ -76,6 +74,63 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal("10", bYielder.GetNext().Str);
             Assert.Equal("12", bYielder.GetNext().Str);
             Assert.Equal("14", bYielder.GetNext().Str);
+        }
+
+        [Fact]
+        public void YielderExtensionSkip() {
+            var yielder = Yielder.NaturalNumber().Skip(1).Map(v => v * v);
+            var skipped = yielder.Skip(5);
+
+            Assert.Equal(36, skipped.GetNext());
+            Assert.Equal(49, skipped.GetNext());
+            Assert.Equal(64, skipped.GetNext());
+            Assert.Equal(81, skipped.GetNext());
+            Assert.Equal(100, skipped.GetNext());
+        }
+
+        [Fact]
+        public void YielderExtensionTake() {
+            var yielder = Yielder.NaturalNumber().Skip(1).Map(v => v * v);
+            var taken = yielder.Take(5);
+
+            Assert.Equal(1, taken.GetNext());
+            Assert.Equal(4, taken.GetNext());
+            Assert.Equal(9, taken.GetNext());
+            Assert.Equal(16, taken.GetNext());
+            Assert.Equal(25, taken.GetNext());
+            Assert.False(taken.HasNext());
+        }
+
+        [Fact]
+        public void YielderExtensionTakeWhile() {
+            var yielder = Yielder.NaturalNumber().Skip(1).Map(v => v * v);
+            var taken = yielder.TakeWhile(v => v < 25);
+
+            Assert.Equal(1, taken.GetNext());
+            Assert.Equal(4, taken.GetNext());
+            Assert.Equal(9, taken.GetNext());
+            Assert.Equal(16, taken.GetNext());
+            Assert.False(taken.HasNext());
+        }
+
+        [Fact]
+        public void YielderExtensionZip() {
+            var yielderA = Yielder.NaturalNumber().Filter(x => x % 2 == 0);
+            var yielderB = Yielder.NaturalNumber().Filter(x => x % 2 != 0);
+
+            var zipped = yielderA.Zip(yielderB, (a, b) => a + b);
+
+            Assert.Equal(1, zipped.GetNext());
+            Assert.Equal(5, zipped.GetNext());
+            Assert.Equal(9, zipped.GetNext());
+            Assert.Equal(13, zipped.GetNext());
+
+            zipped = yielderA.Zip(yielderB, (a, b) => a - b);
+
+            Assert.Equal(-1, zipped.GetNext());
+            Assert.Equal(-1, zipped.GetNext());
+            Assert.Equal(-1, zipped.GetNext());
+            Assert.Equal(-1, zipped.GetNext());
         }
     }
 }
