@@ -280,3 +280,5 @@ geminilab.snk
 #ignore
 *.ignore
 *.ignore*
+
+*.opencover.xml

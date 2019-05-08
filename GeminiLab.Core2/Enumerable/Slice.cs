@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GeminiLab.Core2.Sugar;
 
 namespace GeminiLab.Core2.Enumerable {
     public class Slice<T> : IEnumerable<T> {
@@ -13,7 +14,7 @@ namespace GeminiLab.Core2.Enumerable {
 
         private bool _empty;
 
-        private void recalc() {
+        private void recalculate() {
             if ((_start < 0 || _end < 0) && _cache == null) {
                 // List<T> will know what it is
                 _cache = new List<T>(_source);
@@ -48,12 +49,12 @@ namespace GeminiLab.Core2.Enumerable {
             _end = end;
             _step = step;
 
-            recalc();
+            recalculate();
         }
 
         public Slice<T> Start(int start) {
             _start = start;
-            recalc();
+            recalculate();
 
             return this;
         }
@@ -63,7 +64,7 @@ namespace GeminiLab.Core2.Enumerable {
         public Slice<T> End(int end) {
             _end = end;
             _tillEnd = false;
-            recalc();
+            recalculate();
 
             return this;
         }
@@ -71,14 +72,14 @@ namespace GeminiLab.Core2.Enumerable {
         public Slice<T> End() {
             _end = 0;
             _tillEnd = true;
-            recalc();
+            recalculate();
 
             return this;
         }
 
         public Slice<T> Step(int step) {
             _step = step;
-            recalc();
+            recalculate();
 
             return this;
         }

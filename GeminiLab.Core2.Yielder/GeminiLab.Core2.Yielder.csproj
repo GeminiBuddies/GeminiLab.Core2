@@ -8,10 +8,10 @@
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2.Yielder</Product>
-    <AssemblyVersion>0.9.3.56</AssemblyVersion>
+    <AssemblyVersion>1.0.0.68</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
-    <FileVersion>0.9.3.0</FileVersion>
-    <Version>0.9.3-pre-20190429-56</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0-pre-20190508-68</Version>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
   </PropertyGroup>

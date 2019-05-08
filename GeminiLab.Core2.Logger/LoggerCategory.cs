@@ -3,8 +3,9 @@ using System.Linq;
 
 namespace GeminiLab.Core2.Logger {
     internal class LoggerCategory {
-        private readonly List<(IEnumerable<Filter> filters, IAppender appender)> _connections = new List<(IEnumerable<Filter> filters, IAppender appender)>();
+        private readonly List<(IEnumerable<Filter> filters, IAppender appender)> _connections = new List<(IEnumerable<Filter>, IAppender)>();
         private readonly string _name;
+
         public LoggerCategory(string name) {
             _name = name;
         }

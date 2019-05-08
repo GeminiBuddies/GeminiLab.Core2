@@ -1,17 +1,15 @@
-namespace GeminiLab.Core2 {
+namespace GeminiLab.Core2.Consts {
     public static class Strings {
         public const string Lowercase = "abcdefghijklmnopqrstuvwxyz";
         public const string Uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public const string Letter = Lowercase + Uppercase;
 
+        public const string DigitOct = "01234567";
         public const string Digit = "0123456789";
-        public const string DigitHexOnlyLower = "abcdef";
-        public const string DigitHexOnlyUpper = "ABCDEF";
-        public const string DigitHexOnly = DigitHexOnlyLower + DigitHexOnlyUpper;
-        public const string DigitHexLower = Digit + DigitHexOnlyLower;
-        public const string DigitHexUpper = Digit + DigitHexOnlyUpper;
-        public const string DigitHex = Digit + DigitHexOnlyLower + DigitHexOnlyUpper;
+        public const string DigitHexLower = "0123456789abcdef";
+        public const string DigitHexUpper = "0123456789ABCDEF";
+        public const string DigitHex = "0123456789abcdefABCDEF";
 
         public const string DigitAndLowercase = Digit + Lowercase;
         public const string DigitAndUppercase = Digit + Uppercase;

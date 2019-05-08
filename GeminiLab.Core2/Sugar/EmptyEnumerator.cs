@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
-namespace GeminiLab.Core2 {
+namespace GeminiLab.Core2.Sugar {
     public class EmptyEnumerator<T> : IEnumerator<T> {
         public bool MoveNext() => false;
 

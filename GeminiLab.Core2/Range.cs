@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GeminiLab.Core2.Sugar;
 
 namespace GeminiLab.Core2 {
     // python style range
@@ -11,13 +12,13 @@ namespace GeminiLab.Core2 {
         public int Start { get; }
         public int End { get; }
         public int Step { get; }
-        private readonly bool _ascending;
 
+        private readonly bool _ascending;
         private readonly bool _invalid;
 
         public Range() : this(0) { }
-        public Range(int end) : this(0, end) { }
-        public Range(int start, int end) : this(start, end, start <= end ? 1 : -1) { }
+        public Range(int end) : this(0, end, 1) { }
+        public Range(int start, int end) : this(start, end, 1) { }
         public Range(int start, int end, int step) {
             Start = start;
             End = end;
@@ -77,10 +78,5 @@ namespace GeminiLab.Core2 {
                 _dead = false;
             }
         }
-    }
-
-    public static class RangeExtensions {
-        public static Range To(this int from, int to) => new Range(from, to);
-        public static Range To(this int from, int to, int step) => new Range(from, to, step);
     }
 }

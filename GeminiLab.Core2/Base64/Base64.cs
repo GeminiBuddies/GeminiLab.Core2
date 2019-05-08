@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace GeminiLab.Core2 {
+namespace GeminiLab.Core2.Base64 {
     public static class Base64 {
         public const string Base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

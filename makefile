@@ -3,7 +3,7 @@ mode ?= debug
 autoproj ?= autoproj
 
 ifeq ($(OS),Windows_NT)
-	/ := \
+	/ := \\
 	os := win
 else
 	/ := /
@@ -38,3 +38,6 @@ publish:
 
 run_test:
 	@$(dotnet) run -p TestConsole$(/)TestConsole.csproj
+
+test:
+	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover XUnitTester$(/)XUnitTester.csproj

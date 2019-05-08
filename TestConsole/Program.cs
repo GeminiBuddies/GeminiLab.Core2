@@ -9,6 +9,7 @@ using GeminiLab.Core2.ML.Json;
 using GeminiLab.Core2.Random;
 using GeminiLab.Core2.Logger;
 using GeminiLab.Core2.Logger.Appenders;
+using GeminiLab.Core2.Sugar;
 using Console = GeminiLab.Core2.Exconsole;
 
 namespace TestConsole {

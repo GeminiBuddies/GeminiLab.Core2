@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GeminiLab.Core2.Enumerable {
-    public static class Enumerable {
+namespace GeminiLab.Core2.Sugar {
+    public static class EnumerableExtensions {
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (action == null) throw new ArgumentNullException(nameof(action));
