@@ -23,6 +23,12 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(4, yielder.GetNext());
             Assert.Equal(8, yielder.GetNext());
             Assert.Equal(16, yielder.GetNext());
+
+            yielder = Yielder.Iterate(v => v * 3, 1);
+            Assert.Equal(3, yielder.GetNext());
+            Assert.Equal(9, yielder.GetNext());
+            Assert.Equal(27, yielder.GetNext());
+            Assert.Equal(81, yielder.GetNext());
         }
 
         [Fact]

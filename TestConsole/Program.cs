@@ -89,7 +89,7 @@ namespace TestConsole {
             PrintAssembly(typeof(Logger).Assembly);
 
             var l = Yielder.NaturalNumber().Take(20);
-            var v = l.Select(i => i % 3 == 2, i => $"{i}").ToList();
+            var v = l.Filter(i => i % 3 == 2).Map(i => $"{i}").ToList();
             var chooser = "rgbcmyx".MakeChooser();
             Console.WriteLineColorEscaped($"{v.Select(x => $"@v@{chooser.Next()}{x}@^").JoinBy(", ")}");
 

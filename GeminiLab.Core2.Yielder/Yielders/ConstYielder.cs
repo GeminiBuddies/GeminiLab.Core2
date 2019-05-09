@@ -1,4 +1,4 @@
-namespace GeminiLab.Core2.Yielder {
+namespace GeminiLab.Core2.Yielder.Yielders {
     internal class ConstYielder<T> : IYielder<T> {
         private readonly T _val;
 
