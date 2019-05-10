@@ -8,9 +8,9 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             _selector = selector;
         }
 
-        public TResult GetNext() {
+        public TResult Next() {
             while (true) {
-                var val = _source.GetNext();
+                var val = _source.Next();
                 var res = _selector(val, out var accepted);
 
                 if (accepted) return res;

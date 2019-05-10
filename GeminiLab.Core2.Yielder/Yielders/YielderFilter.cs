@@ -10,9 +10,9 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             _predicate = predicate;
         }
 
-        public T GetNext() {
+        public T Next() {
             while (true) {
-                T temp = _source.GetNext();
+                T temp = _source.Next();
                     
                 if (_predicate(temp)) return temp;
             }

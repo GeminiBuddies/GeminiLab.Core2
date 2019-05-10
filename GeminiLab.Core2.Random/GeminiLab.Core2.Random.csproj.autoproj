@@ -4,14 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ApplicationIcon />
     <Win32Resource />
-    <Description>GeminiLab Corelib. This part contains Yielder.</Description>
+    <Description>GeminiLab Corelib. This part contains Random Number Generators.</Description>
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
-    <Product>GeminiLab.Core2.Yielder</Product>
-    <AssemblyVersion>1.0.0.90</AssemblyVersion>
-    <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
-    <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0-pre-20190510-90</Version>
+    <Product>GeminiLab.Core2.Random</Product>
+    <AssemblyVersion><~ version ~>.<~ build ~></AssemblyVersion>
+    <Copyright>Copyright © Gemini Laboratory 2017 - <~ now yyyy ~></Copyright>
+    <FileVersion><~ version ~>.0</FileVersion>
+    <Version><~ version ~>-pre-<~ now yyyyMMdd ~>-<~ build ~></Version>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
   </PropertyGroup>
@@ -25,8 +25,12 @@
     <AssemblyOriginatorKeyFile>geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Csp" Version="4.3.0" />
   </ItemGroup>
 </Project>

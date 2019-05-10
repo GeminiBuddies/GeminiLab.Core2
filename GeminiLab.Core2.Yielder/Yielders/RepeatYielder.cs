@@ -8,7 +8,7 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             _iterator = iterator;
         }
 
-        public T GetNext() {
+        public T Next() {
             return _iterator();
         }
     }

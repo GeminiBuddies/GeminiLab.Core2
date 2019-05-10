@@ -10,7 +10,7 @@ namespace GeminiLab.Core2.Yielder {
         
         public static bool All<T>(this IFiniteYielder<T> source, Predicate<T> predicate) {
             while (source.HasNext()) {
-                if (!predicate(source.GetNext())) return false;
+                if (!predicate(source.Next())) return false;
             }
 
             return true;
@@ -18,7 +18,7 @@ namespace GeminiLab.Core2.Yielder {
 
         public static bool Any<T>(this IFiniteYielder<T> source, Predicate<T> predicate) {
             while (source.HasNext()) {
-                if (predicate(source.GetNext())) return true;
+                if (predicate(source.Next())) return true;
             }
 
             return false;
@@ -28,7 +28,7 @@ namespace GeminiLab.Core2.Yielder {
             int count = 0;
             while (source.HasNext()) {
                 checked{ count++; }
-                source.GetNext();
+                source.Next();
             }
 
             return count;
@@ -40,7 +40,7 @@ namespace GeminiLab.Core2.Yielder {
 
         public static bool Contains<T>(this IFiniteYielder<T> source, T item, IEqualityComparer<T> comp) {
             while (source.HasNext()) {
-                if (comp.Equals(item, source.GetNext())) return true;
+                if (comp.Equals(item, source.Next())) return true;
             }
 
             return false;
@@ -81,7 +81,7 @@ namespace GeminiLab.Core2.Yielder {
         public static List<T> ToList<T>(this IFiniteYielder<T> source) {
             var rv = new List<T>();
 
-            while (source.HasNext()) rv.Add(source.GetNext());
+            while (source.HasNext()) rv.Add(source.Next());
             return rv;
         }
     }

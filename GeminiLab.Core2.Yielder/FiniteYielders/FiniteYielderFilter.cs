@@ -23,7 +23,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
 
             _hasNext = false;
             while (_source.HasNext()) {
-                _next = _source.GetNext();
+                _next = _source.Next();
 
                 if (!_predicate(_next)) continue;
 
@@ -35,7 +35,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
             return _hasNext;
         }
 
-        public T GetNext() {
+        public T Next() {
             if (!HasNext()) return default;
 
             _nextCalculated = false;

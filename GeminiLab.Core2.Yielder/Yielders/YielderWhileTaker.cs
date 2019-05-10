@@ -24,14 +24,14 @@ namespace GeminiLab.Core2.Yielder.Yielders {
         public bool HasNext() {
             if (_nextCalculated) return _nextGood;
 
-            _next = _source.GetNext();
+            _next = _source.Next();
             _nextCalculated = true;
             _nextGood = _predicate(_next);
 
             return _nextGood;
         }
 
-        public T GetNext() {
+        public T Next() {
             if (!HasNext()) return default;
 
             T rv = _next;

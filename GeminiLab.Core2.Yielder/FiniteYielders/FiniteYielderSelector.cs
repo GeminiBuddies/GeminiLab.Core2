@@ -21,7 +21,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
 
             _hasNext = false;
             while (_source.HasNext()) {
-                _next = _selector(_source.GetNext(), out var accepted);
+                _next = _selector(_source.Next(), out var accepted);
 
                 if (!accepted) continue;
 
@@ -33,7 +33,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
             return _hasNext;
         }
 
-        public TResult GetNext() {
+        public TResult Next() {
             if (!HasNext()) return default;
 
             _nextCalculated = false;

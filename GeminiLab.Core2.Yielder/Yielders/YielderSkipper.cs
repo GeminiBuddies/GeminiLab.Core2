@@ -9,13 +9,13 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             _count = count;
         }
 
-        public T GetNext() {
+        public T Next() {
             if (_first) {
-                for (int i = 0; i < _count; ++i) _source.GetNext();
+                for (int i = 0; i < _count; ++i) _source.Next();
                 _first = false;
             }
 
-            return _source.GetNext();
+            return _source.Next();
         }
     }
 }

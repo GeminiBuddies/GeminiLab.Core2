@@ -1,9 +1,9 @@
+using GeminiLab.Core2.Yielder;
+
 namespace GeminiLab.Core2.Random {
     // contract:
     // Next() return all possible values of TResult
-    public interface IRNG<out TResult> {
-        TResult Next();
-    }
+    public interface IRNG<out T> : IYielder<T> { }
 
     // contract:
     // every class has a constructor like ".ctor()" to initialize it with a runtime-randomly-chosen seed

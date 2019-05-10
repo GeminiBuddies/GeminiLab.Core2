@@ -14,8 +14,8 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
             return _source.HasNext();
         }
 
-        public TResult GetNext() {
-            return _fun(_source.GetNext());
+        public TResult Next() {
+            return _fun(_source.Next());
         }
     }
 }

@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTester", "XUnitTester\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "TestConsole\TestConsole.csproj", "{E7F34464-52BF-4450-8AA5-A1E7119FC60D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiLab.Core2.Random", "GeminiLab.Core2.Random\GeminiLab.Core2.Random.csproj", "{BE6AD4D9-6274-4D33-853C-618B423D580F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,7 +42,6 @@ Global
 		{80E91F8E-3046-41F0-8D9F-72E2C54E75AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80E91F8E-3046-41F0-8D9F-72E2C54E75AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80E91F8E-3046-41F0-8D9F-72E2C54E75AD}.Publish|Any CPU.ActiveCfg = Release|Any CPU
-		{80E91F8E-3046-41F0-8D9F-72E2C54E75AD}.Publish|Any CPU.Build.0 = Release|Any CPU
 		{80E91F8E-3046-41F0-8D9F-72E2C54E75AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80E91F8E-3046-41F0-8D9F-72E2C54E75AD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E7F34464-52BF-4450-8AA5-A1E7119FC60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,6 +49,12 @@ Global
 		{E7F34464-52BF-4450-8AA5-A1E7119FC60D}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
 		{E7F34464-52BF-4450-8AA5-A1E7119FC60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7F34464-52BF-4450-8AA5-A1E7119FC60D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE6AD4D9-6274-4D33-853C-618B423D580F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE6AD4D9-6274-4D33-853C-618B423D580F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE6AD4D9-6274-4D33-853C-618B423D580F}.Publish|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE6AD4D9-6274-4D33-853C-618B423D580F}.Publish|Any CPU.Build.0 = Debug|Any CPU
+		{BE6AD4D9-6274-4D33-853C-618B423D580F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE6AD4D9-6274-4D33-853C-618B423D580F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,7 +15,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         public bool HasNext() {
             if (_first) {
                 for (int i = 0; i < _count; ++i) {
-                    if (_source.HasNext()) _source.GetNext();
+                    if (_source.HasNext()) _source.Next();
                     else break;
                 }
 
@@ -25,9 +25,9 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
             return _source.HasNext();
         }
 
-        public T GetNext() {
+        public T Next() {
             if (!HasNext()) return default;
-            return _source.GetNext();
+            return _source.Next();
         }
     }
 }

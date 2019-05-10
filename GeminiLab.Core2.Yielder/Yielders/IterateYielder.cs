@@ -10,7 +10,7 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             _val = init;
         }
 
-        public T GetNext() {
+        public T Next() {
             return _val = _fun(_val);
         }
     }

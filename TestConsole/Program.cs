@@ -82,15 +82,15 @@ namespace TestConsole {
             var logger = loggerContext.GetLogger("default");
 
             logger.Info("printing assemblies");
-
+            /*
             PrintAssembly(typeof(Console).Assembly);
             PrintAssembly(typeof(System.Console).Assembly);
             PrintAssembly(typeof(int).Assembly);
             PrintAssembly(typeof(Logger).Assembly);
-
+            */
             var l = Yielder.NaturalNumber().Take(20);
             var v = l.Filter(i => i % 3 == 2).Map(i => $"{i}").ToList();
-            var chooser = "rgbcmyx".MakeChooser();
+            var chooser = "rgbcmywdeuntlx".MakeChooser();
             Console.WriteLineColorEscaped($"{v.Select(x => $"@v@{chooser.Next()}{x}@^").JoinBy(", ")}");
 
             logger.Warn("warning!");
@@ -103,6 +103,11 @@ namespace TestConsole {
 
             Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkRed}FATAL {Console.SetForeColorRed}ERROR {Console.SetForeColorYellow} WARN@^");
             Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkGreen}INFO {Console.SetForeColorMagenta}DEBUG {Console.SetForeColorDarkMagenta} TRACE@^");
+
+            Yielder.Repeat(DefaultRNG.Next).Take(20).Map(x => {
+                Console.WriteLine(x);
+                return 0;
+            }).ToList();
         }
     }
 }

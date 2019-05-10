@@ -10,7 +10,7 @@ namespace GeminiLab.Core2.Random {
         private ChooserEnumerator _defaultEnumerator;
         private volatile int _version;
 
-        public Chooser(IList<TValue> values) : this(values, DefaultRNG.GetNext()) { }
+        public Chooser(IList<TValue> values) : this(values, DefaultRNG.Next()) { }
 
         public Chooser(IList<TValue> values, int seed) {
             _seed = seed;
@@ -86,7 +86,7 @@ namespace GeminiLab.Core2.Random {
         }
 
         public static T Choose<T>(this IList<T> source) {
-            return source[DefaultRNG.GetNext(0, source.Count)];
+            return source[DefaultRNG.Instance.Next(0, source.Count)];
         }
 
         public static Chooser<T> MakeChooser<T>(this IEnumerable<T> source) => Make(source);

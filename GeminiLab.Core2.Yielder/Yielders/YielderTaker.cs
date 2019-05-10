@@ -15,11 +15,11 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             return _count < _limit;
         }
 
-        public T GetNext() {
+        public T Next() {
             if (!HasNext()) return default;
 
             ++_count;
-            return _source.GetNext();
+            return _source.Next();
         }
     }
 }

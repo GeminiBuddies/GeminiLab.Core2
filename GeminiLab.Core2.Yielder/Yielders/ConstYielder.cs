@@ -6,7 +6,7 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             _val = val;
         }
 
-        public T GetNext() {
+        public T Next() {
             return _val;
         }
     }
