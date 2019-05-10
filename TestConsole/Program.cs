@@ -103,11 +103,9 @@ namespace TestConsole {
 
             Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkRed}FATAL {Console.SetForeColorRed}ERROR {Console.SetForeColorYellow} WARN@^");
             Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkGreen}INFO {Console.SetForeColorMagenta}DEBUG {Console.SetForeColorDarkMagenta} TRACE@^");
-
-            Yielder.Repeat(DefaultRNG.Next).Take(20).Map(x => {
-                Console.WriteLine(x);
-                return 0;
-            }).ToList();
+            
+            Console.Write(Yielder.Iterate<ulong>(x => unchecked(x * 314159265358ul + 97932), 1).Take(20).Map(x => $"{x}").ToList()
+                                 .JoinBy("\n"));
         }
     }
 }
