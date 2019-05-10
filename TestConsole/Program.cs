@@ -82,12 +82,12 @@ namespace TestConsole {
             var logger = loggerContext.GetLogger("default");
 
             logger.Info("printing assemblies");
-            /*
+            
             PrintAssembly(typeof(Console).Assembly);
-            PrintAssembly(typeof(System.Console).Assembly);
-            PrintAssembly(typeof(int).Assembly);
             PrintAssembly(typeof(Logger).Assembly);
-            */
+            PrintAssembly(typeof(DefaultRNG).Assembly);
+            PrintAssembly(typeof(IYielder<>).Assembly);
+            
             var l = Yielder.NaturalNumber().Take(20);
             var v = l.Filter(i => i % 3 == 2).Map(i => $"{i}").ToList();
             var chooser = "rgbcmywdeuntlx".MakeChooser();
@@ -101,11 +101,15 @@ namespace TestConsole {
             logger.Trace("trace");
             logger.Log(1024, "custom level");
 
-            Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkRed}FATAL {Console.SetForeColorRed}ERROR {Console.SetForeColorYellow} WARN@^");
-            Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkGreen}INFO {Console.SetForeColorMagenta}DEBUG {Console.SetForeColorDarkMagenta} TRACE@^");
-            
-            Console.Write(Yielder.Iterate<ulong>(x => unchecked(x * 314159265358ul + 97932), 1).Take(20).Map(x => $"{x}").ToList()
-                                 .JoinBy("\n"));
+            Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkRed}FATAL {Console.SetForeColorRed}ERROR {Console.SetForeColorYellow}WARN@^");
+            Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkGreen}INFO {Console.SetForeColorMagenta}DEBUG {Console.SetForeColorDarkMagenta}TRACE@^");
+
+            int times = 2000000;
+            int range = 100;
+            int[] count = new int[range];
+            times.Times(() => DefaultRNG.Instance.Next(100)).ForEach(x => ++count[x]);
+
+            count.NumberItems().ForEach(x => Console.WriteLine($"{x.Key}: {x.Value * range / 1.0 / times}"));
         }
     }
 }

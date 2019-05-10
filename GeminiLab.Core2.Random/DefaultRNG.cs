@@ -21,6 +21,12 @@ namespace GeminiLab.Core2.Random {
             }
         }
 
+        public static double NextDouble() {
+            lock (InnerOne) {
+                return InnerOne.NextDouble();
+            }
+        }
+
         public static IRNG<int> Instance { get; } = new DefaultIntRNG();
 
         public static IRNG<bool> Coin { get; } = new Coin();

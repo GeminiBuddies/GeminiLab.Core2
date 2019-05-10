@@ -175,5 +175,11 @@ namespace XUnitTester.GeminiLab_Core2_Random {
             Assert.Equal(14750666319745019266ul, mt.Next());
             Assert.Equal(10797686269382288876ul, mt.Next());
         }
+
+        [Fact]
+        public void DefaultRNGTests() {
+            DefaultRNG.Instance.Next();
+            DefaultRNG.Coin.Next();
+        }
     }
 }
