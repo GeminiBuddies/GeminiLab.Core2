@@ -45,7 +45,7 @@ namespace XUnitTester.GeminiLab_Core2_Random {
             byte[] buffer = DefaultRNG.Instance.NextBytes(len);
 
             for (int i = 0; i < len; ++i) ++count[buffer[i]];
-            for (int i = 0; i < 256; ++i) Assert.InRange(count[i] * 256.0 / len, 0.9, 1.1);
+            for (int i = 0; i < 256; ++i) Assert.InRange(count[i] * 256.0 / len, 0.85, 1.15);
         }
 
         [Fact]
