@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 
-namespace GeminiLab.Core2.Random {
+namespace GeminiLab.Core2.Random.Sugar {
     public static class RandomExtensions {
         public static double NextDouble(this IRNG<int> rng) => unchecked((uint)rng.Next()) * (1.0 / uint.MaxValue);
         public static double NextDouble(this IRNG<ulong> rng) => rng.Next() * (1.0 / ulong.MaxValue);

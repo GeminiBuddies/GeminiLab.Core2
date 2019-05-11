@@ -1,4 +1,5 @@
 using System;
+using GeminiLab.Core2.Random.Sugar;
 
 namespace GeminiLab.Core2.Random {
     public static class DefaultRNG {
