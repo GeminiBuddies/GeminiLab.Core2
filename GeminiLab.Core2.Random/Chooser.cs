@@ -10,7 +10,7 @@ namespace GeminiLab.Core2.Random {
         private readonly int _count;
         private readonly IRNG<int> _rng;
         
-        public Chooser(IList<TValue> values, IRNG<int> rng) {
+        private Chooser(IList<TValue> values, IRNG<int> rng) {
             _values = values;
             _count = values.Count;
             _rng = rng;

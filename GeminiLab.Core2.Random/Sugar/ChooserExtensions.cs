@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace GeminiLab.Core2.Random.Sugar {
     public static class ChooserExtensions {

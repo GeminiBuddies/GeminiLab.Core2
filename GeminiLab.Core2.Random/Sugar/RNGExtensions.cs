@@ -39,7 +39,7 @@ namespace GeminiLab.Core2.Random.Sugar {
             if (start + count > len) throw new ArgumentOutOfRangeException(nameof(count));
 
             int end = start + count;
-            for (int i = start; i < end; ++i) buffer[i] = (byte)(rng.Next() | 0xFF);
+            for (int i = start; i < end; ++i) buffer[i] = (byte)(rng.Next() & 0xFF);
         }
 
         public static byte[] NextBytes(this IRNG<int> rng, int count) {
