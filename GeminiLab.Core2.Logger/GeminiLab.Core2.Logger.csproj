@@ -8,21 +8,22 @@
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2.Logger</Product>
-    <AssemblyVersion>1.0.0.94</AssemblyVersion>
+    <AssemblyVersion>1.0.0.108</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
     <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0-pre-20190511-94</Version>
+    <Version>1.0.0-pre-20190521-108</Version>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Publish'">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\bin\</PackageOutputPath>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>geminilab.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\keys\geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 

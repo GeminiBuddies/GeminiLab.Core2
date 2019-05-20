@@ -5,7 +5,7 @@ namespace GeminiLab.Core2.Logger.Appenders {
     public class ColorfulConsoleAppender : IAppender {
         private readonly ILayout _layout;
 
-        public ColorfulConsoleAppender() : this(Layout.ColorfulTimedConsoleLayout) { }
+        public ColorfulConsoleAppender() : this(Layout.DefaultColorfulTimedConsoleLayout) { }
 
         public ColorfulConsoleAppender(ILayout layout) {
             _layout = layout;

@@ -1,3 +1,4 @@
 <~~ static_counter build_cnt ~~>
 <~~ assign build build_cnt ~~>
 <~~ const version 1.0.0 ~~>
+<~~ static_var sign_code ~~>

@@ -12,6 +12,7 @@ using GeminiLab.Core2.Logger.Appenders;
 using GeminiLab.Core2.Random.Sugar;
 using GeminiLab.Core2.Sugar;
 using GeminiLab.Core2.Yielder;
+using GeminiLab.Core2.Stream;
 using Console = GeminiLab.Core2.Exconsole;
 
 namespace TestConsole {
@@ -70,7 +71,7 @@ namespace TestConsole {
         public static void PrintAssembly(Assembly ass) {
             Console.WriteLineColorEscaped($"Assembly name: @v@r{ass.FullName}@^");
             Console.WriteLineColorEscaped($"Location: @v@g{ass.Location}@^");
-            Console.WriteLineColorEscaped($"Code Base: @v@g{ass.CodeBase}@^");
+            Console.WriteLineColorEscaped($"Code Base: @v@e{ass.CodeBase}@^");
 
             foreach (var type in ass.GetTypes()) PrintType(type);
         }
@@ -88,7 +89,8 @@ namespace TestConsole {
             PrintAssembly(typeof(Logger).Assembly);
             PrintAssembly(typeof(DefaultRNG).Assembly);
             PrintAssembly(typeof(IYielder<>).Assembly);
-            
+            PrintAssembly(typeof(IStream).Assembly);
+
             var l = Yielder.NaturalNumber().Take(20);
             var v = l.Filter(i => i % 3 == 2).Map(i => $"{i}").ToList();
             var chooser = "rgbcmywdeuntlx".MakeChooser();
@@ -104,13 +106,6 @@ namespace TestConsole {
 
             Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkRed}FATAL {Console.SetForeColorRed}ERROR {Console.SetForeColorYellow}WARN@^");
             Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkGreen}INFO {Console.SetForeColorMagenta}DEBUG {Console.SetForeColorDarkMagenta}TRACE@^");
-
-            int times = 2000000;
-            int range = 100;
-            int[] count = new int[range];
-            times.Times(() => DefaultRNG.Instance.Next(100)).ForEach(x => ++count[x]);
-
-            count.NumberItems().ForEach(x => Console.WriteLine($"{x.Key}: {x.Value * range / 1.0 / times}"));
         }
     }
 }

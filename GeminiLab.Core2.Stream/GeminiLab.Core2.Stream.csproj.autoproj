@@ -4,10 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ApplicationIcon />
     <Win32Resource />
-    <Description>GeminiLab Corelib</Description>
+    <Description>GeminiLab Corelib. This part contains Stream Model.</Description>
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
-    <Product>GeminiLab.Core2</Product>
+    <Product>GeminiLab.Core2.Stream</Product>
     <AssemblyVersion><~ version ~>.<~ build ~></AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - <~ now yyyy ~></Copyright>
     <FileVersion><~ version ~>.0</FileVersion>
@@ -17,4 +17,8 @@
   </PropertyGroup>
 
 <~ sign_code ~>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 
 using GeminiLab.Core2.Random;
 using GeminiLab.Core2.Random.Sugar;

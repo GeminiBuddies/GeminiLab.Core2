@@ -10,6 +10,7 @@
     <ProjectReference Include="..\GeminiLab.Core2.Logger\GeminiLab.Core2.Logger.csproj" />
     <ProjectReference Include="..\GeminiLab.Core2.Random\GeminiLab.Core2.Random.csproj" />
     <ProjectReference Include="..\GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj" />
+    <ProjectReference Include="..\GeminiLab.Core2.Stream\GeminiLab.Core2.Stream.csproj" />
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>
 

@@ -16,15 +16,7 @@
     <Configurations>Release;Debug;Publish</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Publish'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>geminilab.snk</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
-  </PropertyGroup>
+<~ sign_code ~>
   
   <ItemGroup>
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
