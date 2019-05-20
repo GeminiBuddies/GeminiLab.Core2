@@ -40,4 +40,4 @@ run_test:
 	@$(dotnet) run -p TestConsole$(/)TestConsole.csproj
 
 test:
-	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:CoverletOutputDirectory=.. XUnitTester$(/)XUnitTester.csproj
+	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:Exclude=[xunit.*]* XUnitTester$(/)XUnitTester.csproj
