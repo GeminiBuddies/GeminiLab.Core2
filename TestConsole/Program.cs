@@ -82,24 +82,12 @@ namespace TestConsole {
         public class AmazingColorLayout : ILayout {
             public string Format(int level, string category, string content) {
                 var sb = new StringBuilder("##@v");
-                var chooser = ("" + Console.ForegroundBlue
-                                 + Console.ForegroundRed
-                                 + Console.ForegroundGreen
-                                 + Console.ForegroundCyan
-                                 + Console.ForegroundMagenta
-                                 + Console.ForegroundYellow
-                                 + Console.ForegroundDarkBlue
-                                 + Console.ForegroundDarkRed
-                                 + Console.ForegroundDarkGreen
-                                 + Console.ForegroundDarkCyan
-                                 + Console.ForegroundDarkMagenta
-                                 + Console.ForegroundDarkYellow
-                                 + Console.ForegroundGray
-                                 + Console.ForegroundWhite).MakeChooser();
+                var chooser1 = ("XDEUNTL").MakeChooser();
+                var chooser2 = ("rgbcmywa").MakeChooser();
 
                 foreach (var c in
                     $"[{Logger.LogLevelToString(level)}][{category}][{DateTime.Now:yyyy/MM/dd HH:mm:ss.fff}]") {
-                    sb.Append($"@{chooser.Next()}{c}");
+                    sb.Append($"@{chooser1.Next()}@{chooser2.Next()}{c}");
                 }
 
                 sb.Append("@^");
