@@ -47,7 +47,7 @@ namespace GeminiLab.Core2 {
 
             for (int i = 0; i < len; ++i) {
                 var chr = content[i];
-                if (chr == CharEscape && i < len - 1) {
+                if (chr == EscapeChar && i < len - 1) {
                     chr = content[++i];
 
                     if (tryGetColorByChar(chr, out var isFore, out var color)) {
@@ -56,7 +56,7 @@ namespace GeminiLab.Core2 {
                         if (isFore) ForegroundColor = color;
                         else BackgroundColor = color;
                     } else {
-                        if (chr == CharPopColor) {
+                        if (chr == PopColorChar) {
                             if (colorStack.Count > 0) {
                                 FlushBuffer();
 
@@ -64,12 +64,12 @@ namespace GeminiLab.Core2 {
                                 ForegroundColor = fore;
                                 BackgroundColor = back;
                             }
-                        } else if (chr == CharPushColor) {
+                        } else if (chr == PushColorChar) {
                             colorStack.Push((ForegroundColor, BackgroundColor));
-                        } else if (chr == CharEscape) {
-                            buffer[ptr++] = CharEscape;
+                        } else if (chr == EscapeChar) {
+                            buffer[ptr++] = EscapeChar;
                         } else {
-                            buffer[ptr++] = CharEscape;
+                            buffer[ptr++] = EscapeChar;
                             buffer[ptr++] = chr;
                         }
                     }
@@ -82,142 +82,107 @@ namespace GeminiLab.Core2 {
         }
 
         // auxiliary
-        public const char CharEscape = '@';
-        public const char CharForeColorBlack = 'k';
-        public const char CharForeColorRed = 'r';
-        public const char CharForeColorGreen = 'g';
-        public const char CharForeColorBlue = 'b';
-        public const char CharForeColorCyan = 'c';
-        public const char CharForeColorMagenta = 'm';
-        public const char CharForeColorYellow = 'y';
-        public const char CharForeColorGray = 'a';
-        public const char CharForeColorWhite = 'w';
-        public const char CharForeColorDarkRed = 'd';
-        public const char CharForeColorDarkGreen = 'e';
-        public const char CharForeColorDarkBlue = 'u';
-        public const char CharForeColorDarkCyan = 'n';
-        public const char CharForeColorDarkMagenta = 't';
-        public const char CharForeColorDarkYellow = 'l';
-        public const char CharForeColorDarkGray = 'x';
-        public const char CharBackColorBlack = 'K';
-        public const char CharBackColorRed = 'R';
-        public const char CharBackColorGreen = 'G';
-        public const char CharBackColorBlue = 'B';
-        public const char CharBackColorCyan = 'C';
-        public const char CharBackColorMagenta = 'M';
-        public const char CharBackColorYellow = 'Y';
-        public const char CharBackColorGray = 'A';
-        public const char CharBackColorWhite = 'W';
-        public const char CharBackColorDarkRed = 'D';
-        public const char CharBackColorDarkGreen = 'E';
-        public const char CharBackColorDarkBlue = 'U';
-        public const char CharBackColorDarkCyan = 'N';
-        public const char CharBackColorDarkMagenta = 'T';
-        public const char CharBackColorDarkYellow = 'L';
-        public const char CharBackColorDarkGray = 'X';
-        public const char CharPushColor = 'v';
-        public const char CharPopColor = '^';
-
-        public const string SetForeColorBlack = "@k";
-        public const string SetForeColorRed = "@r";
-        public const string SetForeColorGreen = "@g";
-        public const string SetForeColorBlue = "@b";
-        public const string SetForeColorCyan = "@c";
-        public const string SetForeColorMagenta = "@m";
-        public const string SetForeColorYellow = "@y";
-        public const string SetForeColorGray = "@a";
-        public const string SetForeColorWhite = "@w";
-        public const string SetForeColorDarkRed = "@d";
-        public const string SetForeColorDarkGreen = "@e";
-        public const string SetForeColorDarkBlue = "@u";
-        public const string SetForeColorDarkCyan = "@n";
-        public const string SetForeColorDarkMagenta = "@t";
-        public const string SetForeColorDarkYellow = "@l";
-        public const string SetForeColorDarkGray = "@x";
-        public const string SetBackColorBlack = "@K";
-        public const string SetBackColorRed = "@R";
-        public const string SetBackColorGreen = "@G";
-        public const string SetBackColorBlue = "@B";
-        public const string SetBackColorCyan = "@C";
-        public const string SetBackColorMagenta = "@M";
-        public const string SetBackColorYellow = "@Y";
-        public const string SetBackColorGray = "@A";
-        public const string SetBackColorWhite = "@W";
-        public const string SetBackColorDarkRed = "@D";
-        public const string SetBackColorDarkGreen = "@E";
-        public const string SetBackColorDarkBlue = "@U";
-        public const string SetBackColorDarkCyan = "@N";
-        public const string SetBackColorDarkMagenta = "@T";
-        public const string SetBackColorDarkYellow = "@L";
-        public const string SetBackColorDarkGray = "@X";
-        public const string PushColor = "@v";
-        public const string PopColor = "@^";
-
+        public const char EscapeChar = '@';
+        public const char ForegroundBlack = 'k';
+        public const char ForegroundRed = 'r';
+        public const char ForegroundGreen = 'g';
+        public const char ForegroundBlue = 'b';
+        public const char ForegroundCyan = 'c';
+        public const char ForegroundMagenta = 'm';
+        public const char ForegroundYellow = 'y';
+        public const char ForegroundGray = 'a';
+        public const char ForegroundWhite = 'w';
+        public const char ForegroundDarkRed = 'd';
+        public const char ForegroundDarkGreen = 'e';
+        public const char ForegroundDarkBlue = 'u';
+        public const char ForegroundDarkCyan = 'n';
+        public const char ForegroundDarkMagenta = 't';
+        public const char ForegroundDarkYellow = 'l';
+        public const char ForegroundDarkGray = 'x';
+        public const char BackgroundBlack = 'K';
+        public const char BackgroundRed = 'R';
+        public const char BackgroundGreen = 'G';
+        public const char BackgroundBlue = 'B';
+        public const char BackgroundCyan = 'C';
+        public const char BackgroundMagenta = 'M';
+        public const char BackgroundYellow = 'Y';
+        public const char BackgroundGray = 'A';
+        public const char BackgroundWhite = 'W';
+        public const char BackgroundDarkRed = 'D';
+        public const char BackgroundDarkGreen = 'E';
+        public const char BackgroundDarkBlue = 'U';
+        public const char BackgroundDarkCyan = 'N';
+        public const char BackgroundDarkMagenta = 'T';
+        public const char BackgroundDarkYellow = 'L';
+        public const char BackgroundDarkGray = 'X';
+        public const char PushColorChar = 'v';
+        public const char PopColorChar = '^';
+        
         private static bool tryGetColorByChar(char chr, out bool fore, out ConsoleColor color) {
             switch (chr) {
-            case CharForeColorBlack:
+            case ForegroundBlack:
                 fore = true; color = ConsoleColor.Black; return true;
-            case CharForeColorRed:
+            case ForegroundRed:
                 fore = true; color = ConsoleColor.Red; return true;
-            case CharForeColorGreen:
+            case ForegroundGreen:
                 fore = true; color = ConsoleColor.Green; return true;
-            case CharForeColorBlue:
+            case ForegroundBlue:
                 fore = true; color = ConsoleColor.Blue; return true;
-            case CharForeColorCyan:
+            case ForegroundCyan:
                 fore = true; color = ConsoleColor.Cyan; return true;
-            case CharForeColorMagenta:
+            case ForegroundMagenta:
                 fore = true; color = ConsoleColor.Magenta; return true;
-            case CharForeColorYellow:
+            case ForegroundYellow:
                 fore = true; color = ConsoleColor.Yellow; return true;
-            case CharForeColorGray:
+            case ForegroundGray:
                 fore = true; color = ConsoleColor.Gray; return true;
-            case CharForeColorWhite:
+            case ForegroundWhite:
                 fore = true; color = ConsoleColor.White; return true;
-            case CharForeColorDarkRed:
+            case ForegroundDarkRed:
                 fore = true; color = ConsoleColor.DarkRed; return true;
-            case CharForeColorDarkGreen:
+            case ForegroundDarkGreen:
                 fore = true; color = ConsoleColor.DarkGreen; return true;
-            case CharForeColorDarkBlue:
+            case ForegroundDarkBlue:
                 fore = true; color = ConsoleColor.DarkBlue; return true;
-            case CharForeColorDarkCyan:
+            case ForegroundDarkCyan:
                 fore = true; color = ConsoleColor.DarkCyan; return true;
-            case CharForeColorDarkMagenta:
+            case ForegroundDarkMagenta:
                 fore = true; color = ConsoleColor.DarkMagenta; return true;
-            case CharForeColorDarkYellow:
+            case ForegroundDarkYellow:
                 fore = true; color = ConsoleColor.DarkYellow; return true;
-            case CharForeColorDarkGray:
+            case ForegroundDarkGray:
                 fore = true; color = ConsoleColor.DarkGray; return true;
-            case CharBackColorBlack:
+            case BackgroundBlack:
                 fore = false; color = ConsoleColor.Black; return true;
-            case CharBackColorRed:
+            case BackgroundRed:
                 fore = false; color = ConsoleColor.Red; return true;
-            case CharBackColorGreen:
+            case BackgroundGreen:
                 fore = false; color = ConsoleColor.Green; return true;
-            case CharBackColorBlue:
+            case BackgroundBlue:
                 fore = false; color = ConsoleColor.Blue; return true;
-            case CharBackColorCyan:
+            case BackgroundCyan:
                 fore = false; color = ConsoleColor.Cyan; return true;
-            case CharBackColorMagenta:
+            case BackgroundMagenta:
                 fore = false; color = ConsoleColor.Magenta; return true;
-            case CharBackColorYellow:
+            case BackgroundYellow:
                 fore = false; color = ConsoleColor.Yellow; return true;
-            case CharBackColorGray:
+            case BackgroundGray:
                 fore = false; color = ConsoleColor.Gray; return true;
-            case CharBackColorWhite:
+            case BackgroundWhite:
                 fore = false; color = ConsoleColor.White; return true;
-            case CharBackColorDarkRed:
+            case BackgroundDarkRed:
                 fore = false; color = ConsoleColor.DarkRed; return true;
-            case CharBackColorDarkGreen:
+            case BackgroundDarkGreen:
                 fore = false; color = ConsoleColor.DarkGreen; return true;
-            case CharBackColorDarkBlue:
+            case BackgroundDarkBlue:
                 fore = false; color = ConsoleColor.DarkBlue; return true;
-            case CharBackColorDarkCyan:
+            case BackgroundDarkCyan:
                 fore = false; color = ConsoleColor.DarkCyan; return true;
-            case CharBackColorDarkMagenta:
+            case BackgroundDarkMagenta:
                 fore = false; color = ConsoleColor.DarkMagenta; return true;
-            case CharBackColorDarkYellow:
+            case BackgroundDarkYellow:
                 fore = false; color = ConsoleColor.DarkYellow; return true;
-            case CharBackColorDarkGray:
+            case BackgroundDarkGray:
                 fore = false; color = ConsoleColor.DarkGray; return true;
             default:
                 fore = false; color = ConsoleColor.Black; return false;

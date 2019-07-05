@@ -14,6 +14,8 @@ using GeminiLab.Core2.Sugar;
 using GeminiLab.Core2.Yielder;
 using GeminiLab.Core2.Stream;
 using Console = GeminiLab.Core2.Exconsole;
+using System.IO;
+using System.Text;
 
 namespace TestConsole {
     class Program {
@@ -76,25 +78,53 @@ namespace TestConsole {
             foreach (var type in ass.GetTypes()) PrintType(type);
         }
 
+        /// <summary>Why c++ have no anonymous inner classes?</summary>
+        public class AmazingColorLayout : ILayout {
+            public string Format(int level, string category, string content) {
+                var sb = new StringBuilder("##@v");
+                var chooser = ("" + Console.ForegroundBlue
+                                 + Console.ForegroundRed
+                                 + Console.ForegroundGreen
+                                 + Console.ForegroundCyan
+                                 + Console.ForegroundMagenta
+                                 + Console.ForegroundYellow
+                                 + Console.ForegroundDarkBlue
+                                 + Console.ForegroundDarkRed
+                                 + Console.ForegroundDarkGreen
+                                 + Console.ForegroundDarkCyan
+                                 + Console.ForegroundDarkMagenta
+                                 + Console.ForegroundDarkYellow
+                                 + Console.ForegroundGray
+                                 + Console.ForegroundWhite).MakeChooser();
+
+                foreach (var c in
+                    $"[{Logger.LogLevelToString(level)}][{category}][{DateTime.Now:yyyy/MM/dd HH:mm:ss.fff}]") {
+                    sb.Append($"@{chooser.Next()}{c}");
+                }
+
+                sb.Append("@^");
+                return sb.ToString();
+            }
+        }
+
         public static void Main(string[] args) {
             var loggerContext = new LoggerContext();
             loggerContext.AddCategory("default");
             loggerContext.AddAppender("console", new ColorfulConsoleAppender());
+            loggerContext.AddAppender("stderr", new StderrAppender());
+            loggerContext.AddAppender("console-layout", new ColorfulConsoleAppender(new AmazingColorLayout()));
             loggerContext.Connect("default", "console");
+            loggerContext.Connect("default", "stderr", Filters.Threshold(Logger.LevelError));
+            loggerContext.Connect("default", "console-layout", Filters.AcceptFilter);
             var logger = loggerContext.GetLogger("default");
 
             logger.Info("printing assemblies");
-            
+
             PrintAssembly(typeof(Console).Assembly);
             PrintAssembly(typeof(Logger).Assembly);
             PrintAssembly(typeof(DefaultRNG).Assembly);
             PrintAssembly(typeof(IYielder<>).Assembly);
             PrintAssembly(typeof(IStream).Assembly);
-
-            var l = Yielder.NaturalNumber().Take(20);
-            var v = l.Filter(i => i % 3 == 2).Map(i => $"{i}").ToList();
-            var chooser = "rgbcmywdeuntlx".MakeChooser();
-            Console.WriteLineColorEscaped($"{v.Select(x => $"@v@{chooser.Next()}{x}@^").JoinBy(", ")}");
 
             logger.Warn("warning!");
 
@@ -104,8 +134,8 @@ namespace TestConsole {
             logger.Trace("trace");
             logger.Log(1024, "custom level");
 
-            Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkRed}FATAL {Console.SetForeColorRed}ERROR {Console.SetForeColorYellow}WARN@^");
-            Console.WriteLineColorEscaped($"@v{Console.SetForeColorDarkGreen}INFO {Console.SetForeColorMagenta}DEBUG {Console.SetForeColorDarkMagenta}TRACE@^");
+            Console.WriteLineColorEscaped($"@v@dFATAL @rERROR @yWARN@^;");
+            Console.WriteLineColorEscaped($"@v@eINFO @mDEBUG @tTRACE@^;");
         }
     }
 }

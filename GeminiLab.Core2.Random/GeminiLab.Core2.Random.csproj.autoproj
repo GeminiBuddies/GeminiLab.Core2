@@ -14,6 +14,7 @@
     <Version><~ version ~>-pre-<~ now yyyyMMdd ~>-<~ build ~></Version>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
 <~ sign_code ~>

@@ -8,12 +8,13 @@
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2.Random</Product>
-    <AssemblyVersion>1.0.0.108</AssemblyVersion>
+    <AssemblyVersion>1.0.0.111</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
     <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0-pre-20190521-108</Version>
+    <Version>1.0.0-pre-20190706-111</Version>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Publish'">

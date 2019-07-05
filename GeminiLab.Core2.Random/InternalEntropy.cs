@@ -9,12 +9,12 @@ namespace GeminiLab.Core2.Random {
 
             ulong IYielder<ulong>.Next() {
                 lock (this) {
-                    var temp = new byte[8];
+                    var temp =  new byte[8];
                     _rng.GetBytes(temp);
+                    ulong rv;
 
-                    ulong rv = 0;
-                    for (int i = 0; i < 8; ++i) {
-                        rv = (rv << 8) | temp[i];
+                    unsafe {
+                        fixed (byte* b = &temp[0]) rv = *(ulong*)b;
                     }
 
                     return rv;
