@@ -1,5 +1,10 @@
+using System;
+using System.Globalization;
+
 namespace GeminiLab.Core2.Logger.Layouts {
-    internal class DefaultLayout : ILayout {
-        public string Format(int level, string category, string content) => $"[{Logger.LogLevelToString(level)}][{category}] {content}";
+    public class DefaultLayout : ILayout {
+        public string Format(int level, string category, DateTime time, string content) => $"[{Logger.LogLevelToString(level)}][{category}][{time:yyyy/MM/dd HH:mm:ss.fff}] {content}";
+
+        public static DefaultLayout Default { get; } = new DefaultLayout();
     }
 }

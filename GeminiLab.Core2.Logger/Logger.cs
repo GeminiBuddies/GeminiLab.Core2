@@ -1,7 +1,7 @@
 using System;
 
 namespace GeminiLab.Core2.Logger {
-    public class Logger {
+    public sealed class Logger {
         private readonly LoggerCategory _category;
         internal Logger(LoggerCategory category) {
             _category = category;
@@ -20,7 +20,7 @@ namespace GeminiLab.Core2.Logger {
         public void Trace(string message) => Log(LevelTrace, message);
 
         public void Log(int level, string message) {
-            _category.Invoke(level, message);
+            _category.Invoke(level, DateTime.Now, message);
         }
 
         public const int LevelOff = 0x10000;

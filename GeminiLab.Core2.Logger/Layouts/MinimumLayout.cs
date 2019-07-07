@@ -1,5 +1,9 @@
+using System;
+
 namespace GeminiLab.Core2.Logger.Layouts {
-    internal class MinimumLayout : ILayout {
-        public string Format(int level, string category, string content) => content;
+    public class MinimumLayout : ILayout {
+        public string Format(int level, string category, DateTime time, string content) => content;
+
+        public static MinimumLayout Default { get; } = new MinimumLayout();
     }
 }

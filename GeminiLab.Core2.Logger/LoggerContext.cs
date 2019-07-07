@@ -29,21 +29,12 @@ namespace GeminiLab.Core2.Logger {
             return true;
         }
 
-        private void disposeAppenders() {
-            foreach (var pair in _appenders) {
-                var appender = pair.Value;
-
-                if (appender is IDisposable disposable) disposable.Dispose(); 
-            }
-        }
-
         public void Dispose() {
-            disposeAppenders();
-            GC.SuppressFinalize(this);
-        }
+            _categories.Clear();
 
-        ~LoggerContext() {
-            disposeAppenders();
+            foreach (var appender in _appenders) {
+                if (appender.Value is IDisposable disposable) disposable.Dispose();
+            }
         }
     }
 }

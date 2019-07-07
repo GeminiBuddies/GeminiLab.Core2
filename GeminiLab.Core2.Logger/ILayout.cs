@@ -4,6 +4,6 @@ using System.Text;
 
 namespace GeminiLab.Core2.Logger {
     public interface ILayout {
-        string Format(int level, string category, string content);
+        string Format(int level, string category, DateTime time, string content);
     }
 }

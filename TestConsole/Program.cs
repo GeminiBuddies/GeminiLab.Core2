@@ -16,6 +16,7 @@ using GeminiLab.Core2.Stream;
 using Console = GeminiLab.Core2.Exconsole;
 using System.IO;
 using System.Text;
+using GeminiLab.Core2.Logger.Layouts;
 
 namespace TestConsole {
     class Program {
@@ -80,13 +81,13 @@ namespace TestConsole {
 
         /// <summary>Why c++ have no anonymous inner classes?</summary>
         public class AmazingColorLayout : ILayout {
-            public string Format(int level, string category, string content) {
+            public string Format(int level, string category, DateTime time, string content) {
                 var sb = new StringBuilder("##@v");
-                var chooser1 = ("XDEUNTL").MakeChooser();
-                var chooser2 = ("rgbcmywa").MakeChooser();
+                var chooser1 = (@"XDEUNTL").MakeChooser();
+                var chooser2 = (@"rgbcmywa").MakeChooser();
+                var str = $"[{Logger.LogLevelToString(level)}][{category}][{time:yyyy/MM/dd HH:mm:ss.fff}]";
 
-                foreach (var c in
-                    $"[{Logger.LogLevelToString(level)}][{category}][{DateTime.Now:yyyy/MM/dd HH:mm:ss.fff}]") {
+                foreach (var c in str) {
                     sb.Append($"@{chooser1.Next()}@{chooser2.Next()}{c}");
                 }
 
@@ -94,36 +95,39 @@ namespace TestConsole {
                 return sb.ToString();
             }
         }
-
+        
         public static void Main(string[] args) {
-            var loggerContext = new LoggerContext();
-            loggerContext.AddCategory("default");
-            loggerContext.AddAppender("console", new ColorfulConsoleAppender());
-            loggerContext.AddAppender("stderr", new StderrAppender());
-            loggerContext.AddAppender("console-layout", new ColorfulConsoleAppender(new AmazingColorLayout()));
-            loggerContext.Connect("default", "console");
-            loggerContext.Connect("default", "stderr", Filters.Threshold(Logger.LevelError));
-            loggerContext.Connect("default", "console-layout", Filters.AcceptFilter);
-            var logger = loggerContext.GetLogger("default");
+            using (var loggerContext = new LoggerContext()) {
+                loggerContext.AddCategory("default");
+                loggerContext.AddAppender("console", new ColoredConsoleAppender());
+                loggerContext.AddAppender("file", new StreamAppender(new FileStream("1.log", FileMode.Append, FileAccess.Write)));
+                // loggerContext.AddAppender("console-layout", new ColoredConsoleAppender(new AmazingColorLayout()));
+                loggerContext.Connect("default", "console");
+                loggerContext.Connect("default", "file", Filters.Threshold(Logger.LevelError));
+                // loggerContext.Connect("default", "console-layout", Filters.AcceptFilter);
+                var logger = loggerContext.GetLogger("default");
 
-            logger.Info("printing assemblies");
+                logger.Info(Environment.CurrentDirectory);
+                logger.Info("printing assemblies");
 
-            PrintAssembly(typeof(Console).Assembly);
-            PrintAssembly(typeof(Logger).Assembly);
-            PrintAssembly(typeof(DefaultRNG).Assembly);
-            PrintAssembly(typeof(IYielder<>).Assembly);
-            PrintAssembly(typeof(IStream).Assembly);
+                PrintAssembly(typeof(Console).Assembly);
+                PrintAssembly(typeof(Logger).Assembly);
+                PrintAssembly(typeof(DefaultRNG).Assembly);
+                PrintAssembly(typeof(IYielder<>).Assembly);
+                PrintAssembly(typeof(IStream).Assembly);
 
-            logger.Warn("warning!");
+                logger.Warn("warning!");
 
-            logger.Fatal("fatal!");
-            logger.Error("error!");
-            logger.Debug("debug into");
-            logger.Trace("trace");
-            logger.Log(1024, "custom level");
+                logger.Fatal("fatal!");
+                logger.Error("error!");
+                logger.Debug("debug into");
+                logger.Trace("trace");
+                logger.Log(1024, "custom level");
+                logger.Log(Logger.LevelError + 1, "custom level");
 
-            Console.WriteLineColorEscaped($"@v@dFATAL @rERROR @yWARN@^;");
-            Console.WriteLineColorEscaped($"@v@eINFO @mDEBUG @tTRACE@^;");
+                Console.WriteLineColorEscaped($"@v@dFATAL @rERROR @yWARN@^;");
+                Console.WriteLineColorEscaped($"@v@eINFO @mDEBUG @tTRACE@^;");
+            }
         }
     }
 }

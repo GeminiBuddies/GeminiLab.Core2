@@ -5,6 +5,8 @@ namespace GeminiLab.Core2.Logger {
         public static Filter AcceptFilter => (_, __, ___) => true;
         public static Filter DenyFilter => (_, __, ___) => false;
 
-        public static Filter Threshold(int levelThreshold) => (level, _, __) => level >= levelThreshold;
+        public static Filter Threshold(int min) => (level, _, __) => level >= min;
+
+        public static Filter Threshold(int min, int max) => (level, _, __) => level >= min && level < max;
     }
 }
