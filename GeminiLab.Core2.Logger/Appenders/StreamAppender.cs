@@ -29,7 +29,6 @@ namespace GeminiLab.Core2.Logger.Appenders {
 
             try {
                 if (disposing) {
-                    Console.WriteLine("closed!!!");
                     _writer?.Dispose();
                 }
             } finally {
