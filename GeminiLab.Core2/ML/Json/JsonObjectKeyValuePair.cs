@@ -7,5 +7,10 @@ namespace GeminiLab.Core2.ML.Json {
             Key = key;
             Value = value;
         }
+
+        public void Deconstruct(out string key, out JsonValue value) {
+            key = Key;
+            value = Value;
+        }
     }
 }

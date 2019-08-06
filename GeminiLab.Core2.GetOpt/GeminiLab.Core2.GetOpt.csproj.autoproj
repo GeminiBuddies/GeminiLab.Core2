@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ApplicationIcon />
+    <Win32Resource />
+    <Description>GeminiLab Corelib. This part contains GetOpt.</Description>
+    <Authors>Gemini Laboratory</Authors>
+    <Company>Gemini Laboratory</Company>
+    <Product>GeminiLab.Core2.GetOpt</Product>
+    <AssemblyVersion><~ version ~>.<~ build ~></AssemblyVersion>
+    <Copyright>Copyright © Gemini Laboratory 2017 - <~ now yyyy ~></Copyright>
+    <FileVersion><~ version ~>.0</FileVersion>
+    <Version><~ version ~>-pre-<~ now yyyyMMdd ~>-<~ build ~></Version>
+    <LangVersion>latest</LangVersion>
+    <Configurations>Release;Debug;Publish</Configurations>
+  </PropertyGroup>
+
+<~ sign_code ~>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+  </ItemGroup>
+</Project>

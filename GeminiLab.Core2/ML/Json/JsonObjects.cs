@@ -199,6 +199,8 @@ namespace GeminiLab.Core2.ML.Json {
             return false;
         }
 
+        public int Count => _values.Count;
+
         public JsonObject() {
             _keyOrder = new Dictionary<string, int>();
             _values = new SortedDictionary<string, JsonValue>(this);
@@ -223,7 +225,7 @@ namespace GeminiLab.Core2.ML.Json {
             bool expandObjects = config.Contains(JsonStringifyConfig.ExpandObjects);
 
             string head = compact ? "{" : "{ ";
-            string seperator = compact ? "," : ", ";
+            string separator = compact ? "," : ", ";
             string colon = compact ? ":" : ": ";
             string tail = compact ? "}" : " }";
 
@@ -232,7 +234,7 @@ namespace GeminiLab.Core2.ML.Json {
             bool first = true;
             foreach (var i in Values) {
                 if (!first) {
-                    target.Append(expandObjects ? ",\n" : seperator);
+                    target.Append(expandObjects ? ",\n" : separator);
                 } else {
                     first = false;
                 }
@@ -278,7 +280,7 @@ namespace GeminiLab.Core2.ML.Json {
         public IEnumerator<JsonValue> GetEnumerator() => Values.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Values.GetEnumerator();
 
-        // ICollectiom
+        // ICollection
         public void Add(JsonValue item) => Values.Add(item);
         public void Clear() => Values.Clear();
         public bool Contains(JsonValue item) => Values.Contains(item);

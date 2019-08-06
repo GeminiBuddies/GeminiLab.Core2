@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using GeminiLab.Core2.Logger.Layouts;

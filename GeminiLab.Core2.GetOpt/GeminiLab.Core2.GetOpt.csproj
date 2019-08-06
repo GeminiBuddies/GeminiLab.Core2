@@ -4,10 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ApplicationIcon />
     <Win32Resource />
-    <Description>GeminiLab Corelib. This part contains Logger.</Description>
+    <Description>GeminiLab Corelib. This part contains GetOpt.</Description>
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
-    <Product>GeminiLab.Core2.Logger</Product>
+    <Product>GeminiLab.Core2.GetOpt</Product>
     <AssemblyVersion>1.0.0.123</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
     <FileVersion>1.0.0.0</FileVersion>

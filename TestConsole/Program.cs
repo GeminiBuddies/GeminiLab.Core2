@@ -16,6 +16,7 @@ using GeminiLab.Core2.Stream;
 using Console = GeminiLab.Core2.Exconsole;
 using System.IO;
 using System.Text;
+using GeminiLab.Core2.GetOpt;
 using GeminiLab.Core2.Logger.Layouts;
 
 namespace TestConsole {
@@ -79,23 +80,28 @@ namespace TestConsole {
             foreach (var type in ass.GetTypes()) PrintType(type);
         }
 
-        /// <summary>Why c++ have no anonymous inner classes?</summary>
-        public class AmazingColorLayout : ILayout {
-            public string Format(int level, string category, DateTime time, string content) {
-                var sb = new StringBuilder("##@v");
-                var chooser1 = (@"XDEUNTL").MakeChooser();
-                var chooser2 = (@"rgbcmywa").MakeChooser();
-                var str = $"[{Logger.LogLevelToString(level)}][{category}][{time:yyyy/MM/dd HH:mm:ss.fff}]";
+        static string mix(char c, string s) {
+            if (c == '\0') return s ?? "<null>";
+            return s == null ? new string(c, 1) : $"{c}|{s}";
+        }
 
-                foreach (var c in str) {
-                    sb.Append($"@{chooser1.Next()}@{chooser2.Next()}{c}");
+        static void testOptGetter(OptGetter opt, params string[] p) {
+            Console.WriteLine(">" + p.JoinBy(" "));
+            opt.BeginParse(p);
+
+            bool eoa = false;
+            GetOptError err;
+            while (!eoa) {
+                if ((err = opt.GetOpt(out var result)) == GetOptError.EndOfArguments) {
+                    eoa = true;
                 }
 
-                sb.Append("@^");
-                return sb.ToString();
+                Console.WriteLine($"  {err}: {result.Type}: \"{mix(result.Option, result.LongOption)}\", p: {result.Parameter ?? "<null>"}, pp: {result.Parameters?.JoinBy(", ") ?? "<null>"}");
             }
+
+            opt.EndParse();
         }
-        
+
         public static void Main(string[] args) {
             using (var loggerContext = new LoggerContext()) {
                 loggerContext.AddCategory("default");
@@ -108,25 +114,28 @@ namespace TestConsole {
                 var logger = loggerContext.GetLogger("default");
 
                 logger.Info(Environment.CurrentDirectory);
-                logger.Info("printing assemblies");
+                logger.Info("printing assemblies...");
 
                 PrintAssembly(typeof(Console).Assembly);
                 PrintAssembly(typeof(Logger).Assembly);
                 PrintAssembly(typeof(DefaultRNG).Assembly);
                 PrintAssembly(typeof(IYielder<>).Assembly);
                 PrintAssembly(typeof(IStream).Assembly);
+                PrintAssembly(typeof(OptGetter).Assembly);
 
-                logger.Warn("warning!");
+                logger.Info("testing getopt...");
 
-                logger.Fatal("fatal!");
-                logger.Error("error!");
-                logger.Debug("debug into");
-                logger.Trace("trace");
-                logger.Log(1024, "custom level");
-                logger.Log(Logger.LevelError + 1, "custom level");
+                var opt = new OptGetter();
+                opt.AddOption('h', OptionType.Switch, "help");
+                opt.AddOption('m', OptionType.Parameterized, "mark");
 
-                Console.WriteLineColorEscaped($"@v@dFATAL @rERROR @yWARN@^;");
-                Console.WriteLineColorEscaped($"@v@eINFO @mDEBUG @tTRACE@^;");
+                logger.Info("with -- enabled");
+                opt.EnableDashDash = true;
+                testOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
+
+                logger.Info("with -- disabled");
+                opt.EnableDashDash = false;
+                testOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
             }
         }
     }
