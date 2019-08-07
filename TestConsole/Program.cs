@@ -68,31 +68,7 @@ namespace TestConsole {
                 opt.EnableDashDash = false;
                 OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
                 
-                Dictionary<int, int> a = new Dictionary<int, int>();
-
-                for (int i = 0; i < 16; ++i) a[i] = 0;
-
-                for (int i = 0; i < 160000; ++i) {
-                    ulong seed0 = 0x0fe12dc34ba56987ul;
-                    ulong seed1 = 0x02468acefdb97531ul;
-
-                    unchecked {
-                        seed0 ^= (ulong)DateTime.UtcNow.Ticks << 32;
-                        seed1 ^= (ulong)DateTime.Now.Ticks << 32;
-                        seed0 ^= (ulong)Environment.TickCount;
-                        seed1 ^= (ulong)Environment.CurrentDirectory.GetHashCode();
-
-                        for (int x = 0; x < 16; ++x) {
-                            seed0 = ((ulong)$"{seed0 - seed1:x16}".GetHashCode() << 32) | (uint)$"{seed0 + seed1:x16}".GetHashCode();
-                            seed1 = ((ulong)$"{seed0 + seed1:x16}".GetHashCode() << 32) | (uint)$"{seed1 - seed0:x16}".GetHashCode();
-                        }
-                    }
-
-                    // Console.WriteLine($"{seed0:x16} {seed1:x16}");
-                    a[(int)(seed0 & 0x0f)]++;
-                }
-
-                for (int i = 0; i < 16; ++i) Console.WriteLine(a[i]);
+                1000000.Times(() => DefaultRNG.U64.Next(100)).ToList().GroupBy(x => x).ForEach(x => Console.WriteLine($"{x.Key}: {x.Count()}"));
             }
         }
     }

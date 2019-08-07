@@ -32,7 +32,7 @@ namespace GeminiLab.Core2.Random.Sugar {
                 uint rn;
                 do {
                     rn = (uint)rng.Next();
-                } while (rn > threshold);
+                } while (rn > threshold && threshold > 0);
 
                 return rn % max;
             }
