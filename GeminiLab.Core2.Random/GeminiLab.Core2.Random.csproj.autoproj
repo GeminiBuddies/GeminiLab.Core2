@@ -23,7 +23,9 @@
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>
 
+  <!-- removed, see InternalEntry.cs
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Csp" Version="4.3.0" />
   </ItemGroup>
+  -->
 </Project>

@@ -78,6 +78,10 @@ namespace GeminiLab.Core2.Yielder {
             return new FiniteYielderWhileTaker<T>(source, predicate);
         }
 
+        public static void ForEach<T>(this IFiniteYielder<T> source, Action<T> action) {
+            while (source.HasNext()) action(source.Next());
+        }
+
         public static List<T> ToList<T>(this IFiniteYielder<T> source) {
             var rv = new List<T>();
 

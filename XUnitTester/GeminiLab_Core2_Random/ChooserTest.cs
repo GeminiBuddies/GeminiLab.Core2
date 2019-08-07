@@ -12,13 +12,13 @@ namespace XUnitTester.GeminiLab_Core2_Random {
             var chooser = new Chooser<int>(Odds);
             Assert.True(chooser.Next() % 2 == 1);
 
-            chooser = new Chooser<int>(Odds, DefaultRNG.Instance);
+            chooser = new Chooser<int>(Odds, DefaultRNG.I32);
             Assert.InRange(chooser.Next(), 1, 9);
 
             chooser = Odds.MakeChooser();
             Assert.True(chooser.Next() % 2 == 1);
 
-            chooser = Odds.MakeChooser(DefaultRNG.Instance);
+            chooser = Odds.MakeChooser(DefaultRNG.I32);
             Assert.InRange(chooser.Next(), 1, 9);
         }
     }

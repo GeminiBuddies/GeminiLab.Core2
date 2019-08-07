@@ -1,3 +1,12 @@
+/*
+ * This class provides CSPRNG(cryptographically secure pseudorandom number generator)
+ * This class is temporarily removed because
+ * - it's costly
+ * - it references too may libs
+ * - using CSPRN as internal entropy to initialize default rng is no more secure than initializing it with some runtime information.
+ */
+
+/*
 using System;
 using System.Security.Cryptography;
 using GeminiLab.Core2.Yielder;
@@ -22,8 +31,10 @@ namespace GeminiLab.Core2.Random {
             }
         }
 
-        public static IRNG<ulong> Instance { get; } = new InternalEntropyImpl();
+        public static IRNG<ulong> I32 { get; } = new InternalEntropyImpl();
 
-        public static ulong Next() => Instance.Next();
+        public static ulong Next() => I32.Next();
     }
 }
+
+*/

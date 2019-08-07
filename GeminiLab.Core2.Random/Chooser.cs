@@ -16,7 +16,7 @@ namespace GeminiLab.Core2.Random {
             _rng = rng;
         }
 
-        public Chooser(IEnumerable<TValue> values) : this(values is IList<TValue> list ? list : values.ToArray(), DefaultRNG.Instance) { }
+        public Chooser(IEnumerable<TValue> values) : this(values is IList<TValue> list ? list : values.ToArray(), DefaultRNG.I32) { }
 
         public Chooser(IEnumerable<TValue> values, IRNG<int> rng) : this(values is IList<TValue> list ? list : values.ToArray(), rng) { }
 

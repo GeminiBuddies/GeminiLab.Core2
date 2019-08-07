@@ -32,7 +32,7 @@ namespace XUnitTester.GeminiLab_Core2_Random {
             int[] count = new int[256];
             byte[] buffer = new byte[len];
 
-            DefaultRNG.Instance.Fill(buffer);
+            DefaultRNG.I32.Fill(buffer);
 
             for (int i = 0; i < len; ++i) ++count[buffer[i]];
             for (int i = 0; i < 256; ++i) Assert.InRange(count[i] * 256.0 / len, 0.8, 1.2);
@@ -42,7 +42,7 @@ namespace XUnitTester.GeminiLab_Core2_Random {
         public void BytesGenerateTest() {
             const int len = 262144;
             int[] count = new int[256];
-            byte[] buffer = DefaultRNG.Instance.NextBytes(len);
+            byte[] buffer = DefaultRNG.I32.NextBytes(len);
 
             for (int i = 0; i < len; ++i) ++count[buffer[i]];
             for (int i = 0; i < 256; ++i) Assert.InRange(count[i] * 256.0 / len, 0.8, 1.2);
