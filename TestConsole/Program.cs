@@ -14,11 +14,13 @@ using GeminiLab.Core2.Random.Sugar;
 using GeminiLab.Core2.Sugar;
 using GeminiLab.Core2.Yielder;
 using GeminiLab.Core2.Stream;
+using GeminiLab.Core2.CmdParser;
 using Console = GeminiLab.Core2.Exconsole;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using GeminiLab.Core2.GetOpt;
 using GeminiLab.Core2.Logger.Layouts;
 
@@ -31,6 +33,12 @@ namespace TestConsole {
             action();
 
             Console.WriteLine($"- [{name}]Timer end at {DateTime.Now - now}");
+        }
+
+        public class O {
+            [Option(Option = 'a')] public string A { get; set; } = "";
+
+            [Option(LongOption = "bb")] public bool B { get; set; } = false;
         }
 
         public static void Main(string[] args) {
@@ -67,8 +75,18 @@ namespace TestConsole {
                 logger.Info("with -- disabled");
                 opt.EnableDashDash = false;
                 OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
-                
+
                 1000000.Times(() => DefaultRNG.U64.Next(100)).ToList().GroupBy(x => x).ForEach(x => Console.WriteLine($"{x.Key}: {x.Count()}"));
+
+                var o = CommandLineParser<O>.Parse("-a", "1233");
+                Console.WriteLine(o.A);
+                Console.WriteLine(o.B);
+
+                var re = new Regex(@"^System\.Reflection\.Assembly[a-zA-Z0-9]*Attribute$");
+                typeof(AssemblyVersionAttribute).Assembly.GetTypes()
+                                                .Select(t => t.FullName)
+                                                .Where(t => re.IsMatch(t))
+                                                .ForEach(Console.WriteLine);
             }
         }
     }

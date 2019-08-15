@@ -1,32 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ApplicationIcon />
-    <Win32Resource />
-    <Description>GeminiLab Corelib. This part contains Logger.</Description>
+    <ApplicationIcon/>
+    <Win32Resource/>
+    <Description>GeminiLab Corelib. This library contains the Stream Model.</Description>
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
-    <Product>GeminiLab.Core2.Logger</Product>
-    <AssemblyVersion>1.0.0.128</AssemblyVersion>
+    <Product>GeminiLab.Core2</Product>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
-    <FileVersion>1.0.0.0</FileVersion>
-    <Version>1.0.0-pre-20190807-128</Version>
+    <FileVersion>1.0.149.0</FileVersion>
+    <Version>1.0.0-dev-20190815-149</Version>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
+    <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release' Or '$(Configuration)'=='Publish'">
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Publish'">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>..\bin\</PackageOutputPath>
+    <PackageOutputPath>..\..\bin\package\</PackageOutputPath>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\keys\geminilab.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\keys\geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>

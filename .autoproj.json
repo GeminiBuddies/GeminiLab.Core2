@@ -1,6 +1,5 @@
 {
-    "values": {
-        "build_cnt": "129",
-        "sign_code": "  <PropertyGroup Condition=\"'$(Configuration)'=='Publish'\">\n    <GeneratePackageOnBuild>true<\/GeneratePackageOnBuild>\n    <PackageOutputPath>..\\bin\\<\/PackageOutputPath>\n    <PackageRequireLicenseAcceptance>true<\/PackageRequireLicenseAcceptance>\n    <PackageLicenseExpression>BSD-3-Clause<\/PackageLicenseExpression>\n    <PackageProjectUrl>https:\/\/github.com\/GeminiLab\/GeminiLab.Core2\/<\/PackageProjectUrl>\n    <SignAssembly>true<\/SignAssembly>\n    <AssemblyOriginatorKeyFile>..\\keys\\geminilab.snk<\/AssemblyOriginatorKeyFile>\n    <DelaySign>false<\/DelaySign>\n  <\/PropertyGroup>"
+    "counter": {
+        "build_counter": 150
     }
 }

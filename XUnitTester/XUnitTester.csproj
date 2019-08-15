@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GeminiLab.Core2.Random\GeminiLab.Core2.Random.csproj" />
+    <ProjectReference Include="..\src\GeminiLab.Core2.Random\GeminiLab.Core2.Random.csproj" />
     <!-- do not test logger, now <ProjectReference Include="..\GeminiLab.Core2.Logger\GeminiLab.Core2.Logger.csproj" /> -->
-    <ProjectReference Include="..\GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj" />
-    <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+    <ProjectReference Include="..\src\GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj" />
+    <ProjectReference Include="..\src\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>
 
 </Project>

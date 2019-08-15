@@ -20,7 +20,7 @@ namespace TestConsole {
                     eoa = true;
                 }
 
-                Exconsole.WriteLine($"  {err}: {result.Type}: \"{mix(result.Option, result.LongOption)}\", p: {result.Parameter ?? "<null>"}, pp: {result.Parameters?.JoinBy(", ") ?? "<null>"}");
+                Exconsole.WriteLine($"  {err}: {result.Type}: \"{mix(result.Option, result.LongOption)}\", p: {result.Argument ?? "<null>"}, pp: {result.Arguments?.JoinBy(", ") ?? "<null>"}");
             }
 
             opt.EndParse();
