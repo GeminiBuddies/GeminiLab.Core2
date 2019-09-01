@@ -14,7 +14,7 @@ using GeminiLab.Core2.Random.Sugar;
 using GeminiLab.Core2.Sugar;
 using GeminiLab.Core2.Yielder;
 using GeminiLab.Core2.Stream;
-using GeminiLab.Core2.CmdParser;
+using GeminiLab.Core2.CommandLineParser;
 using Console = GeminiLab.Core2.Exconsole;
 using System.IO;
 using System.Reflection.Metadata;
@@ -82,11 +82,16 @@ namespace TestConsole {
                 Console.WriteLine(o.A);
                 Console.WriteLine(o.B);
 
-                var re = new Regex(@"^System\.Reflection\.Assembly[a-zA-Z0-9]*Attribute$");
-                typeof(AssemblyVersionAttribute).Assembly.GetTypes()
-                                                .Select(t => t.FullName)
-                                                .Where(t => re.IsMatch(t))
-                                                .ForEach(Console.WriteLine);
+                var tc = typeof(Console);
+                foreach (var property in tc.GetProperties(BindingFlags.Public | BindingFlags.Static)) {
+                    var name = property.Name;
+                    var type = property.PropertyType;
+                    if (property.CanRead) {
+                        if (!property.CanWrite) {
+                            Console.WriteLine($"public static {type.Name} {name} => Console.{name};");
+                        }
+                    }
+                }
             }
         }
     }

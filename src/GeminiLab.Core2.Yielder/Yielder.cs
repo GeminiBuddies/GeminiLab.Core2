@@ -35,15 +35,7 @@ namespace GeminiLab.Core2.Yielder {
         }
 
         public static IYielder<TResult> OfType<TSource, TResult>(this IYielder<TSource> source) where TResult : TSource {
-            return new YielderSelector<TSource, TResult>(source, (TSource s, out bool accepted) => {
-                if (s is TResult res) {
-                    accepted = true;
-                    return res;
-                }
-
-                accepted = false;
-                return default;
-            });
+            return new YielderOfTypeSelector<TSource, TResult>(source);
         }
 
         public static IFiniteYielder<T> Take<T>(this IYielder<T> source, int count) {

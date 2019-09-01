@@ -32,7 +32,7 @@ namespace GeminiLab.Core2.Yielder.Yielders {
         }
 
         public T Next() {
-            if (!HasNext()) return default;
+            if (!HasNext()) throw new InvalidOperationException();
 
             T rv = _next;
             clearNext();

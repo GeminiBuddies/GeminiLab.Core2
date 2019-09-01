@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GeminiLab.Core2.Sugar {
+namespace GeminiLab.Core2.Collections {
     public class EmptyEnumerator<T> : IEnumerator<T> {
         public bool MoveNext() => false;
 

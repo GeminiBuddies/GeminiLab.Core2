@@ -20,7 +20,7 @@ else
 	mode_str := Error
 endif
 
-.PHONY: all autoproj publish run_test
+.PHONY: all autoproj publish run_test test
 all: autoproj
 ifeq ($(mode_str), Error)
 	@echo "unknown mode $(mode)."

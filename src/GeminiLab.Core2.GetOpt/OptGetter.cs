@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GeminiLab.Core2.GetOpt {
     public enum OptionType {
@@ -64,34 +63,36 @@ namespace GeminiLab.Core2.GetOpt {
 
         public bool AcceptOptionAsValue { get; set; } = false;
 
-        private string[] _args;
-        private int _argc;
-        private int _argp;
-        public void BeginParse(params string[] arguments) {
-            _args = arguments;
-            _argc = _args.Length;
-            _argp = 0;
-        }
+        // Enabled:
+        //   -ABC = -A BC
+        // Disabled:
+        //   -ABC = -A -B -C
+        // public bool EnableAttachedValue { get; set; } = true;
 
         // return true => c = option
         // c == '\0' => long option
         private bool isOption(string v, out char c) {
             c = '\0';
-            if (v.Length > 1 && v[0] == '-') {
-                if (v[1] == '-') return v.Length > 2 || !EnableDashDash;
-                
+            if (v.Length <= 1 || v[0] != '-') return false;
+
+            if (v[1] != '-') {
                 c = v[1];
                 return true;
             }
 
-            return false;
+            if (v.Length > 2) return true;
+            if (EnableDashDash) return false;
+
+            c = '-';
+            return true;
+
         }
 
         private bool isEnabledDashDash(string v) {
             return EnableDashDash && v == "--";
         }
 
-        private bool tryGetValue(out string v, bool acceptOptionAsValue) {
+        private bool tryReadValue(out string v, bool acceptOptionAsValue) {
             if (_argp >= _argc) {
                 v = null;
                 return false;
@@ -104,6 +105,15 @@ namespace GeminiLab.Core2.GetOpt {
             return true;
         }
 
+        private string[] _args;
+        private int _argc;
+        private int _argp;
+        public void BeginParse([DisallowNull]params string[] arguments) {
+            _args = arguments;
+            _argc = _args.Length;
+            _argp = 0;
+        }
+
         public GetOptError GetOpt(out GetOptResult result) {
             result = new GetOptResult {
                 Type = GetOptResultType.Invalid,
@@ -114,7 +124,7 @@ namespace GeminiLab.Core2.GetOpt {
                 Arguments = null
             };
 
-            if (_args == null || _argp >= _argc) return GetOptError.EndOfArguments;
+            if (_argp >= _argc) return GetOptError.EndOfArguments;
 
             string v = _args[_argp++];
             
@@ -148,7 +158,7 @@ namespace GeminiLab.Core2.GetOpt {
                 if (result.OptionType == OptionType.Switch) {
                     return result.Argument != null ? GetOptError.UnexpectedAttachedValue : GetOptError.NoError;
                 } else if (result.OptionType == OptionType.Parameterized) {
-                    if (result.Argument != null || tryGetValue(out result.Argument, AcceptOptionAsValue)) {
+                    if (result.Argument != null || tryReadValue(out result.Argument, AcceptOptionAsValue)) {
                         return GetOptError.NoError;
                     }
 
@@ -160,7 +170,7 @@ namespace GeminiLab.Core2.GetOpt {
                         result.Argument = null;
                     }
 
-                    while (tryGetValue(out var s, false)) p.Add(s);
+                    while (tryReadValue(out var s, false)) p.Add(s);
 
                     result.Arguments = p.ToArray();
                     return GetOptError.NoError;

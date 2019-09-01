@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <Configurations>Debug;Release;Publish</Configurations>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -13,7 +13,7 @@
     <ProjectReference Include="..\src\GeminiLab.Core2.Random\GeminiLab.Core2.Random.csproj" />
     <ProjectReference Include="..\src\GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj" />
     <ProjectReference Include="..\src\GeminiLab.Core2.Stream\GeminiLab.Core2.Stream.csproj" />
-    <ProjectReference Include="..\src\GeminiLab.Core2.CmdParser\GeminiLab.Core2.CmdParser.csproj" />
+    <ProjectReference Include="..\src\GeminiLab.Core2.CommandLineParser\GeminiLab.Core2.CommandLineParser.csproj" />
     <ProjectReference Include="..\src\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>
 

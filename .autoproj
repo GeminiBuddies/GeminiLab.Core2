@@ -10,7 +10,7 @@
 <~# accept following arguments: proj_name, proj_desc ~>
 <~~ def_block csproj_body ~>
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <ApplicationIcon/>
     <Win32Resource/>
     <Description>GeminiLab Corelib. <~proj_desc~></Description>
@@ -21,7 +21,7 @@
     <Copyright>Copyright © Gemini Laboratory 2017 - <~ now yyyy ~></Copyright>
     <FileVersion><~file_version~></FileVersion>
     <Version><~full_version~></Version>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
   </PropertyGroup>

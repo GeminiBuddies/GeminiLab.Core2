@@ -1,15 +1,13 @@
 namespace GeminiLab.Core2.Yielder.FiniteYielders {
-    internal class FiniteYielderSelector<TSource, TResult> : IFiniteYielder<TResult> {
+    internal class FiniteYielderOfTypeSelector<TSource, TResult> : IFiniteYielder<TResult> {
         private readonly IFiniteYielder<TSource> _source;
-        private readonly Selector<TSource, TResult> _selector;
 
         private bool _nextCalculated;
         private bool _hasNext;
         private TResult _next;
 
-        public FiniteYielderSelector(IFiniteYielder<TSource> source, Selector<TSource, TResult> selector) {
+        public FiniteYielderOfTypeSelector(IFiniteYielder<TSource> source) {
             _source = source;
-            _selector = selector;
 
             _next = default;
             _nextCalculated = false;
@@ -21,10 +19,9 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
 
             _hasNext = false;
             while (_source.HasNext()) {
-                _next = _selector(_source.Next(), out var accepted);
+                if (!(_source.Next() is TResult t)) continue;
 
-                if (!accepted) continue;
-
+                _next = t;
                 _hasNext = true;
                 break;
             }

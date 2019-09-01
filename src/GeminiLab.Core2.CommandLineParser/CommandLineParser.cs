@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using GeminiLab.Core2.GetOpt;
 
-namespace GeminiLab.Core2.CmdParser {
+namespace GeminiLab.Core2.CommandLineParser {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public sealed class OptionAttribute : Attribute {
         public OptionAttribute() { }

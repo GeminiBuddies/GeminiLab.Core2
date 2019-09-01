@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiLab.Core2.Stream", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiLab.Core2.GetOpt", "src\GeminiLab.Core2.GetOpt\GeminiLab.Core2.GetOpt.csproj", "{5ED0F5FE-2095-4C12-9690-2D38CB7177D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiLab.Core2.CmdParser", "src\GeminiLab.Core2.CmdParser\GeminiLab.Core2.CmdParser.csproj", "{ABF97500-4D4B-440A-BD17-1665EF449F71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeminiLab.Core2.CommandLineParser", "src\GeminiLab.Core2.CommandLineParser\GeminiLab.Core2.CommandLineParser.csproj", "{ABF97500-4D4B-440A-BD17-1665EF449F71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
