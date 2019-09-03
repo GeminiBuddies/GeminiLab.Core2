@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.1.603
+dotnet: 3.0.100-preview8-013656
 dist: bionic
 env:
   global:
