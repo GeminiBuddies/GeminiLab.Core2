@@ -24,6 +24,7 @@
     <LangVersion>preview</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release' Or '$(Configuration)'=='Publish'">

@@ -8,7 +8,7 @@ namespace GeminiLab.Core2.Logger {
         private readonly Dictionary<string, LoggerCategory> _categories = new Dictionary<string, LoggerCategory>();
         private readonly Dictionary<string, IAppender> _appenders = new Dictionary<string, IAppender>();
 
-        public Logger GetLogger(string category) {
+        public Logger? GetLogger(string category) {
             if (!_categories.TryGetValue(category, out var categoryItem)) return null;
             return new Logger(categoryItem);
         }

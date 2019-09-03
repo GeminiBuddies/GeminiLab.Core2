@@ -13,7 +13,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
             _source = source;
             _predicate = predicate;
 
-            _next = default;
+            _next = default!;
             _nextCalculated = false;
             _hasNext = false;
         }
@@ -36,7 +36,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         }
 
         public T Next() {
-            if (!HasNext()) return default;
+            if (!HasNext()) throw new InvalidOperationException();
 
             _nextCalculated = false;
             return _next;

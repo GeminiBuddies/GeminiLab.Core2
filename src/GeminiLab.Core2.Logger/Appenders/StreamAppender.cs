@@ -32,8 +32,8 @@ namespace GeminiLab.Core2.Logger.Appenders {
                     _writer?.Dispose();
                 }
             } finally {
-                _layout = null;
-                _writer = null;
+                _layout = null!;
+                _writer = null!;
             }
 
             _disposed = true;

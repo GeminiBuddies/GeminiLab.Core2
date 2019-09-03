@@ -19,20 +19,20 @@ namespace GeminiLab.Core2.GetOpt {
     }
 
     public enum GetOptResultType {
+        Invalid,
         ShortOption,
         LongOption,
         LongAlias,
         Values,
-        Invalid,
     }
 
     public struct GetOptResult {
         public GetOptResultType Type;
         public OptionType OptionType;
         public char Option;
-        public string LongOption;
-        public string Argument;
-        public string[] Arguments;
+        public string? LongOption;
+        public string? Argument;
+        public string[]? Arguments;
     }
 
     public sealed class OptGetter {
@@ -50,11 +50,11 @@ namespace GeminiLab.Core2.GetOpt {
         }
 
         public void AddOption(string longOption, OptionType type) {
-            _longOptions.Add(longOption, type);
+            _longOptions.Add(longOption ?? throw new ArgumentNullException(nameof(longOption)), type);
         }
 
         public void AddAlias(char option, params string[] longAliases) {
-            foreach (var alias in longAliases) {
+            foreach (var alias in longAliases ?? throw new ArgumentNullException(nameof(longAliases))) {
                 _aliases.Add(alias, option);
             }
         }
@@ -63,6 +63,7 @@ namespace GeminiLab.Core2.GetOpt {
 
         public bool AcceptOptionAsValue { get; set; } = false;
 
+        // TODO: implement this
         // Enabled:
         //   -ABC = -A BC
         // Disabled:
@@ -92,29 +93,36 @@ namespace GeminiLab.Core2.GetOpt {
             return EnableDashDash && v == "--";
         }
 
-        private bool tryReadValue(out string v, bool acceptOptionAsValue) {
-            if (_argp >= _argc) {
-                v = null;
+        private bool tryReadValue([MaybeNullWhen(false)]out string v, bool acceptOptionAsValue) {
+            if (_args == null || _argp >= _argc) {
+                v = null!;
                 return false;
             }
 
             v = _args[_argp];
-            if (!acceptOptionAsValue && (isOption(v, out _) || isEnabledDashDash(v))) return false;
+            if (!acceptOptionAsValue && (isOption(v, out _) || isEnabledDashDash(v))) {
+                v = null!;
+                return false;
+            }
 
             ++_argp;
             return true;
         }
 
-        private string[] _args;
+        private string[]? _args;
         private int _argc;
         private int _argp;
-        public void BeginParse([DisallowNull]params string[] arguments) {
+        public void BeginParse(params string[]? arguments) {
             _args = arguments;
-            _argc = _args.Length;
-            _argp = 0;
+
+            if (_args != null) {
+                _argc = _args.Length;
+                _argp = 0;
+            }
         }
 
         public GetOptError GetOpt(out GetOptResult result) {
+            /*
             result = new GetOptResult {
                 Type = GetOptResultType.Invalid,
                 OptionType = OptionType.Switch,
@@ -123,8 +131,10 @@ namespace GeminiLab.Core2.GetOpt {
                 Argument = null,
                 Arguments = null
             };
+            */
+            result = default;
 
-            if (_argp >= _argc) return GetOptError.EndOfArguments;
+            if (_args == null || _argp >= _argc) return GetOptError.EndOfArguments;
 
             string v = _args[_argp++];
             

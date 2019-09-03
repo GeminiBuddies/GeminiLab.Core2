@@ -118,13 +118,6 @@ namespace GeminiLab.Core2.Collections.HeapBase {
         */
         public static void SortHeap<T>(this T[] array, long length) => SortHeap(array, length, false, Comparer<T>.Default);
 
-        /**
-         * <summary>Disassemble a heap into a sorted array.</summary>
-         * <exception cref="ArgumentOutOfRangeException"/>
-         * <exception cref="NullReferenceException"/>
-         * <exception cref="IndexOutOfRangeException"/>
-         */
-        public static void SortHeap<T>(this T[] array, long length, bool reverse) => SortHeap(array, length, reverse, Comparer<T>.Default);
 
         /**
         * <summary>Disassemble a heap into a sorted array with a specified comparer.</summary>
@@ -151,11 +144,7 @@ namespace GeminiLab.Core2.Collections.HeapBase {
 
             if (reverse) return;
 
-            for (long i = length / 2; i >= 0; --i) {
-                T v = array[i];
-                array[i] = array[length - i - 1];
-                array[length - i - 1] = v;
-            }
+            Array.Reverse(array, 0, (int)length);
         }
     }
 }

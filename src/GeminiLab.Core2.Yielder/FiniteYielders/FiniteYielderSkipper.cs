@@ -1,3 +1,5 @@
+using System;
+
 namespace GeminiLab.Core2.Yielder.FiniteYielders {
     internal class FiniteYielderSkipper<T> : IFiniteYielder<T> {
         private readonly IFiniteYielder<T> _source;
@@ -26,7 +28,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         }
 
         public T Next() {
-            if (!HasNext()) return default;
+            if (!HasNext()) throw new InvalidOperationException();
             return _source.Next();
         }
     }

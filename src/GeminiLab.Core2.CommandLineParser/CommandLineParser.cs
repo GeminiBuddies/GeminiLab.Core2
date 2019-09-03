@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using GeminiLab.Core2.GetOpt;
 
@@ -10,21 +11,48 @@ namespace GeminiLab.Core2.CommandLineParser {
         public OptionAttribute() { }
 
         public char Option { get; set; } = '\0';
-        public string LongOption { get; set; } = null;
+        public string? LongOption { get; set; } = null;
     }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public sealed class GetOptErrorHandlerAttribute : Attribute {
+        public GetOptErrorHandlerAttribute() { }
+
+        public static bool IsValidErrorHandler(MethodInfo handler) {
+            var para = handler.GetParameters();
+            return para.Length == 2
+                   && !para[0].IsIn && !para[0].IsOut && !para[0].IsLcid && para[0].ParameterType == typeof(GetOptError)
+                   && !para[1].IsIn && !para[1].IsOut && !para[1].IsLcid && para[1].ParameterType == typeof(GetOptResult)
+                ;
+        }
+    }
+
+    internal class CommandLineParserTypeMetaInfo {
+        public OptGetter Opt;
+        public Dictionary<char, PropertyInfo> ShortOptionTargets;
+        public Dictionary<string, PropertyInfo> LongOptionTargets;
+        public IList<MethodInfo> ErrorHandlers;
+
+        public CommandLineParserTypeMetaInfo(OptGetter opt, Dictionary<char, PropertyInfo> shortOptionTargets, Dictionary<string, PropertyInfo> longOptionTargets, IList<MethodInfo> errorHandlers) {
+            Opt = opt;
+            ShortOptionTargets = shortOptionTargets;
+            LongOptionTargets = longOptionTargets;
+            ErrorHandlers = errorHandlers;
+        }
+    }
+
+    public delegate bool CommandLineParserErrorHandler(GetOptError error, GetOptResult result);
 
     public static class CommandLineParser<T> {
         // ReSharper disable StaticMemberInGenericType
         private static readonly object InternalLock = new object();
-        private static OptGetter _opt = null;
-        private static Dictionary<char, PropertyInfo> _shortOptionTargets = null;
-        private static Dictionary<string, PropertyInfo> _longOptionTargets = null;
+        private static CommandLineParserTypeMetaInfo? _info;
         // ReSharper restore StaticMemberInGenericType
 
-        private static OptGetter generateOptGetter() {
+        private static CommandLineParserTypeMetaInfo generateOptGetter() {
             var opt = new OptGetter();
-            _shortOptionTargets = new Dictionary<char, PropertyInfo>();
-            _longOptionTargets = new Dictionary<string, PropertyInfo>();
+            var shortOptionTargets = new Dictionary<char, PropertyInfo>();
+            var longOptionTargets = new Dictionary<string, PropertyInfo>();
 
             var type = typeof(T);
 
@@ -32,7 +60,7 @@ namespace GeminiLab.Core2.CommandLineParser {
             foreach (var prop in props) {
                 var propType = prop.PropertyType;
                 var optionType = OptionType.Switch;
-
+                
                 if (propType == typeof(bool)) {
                     optionType = OptionType.Switch;
                 } else if (propType == typeof(string)) {
@@ -43,42 +71,56 @@ namespace GeminiLab.Core2.CommandLineParser {
                     continue;
                 }
 
-                foreach (var attr in prop.GetCustomAttributes(typeof(OptionAttribute), true).OfType<OptionAttribute>()) {
+                foreach (var attr in prop.GetCustomAttributes<OptionAttribute>(true)) {
                     if (attr.Option != '\0') {
-                        _shortOptionTargets[attr.Option] = prop;
+                        shortOptionTargets[attr.Option] = prop;
                         opt.AddOption(attr.Option, optionType);
                     }
 
                     if (attr.LongOption != null) {
-                        _longOptionTargets[attr.LongOption] = prop;
+                        longOptionTargets[attr.LongOption] = prop;
                         opt.AddOption(attr.LongOption, optionType);
                     }
                 }
             }
 
-            return opt;
+            var handlers = new List<MethodInfo>();
+            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            foreach (var method in methods) {
+                if (method.GetCustomAttribute<GetOptErrorHandlerAttribute>() != null) {
+                    if (GetOptErrorHandlerAttribute.IsValidErrorHandler(method)) {
+                        handlers.Add(method);
+                    }
+                }
+            }
+
+            return new CommandLineParserTypeMetaInfo(opt, shortOptionTargets, longOptionTargets, handlers);
         }
 
         public static T Parse(params string[] args) {
-            lock (InternalLock) {
-                if (_opt == null) _opt = generateOptGetter();
+            return Parse(args, null);
+        }
 
-                _opt.BeginParse(args);
+        public static T Parse(string[] args, CommandLineParserErrorHandler? errorHandler) {
+            lock (InternalLock) {
+                if (_info == null) _info = generateOptGetter();
+
+                _info.Opt.BeginParse(args);
 
                 T rv = Activator.CreateInstance<T>();
 
                 GetOptError err;
-                while ((err = _opt.GetOpt(out var result)) != GetOptError.EndOfArguments) {
+                while ((err = _info.Opt.GetOpt(out var result)) != GetOptError.EndOfArguments) {
                     if (err == GetOptError.NoError) {
                         PropertyInfo prop;
 
                         switch (result.Type) {
                         case GetOptResultType.ShortOption:
                         case GetOptResultType.LongAlias:    // not supposed to happen, but handle it anyway
-                            prop = _shortOptionTargets[result.Option];
+                            prop = _info.ShortOptionTargets[result.Option];
                             break;
                         case GetOptResultType.LongOption:
-                            prop = _longOptionTargets[result.LongOption];
+                            prop = _info.LongOptionTargets[result.LongOption!];
                             break;
                         // case GetOptResultType.Values:
                         // case GetOptResultType.Invalid:
@@ -86,23 +128,28 @@ namespace GeminiLab.Core2.CommandLineParser {
                             continue;
                         }
 
-                        switch (result.OptionType) {
-                        case OptionType.Switch:
-                            prop.SetValue(rv, true);
-                            break;
-                        case OptionType.Parameterized:
-                            prop.SetValue(rv, result.Argument);
-                            break;
-                        case OptionType.MultiParameterized:
-                            prop.SetValue(rv, result.Arguments);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                        prop.SetValue(rv, result.OptionType switch {
+                            OptionType.Switch => (object)true,
+                            OptionType.Parameterized => result.Argument,
+                            OptionType.MultiParameterized => result.Arguments,
+                            _ => throw new ArgumentOutOfRangeException(),
+                        });
+                    } else {
+                        bool exit = false;
+
+                        foreach (var handler in _info.ErrorHandlers) {
+                            if (handler.Invoke(rv, new object[] {err, result}) is bool b) exit |= b;
                         }
+
+                        if (errorHandler != null) {
+                            exit |= errorHandler.Invoke(err, result);
+                        }
+
+                        if (exit) break;
                     }
                 }
 
-                _opt.EndParse();
+                _info.Opt.EndParse();
                 return rv;
             }
         }

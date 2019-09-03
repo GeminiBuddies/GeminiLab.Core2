@@ -4,8 +4,8 @@ using System.Globalization;
 namespace GeminiLab.Core2.Logger.Layouts {
     public class ColoredConsoleLayout : ILayout {
         private readonly bool _usingCulture;
-        private readonly string _dateFormat;
-        private readonly CultureInfo _culture;
+        private readonly string? _dateFormat;
+        private readonly CultureInfo? _culture;
 
         public ColoredConsoleLayout(string dateFormat) {
             _dateFormat = dateFormat;
@@ -13,7 +13,7 @@ namespace GeminiLab.Core2.Logger.Layouts {
         }
 
         // null means CultureInfo.CurrentCulture
-        public ColoredConsoleLayout(CultureInfo culture = null) {
+        public ColoredConsoleLayout(CultureInfo? culture = null) {
             _culture = culture ?? CultureInfo.CurrentCulture;
             _usingCulture = true;
         }

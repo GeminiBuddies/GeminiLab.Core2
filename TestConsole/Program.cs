@@ -42,57 +42,47 @@ namespace TestConsole {
         }
 
         public static void Main(string[] args) {
-            using (var loggerContext = new LoggerContext()) {
-                loggerContext.AddCategory("default");
-                loggerContext.AddAppender("console", new ColoredConsoleAppender());
-                loggerContext.AddAppender("file", new StreamAppender(new FileStream("1.log", FileMode.Append, FileAccess.Write)));
-                // loggerContext.AddAppender("console-layout", new ColoredConsoleAppender(new AmazingColorLayout()));
-                loggerContext.Connect("default", "console");
-                loggerContext.Connect("default", "file", Filters.Threshold(Logger.LevelError));
-                // loggerContext.Connect("default", "console-layout", Filters.AcceptFilter);
-                var logger = loggerContext.GetLogger("default");
+            using var loggerContext = new LoggerContext();
 
-                logger.Info(Environment.CurrentDirectory);
-                logger.Info("printing assemblies...");
+            loggerContext.AddCategory("default");
+            loggerContext.AddAppender("console", new ColoredConsoleAppender());
+            loggerContext.AddAppender("file", new StreamAppender(new FileStream("1.log", FileMode.Append, FileAccess.Write)));
+            // loggerContext.AddAppender("console-layout", new ColoredConsoleAppender(new AmazingColorLayout()));
+            loggerContext.Connect("default", "console");
+            loggerContext.Connect("default", "file", Filters.Threshold(Logger.LevelError));
+            // loggerContext.Connect("default", "console-layout", Filters.AcceptFilter);
+            var logger = loggerContext.GetLogger("default");
 
-                AssemblyPrinter.PrintAssembly(typeof(Console).Assembly);
-                AssemblyPrinter.PrintAssembly(typeof(Logger).Assembly);
-                AssemblyPrinter.PrintAssembly(typeof(DefaultRNG).Assembly);
-                AssemblyPrinter.PrintAssembly(typeof(IYielder<>).Assembly);
-                AssemblyPrinter.PrintAssembly(typeof(IStream).Assembly);
-                AssemblyPrinter.PrintAssembly(typeof(OptGetter).Assembly);
+            logger.Info(Environment.CurrentDirectory);
+            logger.Info("printing assemblies...");
 
-                logger.Info("testing getopt...");
+            AssemblyPrinter.PrintAssembly(typeof(Console).Assembly);
+            AssemblyPrinter.PrintAssembly(typeof(Logger).Assembly);
+            AssemblyPrinter.PrintAssembly(typeof(DefaultRNG).Assembly);
+            AssemblyPrinter.PrintAssembly(typeof(IYielder<>).Assembly);
+            AssemblyPrinter.PrintAssembly(typeof(IStream).Assembly);
+            AssemblyPrinter.PrintAssembly(typeof(OptGetter).Assembly);
 
-                var opt = new OptGetter();
-                opt.AddOption('h', OptionType.Switch, "help");
-                opt.AddOption('m', OptionType.Parameterized, "mark");
+            logger.Info("testing getopt...");
 
-                logger.Info("with -- enabled");
-                opt.EnableDashDash = true;
-                OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
+            var opt = new OptGetter();
+            opt.AddOption('h', OptionType.Switch, "help");
+            opt.AddOption('m', OptionType.Parameterized, "mark");
 
-                logger.Info("with -- disabled");
-                opt.EnableDashDash = false;
-                OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
+            logger.Info("with -- enabled");
+            opt.EnableDashDash = true;
+            OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
 
-                1000000.Times(() => DefaultRNG.U64.Next(100)).ToList().GroupBy(x => x).ForEach(x => Console.WriteLine($"{x.Key}: {x.Count()}"));
+            logger.Info("with -- disabled");
+            opt.EnableDashDash = false;
+            OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
 
-                var o = CommandLineParser<O>.Parse("-a", "1233");
-                Console.WriteLine(o.A);
-                Console.WriteLine(o.B);
-
-                var tc = typeof(Console);
-                foreach (var property in tc.GetProperties(BindingFlags.Public | BindingFlags.Static)) {
-                    var name = property.Name;
-                    var type = property.PropertyType;
-                    if (property.CanRead) {
-                        if (!property.CanWrite) {
-                            Console.WriteLine($"public static {type.Name} {name} => Console.{name};");
-                        }
-                    }
-                }
-            }
+            var o = CommandLineParser<O>.Parse(new[] { "-a", "1233", "-h", "--hh" }, (err, result) => {
+                logger.Warn($"{err}");
+                return true;
+            });
+            Console.WriteLine(o.A);
+            Console.WriteLine(o.B);
         }
     }
 }

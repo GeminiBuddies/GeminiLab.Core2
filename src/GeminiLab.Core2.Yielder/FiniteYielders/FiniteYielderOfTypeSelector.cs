@@ -1,3 +1,5 @@
+using System;
+
 namespace GeminiLab.Core2.Yielder.FiniteYielders {
     internal class FiniteYielderOfTypeSelector<TSource, TResult> : IFiniteYielder<TResult> {
         private readonly IFiniteYielder<TSource> _source;
@@ -9,7 +11,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         public FiniteYielderOfTypeSelector(IFiniteYielder<TSource> source) {
             _source = source;
 
-            _next = default;
+            _next = default!;
             _nextCalculated = false;
             _hasNext = false;
         }
@@ -31,7 +33,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         }
 
         public TResult Next() {
-            if (!HasNext()) return default;
+            if (!HasNext()) throw new InvalidOperationException();
 
             _nextCalculated = false;
             return _next;

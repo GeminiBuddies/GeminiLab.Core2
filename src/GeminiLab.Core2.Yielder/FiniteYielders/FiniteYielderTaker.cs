@@ -1,3 +1,5 @@
+using System;
+
 namespace GeminiLab.Core2.Yielder.FiniteYielders {
     internal class FiniteYielderTaker<T> : IFiniteYielder<T> {
         private readonly IFiniteYielder<T> _source;
@@ -16,7 +18,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         }
 
         public T Next() {
-            if (!_source.HasNext()) return default;
+            if (!_source.HasNext()) throw new InvalidOperationException();
 
             ++_count;
             return _source.Next();

@@ -9,13 +9,12 @@ namespace GeminiLab.Core2.Collections {
         public void Reset() { }
 
         public T Current => throw new InvalidOperationException();
-        object IEnumerator.Current => Current;
+        object IEnumerator.Current => Current!;
 
         public void Dispose() { }
 
         private EmptyEnumerator() { }
 
-        private static EmptyEnumerator<T> _shardOne = null;
-        public static EmptyEnumerator<T> Instance => _shardOne ?? (_shardOne = new EmptyEnumerator<T>());
+        public static EmptyEnumerator<T> Instance { get; } = new EmptyEnumerator<T>();
     }
 }

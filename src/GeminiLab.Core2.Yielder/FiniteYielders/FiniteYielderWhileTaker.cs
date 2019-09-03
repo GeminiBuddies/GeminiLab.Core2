@@ -6,14 +6,14 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         private readonly Predicate<T> _predicate;
 
         private bool _nextCalculated;
-        private T _next;
+        private T _next = default!;
         private bool _nextGood;
 
         private bool _reachEnd;
 
         private void clearNext() {
             _nextCalculated = _nextGood = false;
-            _next = default;
+            _next = default!;
         }
 
         public FiniteYielderWhileTaker(IFiniteYielder<T> source, Predicate<T> predicate) {
@@ -41,7 +41,7 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
         }
 
         public T Next() {
-            if (!HasNext()) return default;
+            if (!HasNext()) throw new InvalidOperationException();
 
             T rv = _next;
             clearNext();

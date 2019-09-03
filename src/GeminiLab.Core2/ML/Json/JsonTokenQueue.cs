@@ -5,10 +5,10 @@ using System.Text;
 namespace GeminiLab.Core2.ML.Json {
     internal class JsonTokenQueue {
         private readonly IEnumerator<JsonToken> _tokens;
-        private JsonToken _cache;
+        private JsonToken? _cache;
 
         // return null if no more tokens
-        public JsonToken Read() {
+        public JsonToken? Read() {
             if (_cache != null) {
                 var tmp = _cache;
                 _cache = null;
@@ -26,7 +26,7 @@ namespace GeminiLab.Core2.ML.Json {
             return tmp;
         }
 
-        public JsonToken Peek() {
+        public JsonToken? Peek() {
             if (_cache != null) return _cache;
             return _cache = getNextToken();
         }
@@ -39,7 +39,7 @@ namespace GeminiLab.Core2.ML.Json {
             return tmp;
         }
 
-        private JsonToken getNextToken() => _tokens.MoveNext() ? _tokens.Current : null;
+        private JsonToken? getNextToken() => _tokens.MoveNext() ? _tokens.Current : null;
 
         public JsonTokenQueue(string value) {
             _tokens = JsonTokenizer.GetTokens(value).GetEnumerator();

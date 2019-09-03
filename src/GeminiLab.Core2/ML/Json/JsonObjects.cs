@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -80,13 +81,11 @@ namespace GeminiLab.Core2.ML.Json {
             }
             set {
                 if (str == null) throw new ArgumentNullException(nameof(str));
-                if (value == null) throw new ArgumentNullException(nameof(value));
-
                 if (!_values.ContainsKey(str)) {
                     _keyOrder[str] = _keyOrder.Count;
                 }
 
-                _values[str] = value;
+                _values[str] = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
 
@@ -124,60 +123,60 @@ namespace GeminiLab.Core2.ML.Json {
             return _values.ContainsKey(key ?? throw new ArgumentNullException(nameof(key)));
         }
 
-        public bool TryGetValue(string key, out JsonValue value) {
-            value = null;
+        public bool TryGetValue(string key, [MaybeNullWhen(false)]out JsonValue value) {
+            value = null!;
             if (!ContainsKey(key)) return false;
 
             value = this[key];
             return true;
         }
 
-        public bool TryGetJsonString(string key, out JsonString result) {
+        public bool TryGetJsonString(string key, [MaybeNullWhen(false)]out JsonString result) {
             if (TryGetValue(key, out var value) && value is JsonString s) {
                 result = s;
                 return true;
             } else {
-                result = null;
+                result = null!;
                 return false;
             }
         }
 
-        public bool TryGetJsonObject(string key, out JsonObject result) {
+        public bool TryGetJsonObject(string key, [MaybeNullWhen(false)]out JsonObject result) {
             if (TryGetValue(key, out var value) && value is JsonObject o) {
                 result = o;
                 return true;
             } else {
-                result = null;
+                result = null!;
                 return false;
             }
         }
 
-        public bool TryGetJsonArray(string key, out JsonArray result) {
+        public bool TryGetJsonArray(string key, [MaybeNullWhen(false)]out JsonArray result) {
             if (TryGetValue(key, out var value) && value is JsonArray arr) {
                 result = arr;
                 return true;
             } else {
-                result = null;
+                result = null!;
                 return false;
             }
         }
 
-        public bool TryGetJsonNumber(string key, out JsonNumber result) {
+        public bool TryGetJsonNumber(string key, [MaybeNullWhen(false)]out JsonNumber result) {
             if (TryGetValue(key, out var value) && value is JsonNumber number) {
                 result = number;
                 return true;
             } else {
-                result = null;
+                result = null!;
                 return false;
             }
         }
         
-        public bool TryGetJsonBool(string key, out JsonBool result) {
+        public bool TryGetJsonBool(string key, [MaybeNullWhen(false)]out JsonBool result) {
             if (TryGetValue(key, out var value) && value is JsonBool b) {
                 result = b;
                 return true;
             } else {
-                result = null;
+                result = null!;
                 return false;
             }
         }
@@ -414,7 +413,7 @@ namespace GeminiLab.Core2.ML.Json {
         }
 
         public bool Equals(JsonNumber other) {
-            if (other == null) return false;
+            if (other == null!) return false;
             if (other.IsFloat ^ IsFloat) return false;
 
             return IsFloat ? ValueFloat.Equals(other.ValueFloat) : ValueInt.Equals(other.ValueInt);

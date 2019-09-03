@@ -10,6 +10,7 @@ namespace TestConsole {
         }
 
         public static void TestOptGetter(OptGetter opt, params string[] p) {
+            // GetOptResult r = default;
             Exconsole.WriteLine(">" + p.JoinBy(" "));
             opt.BeginParse(p);
 

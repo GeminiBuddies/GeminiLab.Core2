@@ -6,12 +6,12 @@ namespace GeminiLab.Core2.Yielder.Yielders {
         private readonly Predicate<T> _predicate;
 
         private bool _nextCalculated;
-        private T _next;
+        private T _next = default!;
         private bool _nextGood;
 
         private void clearNext() {
             _nextCalculated = _nextGood = false;
-            _next = default;
+            _next = default!;
         }
 
         public YielderWhileTaker(IYielder<T> source, Predicate<T> predicate) {
