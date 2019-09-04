@@ -16,6 +16,8 @@ namespace GeminiLab.Core2.GetOpt {
         UnexpectedAttachedValue,
         ValueExpected,
         EndOfArguments,
+        /// <summary>Something unexpected happened. Please report if 'GetOpt' return this value.</summary>
+        InternalError,
     }
 
     public enum GetOptResultType {
@@ -41,6 +43,7 @@ namespace GeminiLab.Core2.GetOpt {
         private readonly Dictionary<string, char> _aliases = new Dictionary<string, char>();
 
         public void AddOption(char option, OptionType type) {
+            if (!Enum.IsDefined(typeof(OptionType), type)) throw new ArgumentOutOfRangeException(nameof(type));
             _options[option] = type;
         }
 
@@ -50,11 +53,14 @@ namespace GeminiLab.Core2.GetOpt {
         }
 
         public void AddOption(string longOption, OptionType type) {
+            if (!Enum.IsDefined(typeof(OptionType), type)) throw new ArgumentOutOfRangeException(nameof(type));
             _longOptions.Add(longOption ?? throw new ArgumentNullException(nameof(longOption)), type);
         }
 
         public void AddAlias(char option, params string[] longAliases) {
+            if (!_options.ContainsKey(option)) throw new ArgumentOutOfRangeException(nameof(option));
             foreach (var alias in longAliases ?? throw new ArgumentNullException(nameof(longAliases))) {
+                if (alias == null) throw new ArgumentOutOfRangeException(nameof(longAliases));
                 _aliases.Add(alias, option);
             }
         }
@@ -158,7 +164,7 @@ namespace GeminiLab.Core2.GetOpt {
                     if (!_longOptions.TryGetValue(option, out result.OptionType)) {
                         if (_aliases.TryGetValue(option, out result.Option)) {
                             result.Type = GetOptResultType.LongAlias;
-                            if (!_options.TryGetValue(result.Option, out result.OptionType)) return GetOptError.UnknownOption;
+                            if (!_options.TryGetValue(result.Option, out result.OptionType)) return GetOptError.InternalError;
                         } else {
                             return GetOptError.UnknownOption;
                         }
@@ -185,7 +191,7 @@ namespace GeminiLab.Core2.GetOpt {
                     result.Arguments = p.ToArray();
                     return GetOptError.NoError;
                 } else {
-                    return GetOptError.UnknownOption;
+                    return GetOptError.InternalError;
                 }
             } else if (isEnabledDashDash(v)) {
                 int len = _argc - _argp;
