@@ -32,24 +32,15 @@ namespace GeminiLab.Core2.Logger {
         public const int LevelTrace = 0x02000;
         public const int LevelAll = 0x00000;
 
-        public static string LogLevelToString(int level) {
-            switch (level) {
-            case LevelFatal:
-                return "Fatal";
-            case LevelError:
-                return "Error";
-            case LevelWarn:
-                return "Warn";
-            case LevelInfo:
-                return "Info";
-            case LevelDebug:
-                return "Debug";
-            case LevelTrace:
-                return "Trace";
-            default:
-                return $"Level{level}";
-            }
-        }
+        public static string LogLevelToString(int level) => level switch {
+            LevelFatal => "Fatal",
+            LevelError => "Error",
+            LevelWarn => "Warn",
+            LevelInfo => "Info",
+            LevelDebug => "Debug",
+            LevelTrace => "Trace",
+            _ => $"Level{level}",
+        };
     }
 
 }

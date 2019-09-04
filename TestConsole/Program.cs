@@ -63,19 +63,12 @@ namespace TestConsole {
             AssemblyPrinter.PrintAssembly(typeof(IStream).Assembly);
             AssemblyPrinter.PrintAssembly(typeof(OptGetter).Assembly);
 
-            logger.Info("testing getopt...");
-
-            var opt = new OptGetter();
-            opt.AddOption('h', OptionType.Switch, "help");
-            opt.AddOption('m', OptionType.Parameterized, "mark");
-
-            logger.Info("with -- enabled");
-            opt.EnableDashDash = true;
-            OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
-
-            logger.Info("with -- disabled");
-            opt.EnableDashDash = false;
-            OptGetterTester.TestOptGetter(opt, "-h", "-m123", "-m", "-h123", "-add", "-m", "2", "3", "--help", "--mark", "2", "--", "--help", "qwer", "fff");
+            logger.Fatal("fatal");
+            logger.Error("error");
+            logger.Warn("warn");
+            logger.Info("info");
+            logger.Debug("debug");
+            logger.Trace("trace");
 
             var o = CommandLineParser<O>.Parse(new[] { "-a", "1233", "-h", "--hh" }, (err, result) => {
                 logger.Warn($"{err}");

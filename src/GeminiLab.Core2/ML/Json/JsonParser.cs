@@ -8,32 +8,24 @@ namespace GeminiLab.Core2.ML.Json {
 
             if (tok == null) throw new JsonParsingUnexpectedEndOfFileException();
 
-            switch (tok.Type) {
-            case JsonTokenType.LBrace:
-                return parseJsonObject(queue);
-            case JsonTokenType.LBracket:
-                return parseJsonArray(queue);
-            case JsonTokenType.LiteralTrue:
-                return new JsonBool(true);
-            case JsonTokenType.LiteralFalse:
-                return new JsonBool(false);
-            case JsonTokenType.LiteralNull:
-                return new JsonNull();
-            case JsonTokenType.String:
-                return new JsonString(JsonEscapeCharsConverter.Decode(tok.Value));
-            case JsonTokenType.Number:
-                return new JsonNumber(tok.Value);
-            /*
-            case JsonTokenType.RBracket:
-            case JsonTokenType.RBrace:
-            case JsonTokenType.Colon:
-            case JsonTokenType.Comma:
-            case JsonTokenType.Error:
-            case anything else:
-            */
-            default:
-                throw new JsonParsingUnexpectedTokenException(tok);
-            }
+            return tok.Type switch {
+                JsonTokenType.LBrace => (JsonValue)parseJsonObject(queue),
+                JsonTokenType.LBracket => parseJsonArray(queue),
+                JsonTokenType.LiteralTrue => new JsonBool(true),
+                JsonTokenType.LiteralFalse => new JsonBool(false),
+                JsonTokenType.LiteralNull => new JsonNull(),
+                JsonTokenType.String => new JsonString(JsonEscapeCharsConverter.Decode(tok.Value)),
+                JsonTokenType.Number => new JsonNumber(tok.Value),
+                /*
+                case JsonTokenType.RBracket:
+                case JsonTokenType.RBrace:
+                case JsonTokenType.Colon:
+                case JsonTokenType.Comma:
+                case JsonTokenType.Error:
+                case anything else:
+                */
+                _ => throw new JsonParsingUnexpectedTokenException(tok),
+            };
         }
 
         private static JsonObject parseJsonObject(JsonTokenQueue queue) {

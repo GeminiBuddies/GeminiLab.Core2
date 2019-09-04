@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Text;
 
@@ -119,74 +120,39 @@ namespace GeminiLab.Core2 {
         public const char PopColorChar = '^';
         
         private static bool tryGetColorByChar(char chr, out bool fore, out ConsoleColor color) {
-            switch (chr) {
-            case ForegroundBlack:
-                fore = true; color = ConsoleColor.Black; return true;
-            case ForegroundRed:
-                fore = true; color = ConsoleColor.Red; return true;
-            case ForegroundGreen:
-                fore = true; color = ConsoleColor.Green; return true;
-            case ForegroundBlue:
-                fore = true; color = ConsoleColor.Blue; return true;
-            case ForegroundCyan:
-                fore = true; color = ConsoleColor.Cyan; return true;
-            case ForegroundMagenta:
-                fore = true; color = ConsoleColor.Magenta; return true;
-            case ForegroundYellow:
-                fore = true; color = ConsoleColor.Yellow; return true;
-            case ForegroundGray:
-                fore = true; color = ConsoleColor.Gray; return true;
-            case ForegroundWhite:
-                fore = true; color = ConsoleColor.White; return true;
-            case ForegroundDarkRed:
-                fore = true; color = ConsoleColor.DarkRed; return true;
-            case ForegroundDarkGreen:
-                fore = true; color = ConsoleColor.DarkGreen; return true;
-            case ForegroundDarkBlue:
-                fore = true; color = ConsoleColor.DarkBlue; return true;
-            case ForegroundDarkCyan:
-                fore = true; color = ConsoleColor.DarkCyan; return true;
-            case ForegroundDarkMagenta:
-                fore = true; color = ConsoleColor.DarkMagenta; return true;
-            case ForegroundDarkYellow:
-                fore = true; color = ConsoleColor.DarkYellow; return true;
-            case ForegroundDarkGray:
-                fore = true; color = ConsoleColor.DarkGray; return true;
-            case BackgroundBlack:
-                fore = false; color = ConsoleColor.Black; return true;
-            case BackgroundRed:
-                fore = false; color = ConsoleColor.Red; return true;
-            case BackgroundGreen:
-                fore = false; color = ConsoleColor.Green; return true;
-            case BackgroundBlue:
-                fore = false; color = ConsoleColor.Blue; return true;
-            case BackgroundCyan:
-                fore = false; color = ConsoleColor.Cyan; return true;
-            case BackgroundMagenta:
-                fore = false; color = ConsoleColor.Magenta; return true;
-            case BackgroundYellow:
-                fore = false; color = ConsoleColor.Yellow; return true;
-            case BackgroundGray:
-                fore = false; color = ConsoleColor.Gray; return true;
-            case BackgroundWhite:
-                fore = false; color = ConsoleColor.White; return true;
-            case BackgroundDarkRed:
-                fore = false; color = ConsoleColor.DarkRed; return true;
-            case BackgroundDarkGreen:
-                fore = false; color = ConsoleColor.DarkGreen; return true;
-            case BackgroundDarkBlue:
-                fore = false; color = ConsoleColor.DarkBlue; return true;
-            case BackgroundDarkCyan:
-                fore = false; color = ConsoleColor.DarkCyan; return true;
-            case BackgroundDarkMagenta:
-                fore = false; color = ConsoleColor.DarkMagenta; return true;
-            case BackgroundDarkYellow:
-                fore = false; color = ConsoleColor.DarkYellow; return true;
-            case BackgroundDarkGray:
-                fore = false; color = ConsoleColor.DarkGray; return true;
-            default:
-                fore = false; color = ConsoleColor.Black; return false;
+            if (!(('a' <= chr && chr <= 'z') || ('A' <= chr && chr <= 'Z'))) {
+                fore = default;
+                color = default;
+                return false;
             }
+
+            fore = (chr & 0x20) != 0;
+
+            color = (chr | (char)0x20) switch {
+                ForegroundBlack => ConsoleColor.Black,
+                ForegroundRed => ConsoleColor.Red,
+                ForegroundGreen => ConsoleColor.Green,
+                ForegroundBlue => ConsoleColor.Blue,
+                ForegroundCyan => ConsoleColor.Cyan,
+                ForegroundMagenta => ConsoleColor.Magenta,
+                ForegroundYellow => ConsoleColor.Yellow,
+                ForegroundGray => ConsoleColor.Gray,
+                ForegroundWhite => ConsoleColor.White,
+                ForegroundDarkRed => ConsoleColor.DarkRed,
+                ForegroundDarkGreen => ConsoleColor.DarkGreen,
+                ForegroundDarkBlue => ConsoleColor.DarkBlue,
+                ForegroundDarkCyan => ConsoleColor.DarkCyan,
+                ForegroundDarkMagenta => ConsoleColor.DarkMagenta,
+                ForegroundDarkYellow => ConsoleColor.DarkYellow,
+                ForegroundDarkGray => ConsoleColor.DarkGray,
+                _ => (ConsoleColor)(-1),
+            };
+
+            if (color != (ConsoleColor)(-1)) return true;
+
+            fore = default;
+            color = default;
+            return false;
         }
     }
 }
