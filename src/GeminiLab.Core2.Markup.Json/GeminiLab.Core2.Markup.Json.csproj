@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <ApplicationIcon />
     <Win32Resource />
-    <Description>GeminiLab Corelib. This library contains the most basic parts.</Description>
+    <Description>GeminiLab Corelib. This library contains the Json library.</Description>
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2</Product>
@@ -31,4 +31,8 @@
     <AssemblyOriginatorKeyFile>..\..\keys\geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+  </ItemGroup>
 </Project>

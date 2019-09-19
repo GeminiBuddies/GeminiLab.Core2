@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\src\GeminiLab.Core2.GetOpt\GeminiLab.Core2.GetOpt.csproj" />
     <ProjectReference Include="..\src\GeminiLab.Core2.Logger\GeminiLab.Core2.Logger.csproj" />
+    <ProjectReference Include="..\src\GeminiLab.Core2.Markup.Json\GeminiLab.Core2.Markup.Json.csproj" />
     <ProjectReference Include="..\src\GeminiLab.Core2.Random\GeminiLab.Core2.Random.csproj" />
     <ProjectReference Include="..\src\GeminiLab.Core2.Yielder\GeminiLab.Core2.Yielder.csproj" />
     <ProjectReference Include="..\src\GeminiLab.Core2.Stream\GeminiLab.Core2.Stream.csproj" />

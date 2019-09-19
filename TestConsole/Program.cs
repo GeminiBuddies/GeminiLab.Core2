@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -6,7 +7,6 @@ using System.Reflection;
 using GeminiLab.Core2;
 using GeminiLab.Core2.Collections;
 using GeminiLab.Core2.Collections.HeapBase;
-using GeminiLab.Core2.ML.Json;
 using GeminiLab.Core2.Random;
 using GeminiLab.Core2.Logger;
 using GeminiLab.Core2.Logger.Appenders;
@@ -15,14 +15,17 @@ using GeminiLab.Core2.Sugar;
 using GeminiLab.Core2.Yielder;
 using GeminiLab.Core2.Stream;
 using GeminiLab.Core2.CommandLineParser;
-using Console = GeminiLab.Core2.Exconsole;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using GeminiLab.Core2.Consts;
 using GeminiLab.Core2.GetOpt;
+using GeminiLab.Core2.IO;
 using GeminiLab.Core2.Logger.Layouts;
+using GeminiLab.Core2.Markup.Json;
+using Console = GeminiLab.Core2.Exconsole;
 
 namespace TestConsole {
     class Program {
@@ -76,6 +79,10 @@ namespace TestConsole {
             });
             Console.WriteLine(o.A);
             Console.WriteLine(o.B);
+
+            var a = JsonParser.Parse("{ \"123\": [ 1, 2, 4, false, \"狗粮\" ], \"456\": [ true, null, \"レモン\" ] }");
+            Console.Write(a.ToString(JsonStringifyOption.Compact | JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly));
+            Console.Write("###");
         }
     }
 }

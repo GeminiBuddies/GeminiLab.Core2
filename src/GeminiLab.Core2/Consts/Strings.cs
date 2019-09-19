@@ -5,11 +5,12 @@ namespace GeminiLab.Core2.Consts {
 
         public const string Letter = Lowercase + Uppercase;
 
-        public const string DigitOct = "01234567";
+        public const string DigitOctal = "01234567";
         public const string Digit = "0123456789";
-        public const string DigitHexLower = "0123456789abcdef";
-        public const string DigitHexUpper = "0123456789ABCDEF";
-        public const string DigitHex = "0123456789abcdefABCDEF";
+        public const string DigitDecimal = Digit;
+        public const string DigitHexadecimalLower = "0123456789abcdef";
+        public const string DigitHexadecimalUpper = "0123456789ABCDEF";
+        public const string DigitHexadecimal = "0123456789abcdefABCDEF";
 
         public const string DigitAndLowercase = Digit + Lowercase;
         public const string DigitAndUppercase = Digit + Uppercase;

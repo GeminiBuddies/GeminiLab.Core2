@@ -1,4 +1,4 @@
-namespace GeminiLab.Core2.ML.Json {
+namespace GeminiLab.Core2.Markup.Json {
     public struct JsonObjectKeyValuePair {
         public JsonString Key { get; }
         public JsonValue Value { get; }
@@ -8,7 +8,7 @@ namespace GeminiLab.Core2.ML.Json {
             Value = value;
         }
 
-        public void Deconstruct(out string key, out JsonValue value) {
+        public void Deconstruct(out JsonString key, out JsonValue value) {
             key = Key;
             value = Value;
         }
