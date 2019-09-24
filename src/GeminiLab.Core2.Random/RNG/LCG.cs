@@ -1,4 +1,4 @@
-namespace GeminiLab.Core2.Random {
+namespace GeminiLab.Core2.Random.RNG {
     public sealed class LCG : IPRNG<uint> {
         public const uint A = 1664525u, C = 1013904223u;
 

@@ -4,13 +4,14 @@ using System.IO;
 using System.Text;
 
 namespace GeminiLab.Core2.IO {
+    /// <summary>DO NOT use async functions inherited from TextWriter.</summary>
     public class IndentedWriter : TextWriter {
         private readonly TextWriter _internalWriter;
 
         public IndentedWriter(TextWriter internalWriter): this(internalWriter, null) {}
 
         public IndentedWriter(TextWriter internalWriter, IFormatProvider? formatProvider): base(formatProvider) {
-            _internalWriter = internalWriter;
+            _internalWriter = internalWriter ?? throw new ArgumentNullException(nameof(internalWriter));
             _indent = 0;
             _indentWritten = false;
         }
@@ -22,6 +23,11 @@ namespace GeminiLab.Core2.IO {
         public virtual int Indent {
             get => _indent;
             set => _indent = value < 0 ? 0 : value;
+        }
+
+        public override string NewLine {
+            get => base.NewLine;
+            set => base.NewLine = _internalWriter.NewLine = value;
         }
 
         public void IncreaseIndent() => IncreaseIndent(1);
@@ -46,6 +52,12 @@ namespace GeminiLab.Core2.IO {
         public override void Write(char[] buffer, int index, int count) {
             EnsureIndent();
             _internalWriter.Write(buffer, index, count);
+        }
+
+        public override void WriteLine(string value) {
+            EnsureIndent();
+            _internalWriter.Write(value);
+            WriteLine();
         }
 
         public override void WriteLine() {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace GeminiLab.Core2.Collections.Comparers {
@@ -5,7 +6,7 @@ namespace GeminiLab.Core2.Collections.Comparers {
         readonly IComparer<T> _internalComp;
 
         public ReverseComparer(IComparer<T> internalComp) {
-            _internalComp = internalComp;
+            _internalComp = internalComp ?? throw new ArgumentNullException(nameof(internalComp));
         }
         
         int IComparer<T>.Compare(T x, T y) {

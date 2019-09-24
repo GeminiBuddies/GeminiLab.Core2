@@ -1,7 +1,6 @@
 using Xunit;
 
 using GeminiLab.Core2;
-using GeminiLab.Core2.Sugar;
 
 namespace XUnitTester.GeminiLab_Core2 {
     public class RangeTest {

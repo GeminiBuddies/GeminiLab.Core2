@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using GeminiLab.Core2.Collections;
-using GeminiLab.Core2.Sugar;
 
 namespace GeminiLab.Core2 {
     // python style range

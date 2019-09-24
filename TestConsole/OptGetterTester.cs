@@ -1,6 +1,5 @@
 using GeminiLab.Core2;
 using GeminiLab.Core2.GetOpt;
-using GeminiLab.Core2.Sugar;
 
 namespace TestConsole {
     class OptGetterTester {

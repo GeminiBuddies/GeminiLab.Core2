@@ -78,7 +78,7 @@ namespace XUnitTester.GeminiLab_Core2_GetOpt {
             var opt = optGetter();
             opt.EnableDashDash = false;
 
-            opt.BeginParse("-a", "--", "1", "2", "--bravo", "-ax");
+            opt.BeginParse("-a", "--", "1", "2", "--bravo", "-ax", "--exception");
 
             Assert.Equal(GetOptError.NoError, opt.GetOpt(out var result));
             assertGetOptResultEqual(result, GetOptResultType.ShortOption, OptionType.Switch, 'a', null, null, null);
@@ -92,6 +92,8 @@ namespace XUnitTester.GeminiLab_Core2_GetOpt {
             assertGetOptResultEqual(result, GetOptResultType.LongAlias, OptionType.Parameterized, 'b', "bravo", null, null);
             Assert.Equal(GetOptError.UnexpectedAttachedValue, opt.GetOpt(out result));
             assertGetOptResultEqual(result, GetOptResultType.ShortOption, OptionType.Switch, 'a', null, "x", null);
+            Assert.Equal(GetOptError.UnknownOption, opt.GetOpt(out result));
+            assertGetOptResultEqual(result, GetOptResultType.LongOption, OptionType.Switch, '\0', "exception", null, null);
             Assert.Equal(GetOptError.EndOfArguments, opt.GetOpt(out _));
 
             opt.EndParse();

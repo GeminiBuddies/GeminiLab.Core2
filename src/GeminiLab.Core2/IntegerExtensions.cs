@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GeminiLab.Core2.Sugar {
+namespace GeminiLab.Core2 {
     public static class IntegerExtensions {
         public static IEnumerable<T> Times<T>(this int v, Func<T> fn) {
             if (fn == null) throw new ArgumentNullException(nameof(fn));

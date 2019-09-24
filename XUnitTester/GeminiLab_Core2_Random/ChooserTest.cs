@@ -1,7 +1,6 @@
 using Xunit;
 
 using GeminiLab.Core2.Random;
-using GeminiLab.Core2.Random.Sugar;
 
 namespace XUnitTester.GeminiLab_Core2_Random {
     public class ChooserTest {

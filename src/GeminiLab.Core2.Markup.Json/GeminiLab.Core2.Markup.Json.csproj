@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <ApplicationIcon />
-    <Win32Resource />
+    <ApplicationIcon/>
+    <Win32Resource/>
     <Description>GeminiLab Corelib. This library contains the Json library.</Description>
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2</Product>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
-    <FileVersion>1.0.167.0</FileVersion>
-    <Version>1.0.0-dev-20190912-167</Version>
+    <FileVersion>1.0.171.0</FileVersion>
+    <Version>1.0.0-dev-20190922-171</Version>
     <LangVersion>preview</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
@@ -31,7 +31,7 @@
     <AssemblyOriginatorKeyFile>..\..\keys\geminilab.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
   </ItemGroup>

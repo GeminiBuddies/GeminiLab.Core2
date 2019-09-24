@@ -1,4 +1,4 @@
-namespace GeminiLab.Core2.Random {
+namespace GeminiLab.Core2.Random.RNG {
     public class PCG : IPRNG<int, ulong> {
         private readonly ulong _inc;
         private ulong _state;

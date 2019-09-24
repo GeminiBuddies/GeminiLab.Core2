@@ -11,7 +11,7 @@ namespace GeminiLab.Core2.Collections {
     // not thread-safe
     // won't implement interfaces like IEnumerable<T>, ICollection<T>, etc.
     public class PriorityQueue<T> {
-        private const int MinimumItemsLength = 8;
+        public const int MinimumItemsLength = 8;
 
         private int _size, _cap;
         private T[] _items;
@@ -37,24 +37,26 @@ namespace GeminiLab.Core2.Collections {
                 var newCap = getLegalCapacity(value);
                 if (newCap == _cap) return;
 
-                
+                var newItems = new T[newCap];
+                Array.Copy(_items, newItems, _size);
+                _items = newItems;
+                _cap = newCap;
             }
         }
 
-        public PriorityQueue(): this(Comparer<T>.Default) { }
+        public PriorityQueue(): this(null, null) { }
 
-        public PriorityQueue(IComparer<T> comparer): this(null, comparer) { }
+        public PriorityQueue(IComparer<T>? comparer): this(null, comparer) { }
 
-        public PriorityQueue(IEnumerable<T>? items): this(items, Comparer<T>.Default) { }
+        public PriorityQueue(IEnumerable<T>? items): this(items, null) { }
 
-        public PriorityQueue(IEnumerable<T>? items, IComparer<T> comparer) {
-            _comp = comparer;
+        public PriorityQueue(IEnumerable<T>? items, IComparer<T>? comparer) {
+            _comp = comparer ?? Comparer<T>.Default;
 
             if (items == null) {
                 _size = 0;
                 _cap = MinimumItemsLength;
-
-                _items = new T[MinimumItemsLength];
+                _items = new T[_cap];
             } else {
                 var arr = items as T[] ?? items.ToArray();
 

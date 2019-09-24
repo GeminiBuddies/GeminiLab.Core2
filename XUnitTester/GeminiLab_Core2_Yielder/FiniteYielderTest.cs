@@ -1,6 +1,5 @@
 using System;
 using GeminiLab.Core2;
-using GeminiLab.Core2.Sugar;
 using Xunit;
 
 using GeminiLab.Core2.Yielder;

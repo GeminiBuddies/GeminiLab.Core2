@@ -10,10 +10,7 @@ using GeminiLab.Core2.Collections.HeapBase;
 using GeminiLab.Core2.Random;
 using GeminiLab.Core2.Logger;
 using GeminiLab.Core2.Logger.Appenders;
-using GeminiLab.Core2.Random.Sugar;
-using GeminiLab.Core2.Sugar;
 using GeminiLab.Core2.Yielder;
-using GeminiLab.Core2.Stream;
 using GeminiLab.Core2.CommandLineParser;
 using System.IO;
 using System.Reflection.Metadata;
@@ -63,7 +60,6 @@ namespace TestConsole {
             AssemblyPrinter.PrintAssembly(typeof(Logger).Assembly);
             AssemblyPrinter.PrintAssembly(typeof(DefaultRNG).Assembly);
             AssemblyPrinter.PrintAssembly(typeof(IYielder<>).Assembly);
-            AssemblyPrinter.PrintAssembly(typeof(IStream).Assembly);
             AssemblyPrinter.PrintAssembly(typeof(OptGetter).Assembly);
 
             logger.Fatal("fatal");
@@ -83,6 +79,8 @@ namespace TestConsole {
             var a = JsonParser.Parse("{ \"123\": [ 1, 2, 4, false, \"狗粮\" ], \"456\": [ true, null, \"レモン\" ] }");
             Console.Write(a.ToString(JsonStringifyOption.Compact | JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly));
             Console.Write("###");
+
+            1024.Times(DefaultRNG.GetDefaultRandomSeed).ForEach(z => Console.WriteLine($"({z.Item1:x16}, {z.Item2:x16})"));
         }
     }
 }

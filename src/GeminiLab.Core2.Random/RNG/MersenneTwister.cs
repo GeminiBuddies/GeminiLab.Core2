@@ -1,4 +1,4 @@
-namespace GeminiLab.Core2.Random {
+namespace GeminiLab.Core2.Random.RNG {
     public sealed class Mt19937X64 : IPRNG<ulong> {
         private const int W = 64;
         private const ulong N = 312;

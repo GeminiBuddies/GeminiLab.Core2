@@ -1,11 +1,11 @@
 using System;
-using GeminiLab.Core2.Random.Adapter;
+using GeminiLab.Core2.Random.RNG;
 
-namespace GeminiLab.Core2.Random.Sugar {
+namespace GeminiLab.Core2.Random {
     // accept two types of rngs as basic numeric rngs
     // - IRNG<int>
     // - IRNG<ulong>
-    public static class RandomExtensions {
+    public static class RNGExtensions {
         public static double NextDouble(this IRNG<int> rng) => unchecked((uint)rng.Next()) * (1.0 / uint.MaxValue);
         public static double NextDouble(this IRNG<ulong> rng) => rng.Next() * (1.0 / ulong.MaxValue);
 
