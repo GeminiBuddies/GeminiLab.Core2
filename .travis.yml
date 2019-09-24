@@ -8,7 +8,7 @@ env:
 script:
   - mkdir tools
   - dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
-  - apt-get install -y apt-transport-https aspnetcore-runtime-2.1
+  - sudo apt-get install -y apt-transport-https aspnetcore-runtime-2.1
   - make mode=debug
   - make run_test
   - make mode=release
