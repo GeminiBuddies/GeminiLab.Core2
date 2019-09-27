@@ -20,7 +20,7 @@ else
 	mode_str := Error
 endif
 
-.PHONY: all autoproj publish run_test test
+.PHONY: all autoproj publish exam test
 all: autoproj
 ifeq ($(mode_str), Error)
 	@echo "unknown mode $(mode)."
@@ -36,8 +36,8 @@ autoproj:
 publish:
 	@$(MAKE) --no-print-directory dotnet=$(dotnet) autoproj=$(autoproj) mode=publish
 
-run_test:
-	@$(dotnet) run -p TestConsole$(/)TestConsole.csproj
+exam:
+	@$(dotnet) run -p Exam$(/)Exam.csproj
 
 test:
 	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:Exclude=[xunit.*]* XUnitTester$(/)XUnitTester.csproj

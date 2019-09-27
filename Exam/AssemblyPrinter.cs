@@ -1,8 +1,9 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using GeminiLab.Core2;
 
-namespace TestConsole {
+namespace Exam {
     class AssemblyPrinter {
         public static void PrintType(Type type) {
             if (type.IsVisible) {
@@ -47,6 +48,8 @@ namespace TestConsole {
                 Exconsole.WriteColor("A", ConsoleColor.DarkRed);
             } else if (type.IsUnicodeClass) {
                 Exconsole.WriteColor("U", ConsoleColor.DarkGreen);
+            } else if (type.IsAutoClass) {
+                Exconsole.WriteColor("T", ConsoleColor.Yellow);
             } else {
                 Exconsole.Write("-");
             }
@@ -61,6 +64,10 @@ namespace TestConsole {
             Exconsole.WriteLineColorEscaped($"Code Base: @v@e{ass.CodeBase}@^");
 
             foreach (var type in ass.GetTypes()) PrintType(type);
+        }
+
+        public static void PrintReferencedAssembly(Assembly ass) {
+            ass.GetReferencedAssemblies()/*.Where(name => !name.Name.StartsWith("System"))*/.ForEach(name => PrintAssembly(Assembly.Load(name)));
         }
     }
 }

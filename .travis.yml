@@ -10,7 +10,7 @@ script:
   - dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
   - sudo apt-get install -y apt-transport-https aspnetcore-runtime-2.1
   - make mode=debug
-  - make run_test
+  - make exam
   - make mode=release
   - make test
   - REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")

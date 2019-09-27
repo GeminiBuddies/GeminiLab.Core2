@@ -13,6 +13,7 @@ using GeminiLab.Core2.Logger.Appenders;
 using GeminiLab.Core2.Yielder;
 using GeminiLab.Core2.CommandLineParser;
 using System.IO;
+using System.Net.Sockets;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -24,7 +25,7 @@ using GeminiLab.Core2.Logger.Layouts;
 using GeminiLab.Core2.Markup.Json;
 using Console = GeminiLab.Core2.Exconsole;
 
-namespace TestConsole {
+namespace Exam {
     class Program {
         public static void Timed(Action action, string name = "") {
             Console.WriteLine($"- [{name}]Timer begin");
@@ -41,7 +42,7 @@ namespace TestConsole {
             [Option(LongOption = "bb")] public bool B { get; set; } = false;
         }
 
-        public static void Main(string[] args) {
+        public static int Main(string[] args) {
             using var loggerContext = new LoggerContext();
 
             loggerContext.AddCategory("default");
@@ -53,14 +54,12 @@ namespace TestConsole {
             // loggerContext.Connect("default", "console-layout", Filters.AcceptFilter);
             var logger = loggerContext.GetLogger("default");
 
-            logger.Info(Environment.CurrentDirectory);
+            logger.Info($"cwd: {Environment.CurrentDirectory}");
             logger.Info("printing assemblies...");
 
-            AssemblyPrinter.PrintAssembly(typeof(Console).Assembly);
-            AssemblyPrinter.PrintAssembly(typeof(Logger).Assembly);
-            AssemblyPrinter.PrintAssembly(typeof(DefaultRNG).Assembly);
-            AssemblyPrinter.PrintAssembly(typeof(IYielder<>).Assembly);
-            AssemblyPrinter.PrintAssembly(typeof(OptGetter).Assembly);
+            var ass = Assembly.GetExecutingAssembly();
+            AssemblyPrinter.PrintAssembly(ass);
+            AssemblyPrinter.PrintReferencedAssembly(ass);
 
             logger.Fatal("fatal");
             logger.Error("error");
@@ -68,6 +67,8 @@ namespace TestConsole {
             logger.Info("info");
             logger.Debug("debug");
             logger.Trace("trace");
+
+            var x = from i in new[] {1, 2, 3, 4, 5} select i * 2 + 1;
 
             var o = CommandLineParser<O>.Parse(new[] { "-a", "1233", "-h", "--hh" }, (err, result) => {
                 logger.Warn($"{err}");
@@ -80,7 +81,7 @@ namespace TestConsole {
             Console.Write(a.ToString(JsonStringifyOption.Compact | JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly));
             Console.Write("###");
 
-            1024.Times(DefaultRNG.GetDefaultRandomSeed).ForEach(z => Console.WriteLine($"({z.Item1:x16}, {z.Item2:x16})"));
+            return 0;
         }
     }
 }

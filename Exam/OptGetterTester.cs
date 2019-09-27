@@ -1,7 +1,7 @@
 using GeminiLab.Core2;
 using GeminiLab.Core2.GetOpt;
 
-namespace TestConsole {
+namespace Exam {
     class OptGetterTester {
         private static string mix(char c, string s) {
             if (c == '\0') return s ?? "<null>";
