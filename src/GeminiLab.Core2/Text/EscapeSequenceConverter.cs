@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Text;
-using GeminiLab.Core2.Consts;
 
 namespace GeminiLab.Core2.Text {
     public static class EscapeSequenceConverter {
@@ -36,7 +35,7 @@ namespace GeminiLab.Core2.Text {
                 if (source[i] == '\\') {
                     if (i + 1 == length) {
                         sb.Append('\\');
-                        continue;;
+                        continue;
                     }
 
                     if (source[i + 1] < 128 && DecodeTable[source[i + 1]] < 0xff) {

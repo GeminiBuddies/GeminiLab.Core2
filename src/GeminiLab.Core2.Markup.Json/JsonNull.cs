@@ -1,6 +1,5 @@
 using GeminiLab.Core2.IO;
 using System;
-using System.Text;
 
 namespace GeminiLab.Core2.Markup.Json {
     public sealed class JsonNull : JsonValue, IEquatable<JsonNull> {

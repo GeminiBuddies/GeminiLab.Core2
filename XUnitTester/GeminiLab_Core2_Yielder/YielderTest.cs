@@ -1,5 +1,3 @@
-using System;
-using GeminiLab.Core2;
 using Xunit;
 
 using GeminiLab.Core2.Yielder;

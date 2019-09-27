@@ -1,6 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using GeminiLab.Core2.Text;
 using Xunit;
 

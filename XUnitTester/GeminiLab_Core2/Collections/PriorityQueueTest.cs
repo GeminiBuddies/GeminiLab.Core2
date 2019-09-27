@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using GeminiLab.Core2;
 using GeminiLab.Core2.Collections;

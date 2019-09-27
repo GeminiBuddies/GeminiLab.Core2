@@ -5,15 +5,15 @@ using GeminiLab.Core2.Text;
 
 namespace GeminiLab.Core2.Markup.Json {
     public static class JsonParser {
-        private static JsonToken readToken(JsonTokenizer tokenizer) {
+        private static JsonToken ReadToken(JsonTokenizer tokenizer) {
             if (tokenizer.GetToken(out var token) != JsonGetTokenError.NoError) throw new Exception();
             return token;
         }
 
-        private static JsonValue parseJsonValue(JsonTokenizer tokenizer, JsonToken top) {
+        private static JsonValue ParseJsonValue(JsonTokenizer tokenizer, JsonToken top) {
             return top.Type switch {
-                JsonTokenType.LBrace => (JsonValue)parseJsonObject(tokenizer, top),
-                JsonTokenType.LBracket => parseJsonArray(tokenizer, top),
+                JsonTokenType.LBrace => (JsonValue)ParseJsonObject(tokenizer, top),
+                JsonTokenType.LBracket => ParseJsonArray(tokenizer, top),
                 JsonTokenType.LiteralTrue => new JsonBool(true),
                 JsonTokenType.LiteralFalse => new JsonBool(false),
                 JsonTokenType.LiteralNull => new JsonNull(),
@@ -31,28 +31,28 @@ namespace GeminiLab.Core2.Markup.Json {
             };
         }
 
-        private static JsonObject parseJsonObject(JsonTokenizer tokenizer, JsonToken top) {
+        private static JsonObject ParseJsonObject(JsonTokenizer tokenizer, JsonToken top) {
             var cache = new List<JsonObjectKeyValuePair>();
 
-            var token = readToken(tokenizer);
+            var token = ReadToken(tokenizer);
             if (token.Type == JsonTokenType.RBrace) {
                 return new JsonObject(cache);
             }
 
             while (true) {
-                var key = parseJsonString(tokenizer, token);
+                var key = ParseJsonString(tokenizer, token);
 
-                token = readToken(tokenizer);
+                token = ReadToken(tokenizer);
                 if (token.Type != JsonTokenType.Colon) throw new Exception();
 
-                token = readToken(tokenizer);
-                var value = parseJsonValue(tokenizer, token);
+                token = ReadToken(tokenizer);
+                var value = ParseJsonValue(tokenizer, token);
 
                 cache.Add(new JsonObjectKeyValuePair(key, value));
 
-                token = readToken(tokenizer);
+                token = ReadToken(tokenizer);
                 if (token.Type == JsonTokenType.Comma) {
-                    token = readToken(tokenizer);
+                    token = ReadToken(tokenizer);
                     continue;
                 }
                 if (token.Type == JsonTokenType.RBrace) break;
@@ -62,20 +62,20 @@ namespace GeminiLab.Core2.Markup.Json {
             return new JsonObject(cache);
         }
 
-        private static JsonArray parseJsonArray(JsonTokenizer tokenizer, JsonToken top) {
+        private static JsonArray ParseJsonArray(JsonTokenizer tokenizer, JsonToken top) {
             var cache = new List<JsonValue>();
 
-            var token = readToken(tokenizer);
+            var token = ReadToken(tokenizer);
             if (token.Type == JsonTokenType.RBracket) {
                 return new JsonArray(cache);
             }
 
             while (true) {
-                cache.Add(parseJsonValue(tokenizer, token));
+                cache.Add(ParseJsonValue(tokenizer, token));
 
-                token = readToken(tokenizer);
+                token = ReadToken(tokenizer);
                 if (token.Type == JsonTokenType.Comma) {
-                    token = readToken(tokenizer);
+                    token = ReadToken(tokenizer);
                     continue;
                 }
                 if (token.Type == JsonTokenType.RBracket) break;
@@ -86,7 +86,7 @@ namespace GeminiLab.Core2.Markup.Json {
             return new JsonArray(cache);
         }
 
-        private static JsonString parseJsonString(JsonTokenizer tokenizer, JsonToken top) {
+        private static JsonString ParseJsonString(JsonTokenizer tokenizer, JsonToken top) {
             if (top.Type != JsonTokenType.String) throw new Exception();
             return new JsonString(EscapeSequenceConverter.Decode(top.Value));
         }
@@ -95,7 +95,7 @@ namespace GeminiLab.Core2.Markup.Json {
             var tokenizer = new JsonTokenizer(new StringReader(value));
             if (tokenizer.GetToken(out var token) != JsonGetTokenError.NoError) throw new Exception();
 
-            return parseJsonValue(tokenizer, token);
+            return ParseJsonValue(tokenizer, token);
         }
     }
 }

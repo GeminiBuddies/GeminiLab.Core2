@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.ExceptionServices;
-using System.Text;
 
 namespace GeminiLab.Core2 {
     // following are things you really need
@@ -51,7 +48,7 @@ namespace GeminiLab.Core2 {
                 if (chr == EscapeChar && i < len - 1) {
                     chr = content[++i];
 
-                    if (tryGetColorByChar(chr, out var isFore, out var color)) {
+                    if (TryGetColorByChar(chr, out var isFore, out var color)) {
                         FlushBuffer();
 
                         if (isFore) ForegroundColor = color;
@@ -119,7 +116,7 @@ namespace GeminiLab.Core2 {
         public const char PushColorChar = 'v';
         public const char PopColorChar = '^';
         
-        private static bool tryGetColorByChar(char chr, out bool fore, out ConsoleColor color) {
+        private static bool TryGetColorByChar(char chr, out bool fore, out ConsoleColor color) {
             if (!(('a' <= chr && chr <= 'z') || ('A' <= chr && chr <= 'Z'))) {
                 fore = default;
                 color = default;

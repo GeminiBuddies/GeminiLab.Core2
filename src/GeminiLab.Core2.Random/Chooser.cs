@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace GeminiLab.Core2.Random {
     public class Chooser<TValue> : IRNG<TValue> {

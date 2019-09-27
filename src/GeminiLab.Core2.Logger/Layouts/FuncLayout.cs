@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GeminiLab.Core2.Logger.Layouts {
     public class FuncLayout : ILayout {

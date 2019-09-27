@@ -1,23 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Reflection;
 using GeminiLab.Core2.GetOpt;
 
 namespace GeminiLab.Core2.CommandLineParser {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public sealed class OptionAttribute : Attribute {
-        public OptionAttribute() { }
-
         public char Option { get; set; } = '\0';
         public string? LongOption { get; set; } = null;
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public sealed class GetOptErrorHandlerAttribute : Attribute {
-        public GetOptErrorHandlerAttribute() { }
-
         public static bool IsValidErrorHandler(MethodInfo handler) {
             var para = handler.GetParameters();
             return para.Length == 2
@@ -46,10 +40,10 @@ namespace GeminiLab.Core2.CommandLineParser {
     public static class CommandLineParser<T> {
         // ReSharper disable StaticMemberInGenericType
         private static readonly object InternalLock = new object();
-        private static CommandLineParserTypeMetaInfo? _info;
+        private static CommandLineParserTypeMetaInfo? Info;
         // ReSharper restore StaticMemberInGenericType
 
-        private static CommandLineParserTypeMetaInfo generateOptGetter() {
+        private static CommandLineParserTypeMetaInfo GenerateOptGetter() {
             var opt = new OptGetter();
             var shortOptionTargets = new Dictionary<char, PropertyInfo>();
             var longOptionTargets = new Dictionary<string, PropertyInfo>();
@@ -103,24 +97,24 @@ namespace GeminiLab.Core2.CommandLineParser {
 
         public static T Parse(string[] args, CommandLineParserErrorHandler? errorHandler) {
             lock (InternalLock) {
-                if (_info == null) _info = generateOptGetter();
+                if (Info == null) Info = GenerateOptGetter();
 
-                _info.Opt.BeginParse(args);
+                Info.Opt.BeginParse(args);
 
                 T rv = Activator.CreateInstance<T>();
 
                 GetOptError err;
-                while ((err = _info.Opt.GetOpt(out var result)) != GetOptError.EndOfArguments) {
+                while ((err = Info.Opt.GetOpt(out var result)) != GetOptError.EndOfArguments) {
                     if (err == GetOptError.NoError) {
                         PropertyInfo prop;
 
                         switch (result.Type) {
                         case GetOptResultType.ShortOption:
                         case GetOptResultType.LongAlias:    // not supposed to happen, but handle it anyway
-                            prop = _info.ShortOptionTargets[result.Option];
+                            prop = Info.ShortOptionTargets[result.Option];
                             break;
                         case GetOptResultType.LongOption:
-                            prop = _info.LongOptionTargets[result.LongOption!];
+                            prop = Info.LongOptionTargets[result.LongOption!];
                             break;
                         // case GetOptResultType.Values:
                         // case GetOptResultType.Invalid:
@@ -137,7 +131,7 @@ namespace GeminiLab.Core2.CommandLineParser {
                     } else {
                         bool exit = false;
 
-                        foreach (var handler in _info.ErrorHandlers) {
+                        foreach (var handler in Info.ErrorHandlers) {
                             if (handler.Invoke(rv, new object[] {err, result}) is bool b) exit |= b;
                         }
 
@@ -149,7 +143,7 @@ namespace GeminiLab.Core2.CommandLineParser {
                     }
                 }
 
-                _info.Opt.EndParse();
+                Info.Opt.EndParse();
                 return rv;
             }
         }

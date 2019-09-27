@@ -112,8 +112,8 @@ namespace GeminiLab.Core2 {
             => Console.MoveBufferArea(sourceLeft, sourceTop, sourceWidth, sourceHeight, targetLeft, targetTop);
 
         public static void MoveBufferArea(int sourceLeft, int sourceTop, int sourceWidth, int sourceHeight,
-            int targetLeft, int targetTop, char sourceChar, System.ConsoleColor sourceForeColor,
-            System.ConsoleColor sourceBackColor) 
+            int targetLeft, int targetTop, char sourceChar, ConsoleColor sourceForeColor,
+            ConsoleColor sourceBackColor) 
             => Console.MoveBufferArea(sourceLeft, sourceTop, sourceWidth, sourceHeight, targetLeft, targetTop, 
                 sourceChar, sourceForeColor, sourceBackColor);
 
@@ -223,7 +223,7 @@ namespace GeminiLab.Core2 {
 
         public static void WriteLine(string format, params object[] arg) => Console.WriteLine(format, arg);
 
-        public static event System.ConsoleCancelEventHandler CancelKeyPress {
+        public static event ConsoleCancelEventHandler CancelKeyPress {
             add => Console.CancelKeyPress += value;
             remove => Console.CancelKeyPress -= value;
         }

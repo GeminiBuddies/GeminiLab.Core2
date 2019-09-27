@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace GeminiLab.Core2 {
     public static class GMath {
         public static ulong Ceil2(ulong v) {

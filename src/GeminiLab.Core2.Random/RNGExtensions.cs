@@ -2,7 +2,7 @@ using System;
 using GeminiLab.Core2.Random.RNG;
 
 namespace GeminiLab.Core2.Random {
-    // accept two types of rngs as basic numeric rngs
+    // accept two types of RNGs as basic numeric RNGs
     // - IRNG<int>
     // - IRNG<ulong>
     public static class RNGExtensions {

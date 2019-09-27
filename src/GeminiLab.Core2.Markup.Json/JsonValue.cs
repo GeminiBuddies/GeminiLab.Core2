@@ -1,6 +1,4 @@
-using System.Globalization;
 using System.IO;
-using System.Text;
 using GeminiLab.Core2.IO;
 
 namespace GeminiLab.Core2.Markup.Json {

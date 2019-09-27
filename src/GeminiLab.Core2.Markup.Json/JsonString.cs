@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using GeminiLab.Core2.IO;
 using GeminiLab.Core2.Text;
 

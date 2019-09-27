@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using GeminiLab.Core2.IO;
 
 namespace GeminiLab.Core2.Markup.Json {

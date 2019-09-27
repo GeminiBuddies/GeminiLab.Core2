@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Linq.Expressions;
 using GeminiLab.Core2.Collections.HeapBase;
 using GeminiLab.Core2.Consts;
 
@@ -18,7 +16,7 @@ namespace GeminiLab.Core2.Collections {
 
         private readonly IComparer<T> _comp;
 
-        private static int getLegalCapacity(int expected) {
+        private static int GetLegalCapacity(int expected) {
             if (expected < MinimumItemsLength) return MinimumItemsLength;
 
             ulong p = GMath.Ceil2((ulong)expected);
@@ -34,7 +32,7 @@ namespace GeminiLab.Core2.Collections {
             set {
                 if (value < _size) throw new ArgumentOutOfRangeException(nameof(value));
 
-                var newCap = getLegalCapacity(value);
+                var newCap = GetLegalCapacity(value);
                 if (newCap == _cap) return;
 
                 var newItems = new T[newCap];
@@ -61,7 +59,7 @@ namespace GeminiLab.Core2.Collections {
                 var arr = items as T[] ?? items.ToArray();
 
                 _size = arr.Length;
-                _cap = getLegalCapacity(_size);
+                _cap = GetLegalCapacity(_size);
 
                 _items = new T[_cap];
                 Array.Copy(arr, _items, _size);

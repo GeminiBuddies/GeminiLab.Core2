@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices.ComTypes;
-
 namespace GeminiLab.Core2.Logger {
     public static class Filters {
         public static Filter AcceptFilter => (_, __, ___) => true;

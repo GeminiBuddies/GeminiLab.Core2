@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 
 namespace GeminiLab.Core2.Logger.Layouts {
     public class DefaultLayout : ILayout {

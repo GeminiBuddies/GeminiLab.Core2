@@ -13,7 +13,7 @@ namespace GeminiLab.Core2.Random.RNG {
             Seed(seed);
         }
 
-        private static uint ror(uint x, uint r) {
+        private static uint RotateRight(uint x, uint r) {
             return (x >> (int)r) | (x << (int)(-r & 31));
         }
 
@@ -22,7 +22,7 @@ namespace GeminiLab.Core2.Random.RNG {
 
             unchecked {
                 _state = _state * 6364136223846793005ul + _inc;
-                return (int)ror((uint)(((x >> 18) ^ x) >> 27), (uint)(x >> 59));
+                return (int)RotateRight((uint)(((x >> 18) ^ x) >> 27), (uint)(x >> 59));
             }
         }
 

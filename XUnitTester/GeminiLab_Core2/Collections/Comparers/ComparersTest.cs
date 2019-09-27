@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GeminiLab.Core2;
@@ -10,8 +10,8 @@ using C = GeminiLab.Core2.Collections.Comparers.Comparers;
 
 namespace XUnitTester.GeminiLab_Core2.Collections.Comparers {
     public class ComparersTest {
-        private static IEnumerable<(int, int)> randomIntPairs(int count) => count.Times(() => (DefaultRNG.Next(), DefaultRNG.Next()));
-        private static IEnumerable<(int, int)> randomSameIntPairs(int count) => count.Times(() => {
+        private static IEnumerable<(int, int)> RandomIntPairs(int count) => count.Times(() => (DefaultRNG.Next(), DefaultRNG.Next()));
+        private static IEnumerable<(int, int)> RandomSameIntPairs(int count) => count.Times(() => {
             var x = DefaultRNG.Next();
             return (x, x);
         });
@@ -21,14 +21,14 @@ namespace XUnitTester.GeminiLab_Core2.Collections.Comparers {
             Func<int, int, bool> lessThan = (x, y) => x < y;
             var comp1 = lessThan.AsComparer();
 
-            Assert.True(randomIntPairs(32768).Select(tuple => comp1.Compare(tuple.Item1, tuple.Item2) == Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2)).All());
-            Assert.True(randomSameIntPairs(32768).Select(tuple => comp1.Compare(tuple.Item1, tuple.Item2) == Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2)).All());
+            Assert.True(RandomIntPairs(32768).Select(tuple => comp1.Compare(tuple.Item1, tuple.Item2) == Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2)).All());
+            Assert.True(RandomSameIntPairs(32768).Select(tuple => comp1.Compare(tuple.Item1, tuple.Item2) == Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2)).All());
 
             Func<int, int, int> rev = (x, y) => x < y ? 1 : x > y ? -1 : 0;
             var comp2 = rev.AsComparer();
 
-            Assert.True(randomIntPairs(32768).Select(tuple => comp2.Compare(tuple.Item1, tuple.Item2) + Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2) == 0).All());
-            Assert.True(randomSameIntPairs(32768).Select(tuple => comp2.Compare(tuple.Item1, tuple.Item2) + Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2) == 0).All());
+            Assert.True(RandomIntPairs(32768).Select(tuple => comp2.Compare(tuple.Item1, tuple.Item2) + Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2) == 0).All());
+            Assert.True(RandomSameIntPairs(32768).Select(tuple => comp2.Compare(tuple.Item1, tuple.Item2) + Comparer<int>.Default.Compare(tuple.Item1, tuple.Item2) == 0).All());
         }
 
         [Fact]
@@ -36,8 +36,8 @@ namespace XUnitTester.GeminiLab_Core2.Collections.Comparers {
             var def = Comparer<int>.Default;
             var rev = def.Reverse();
 
-            Assert.True(randomIntPairs(32768).Select(tuple => def.Compare(tuple.Item1, tuple.Item2) + rev.Compare(tuple.Item1, tuple.Item2) == 0).All());
-            Assert.True(randomSameIntPairs(32768).Select(tuple => def.Compare(tuple.Item1, tuple.Item2) + rev.Compare(tuple.Item1, tuple.Item2) == 0).All());
+            Assert.True(RandomIntPairs(32768).Select(tuple => def.Compare(tuple.Item1, tuple.Item2) + rev.Compare(tuple.Item1, tuple.Item2) == 0).All());
+            Assert.True(RandomSameIntPairs(32768).Select(tuple => def.Compare(tuple.Item1, tuple.Item2) + rev.Compare(tuple.Item1, tuple.Item2) == 0).All());
         }
 
         [Fact]

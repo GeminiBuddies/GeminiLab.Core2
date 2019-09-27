@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Text;
 
 namespace GeminiLab.Core2.Logger {
     public sealed class LoggerContext : IDisposable {

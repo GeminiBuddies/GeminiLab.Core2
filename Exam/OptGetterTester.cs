@@ -3,7 +3,7 @@ using GeminiLab.Core2.GetOpt;
 
 namespace Exam {
     class OptGetterTester {
-        private static string mix(char c, string s) {
+        private static string Mix(char c, string s) {
             if (c == '\0') return s ?? "<null>";
             return s == null ? new string(c, 1) : $"{c}|{s}";
         }
@@ -14,13 +14,13 @@ namespace Exam {
             opt.BeginParse(p);
 
             bool eoa = false;
-            GetOptError err;
             while (!eoa) {
+                GetOptError err;
                 if ((err = opt.GetOpt(out var result)) == GetOptError.EndOfArguments) {
                     eoa = true;
                 }
 
-                Exconsole.WriteLine($"  {err}: {result.Type}: \"{mix(result.Option, result.LongOption)}\", p: {result.Argument ?? "<null>"}, pp: {result.Arguments?.JoinBy(", ") ?? "<null>"}");
+                Exconsole.WriteLine($"  {err}: {result.Type}: \"{Mix(result.Option, result.LongOption)}\", p: {result.Argument ?? "<null>"}, pp: {result.Arguments?.JoinBy(", ") ?? "<null>"}");
             }
 
             opt.EndParse();
