@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GeminiLab.Core2 {
     // following are things you really need
+    [ExcludeFromCodeCoverage]
     public static partial class Exconsole {
         public static void WriteLineColor(string value, ConsoleColor? foregroundColor = null,
             ConsoleColor? backgroundColor = null) {
