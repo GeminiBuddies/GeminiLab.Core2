@@ -20,7 +20,7 @@ else
 	mode_str := Error
 endif
 
-.PHONY: all autoproj publish exam test
+.PHONY: all autoproj publish exam test install_local_cover
 all: autoproj
 ifeq ($(mode_str), Error)
 	@echo "unknown mode $(mode)."
@@ -42,5 +42,8 @@ exam:
 test:
 	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:Exclude=[xunit.*]* XUnitTester$(/)XUnitTester.csproj
 
-local_cover:
+local_cover: test
 	reportgenerator -reports:.$(/)XUnitTester$(/)coverage.opencover.xml -targetdir:report.ignore
+
+install_local_cover:
+	dotnet tool install -g dotnet-reportgenerator-globaltool

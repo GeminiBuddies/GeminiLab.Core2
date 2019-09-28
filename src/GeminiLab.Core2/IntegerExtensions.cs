@@ -16,5 +16,8 @@ namespace GeminiLab.Core2 {
 
             for (int i = 0; i < v; ++i) act();
         }
+
+        public static Range To(this int from, int to) => new Range(from, to);
+        public static Range To(this int from, int to, int step) => new Range(from, to, step);
     }
 }

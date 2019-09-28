@@ -5,7 +5,10 @@ using GeminiLab.Core2.Logger;
 using GeminiLab.Core2.Logger.Appenders;
 using GeminiLab.Core2.CommandLineParser;
 using System.IO;
+using GeminiLab.Core2;
 using GeminiLab.Core2.Markup.Json;
+using GeminiLab.Core2.Random;
+using GeminiLab.Core2.Yielder;
 using Console = GeminiLab.Core2.Exconsole;
 
 namespace Exam {
@@ -62,7 +65,7 @@ namespace Exam {
 
             var a = JsonParser.Parse("{ \"123\": [ 1, 2, 4, false, \"狗粮\" ], \"456\": [ true, null, \"レモン\" ] }");
             Console.Write(a.ToString(JsonStringifyOption.Compact | JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly));
-            Console.Write("###");
+            Console.WriteLine("###");
 
             return 0;
         }

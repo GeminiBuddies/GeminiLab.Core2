@@ -1,5 +1,6 @@
 namespace GeminiLab.Core2 {
-    public static class GMath {
+    // temporarily internal
+    internal static class GMath {
         public static ulong Ceil2(ulong v) {
             unchecked {
                 if ((v & (v - 1)) == 0) return v;

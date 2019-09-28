@@ -15,7 +15,7 @@ namespace GeminiLab.Core2 {
 
         private readonly bool _invalid;
 
-        public Range() : this(0) { }
+        public Range() : this(0, 0, 1) { }
 
         public Range(int end) : this(0, end, 1) { }
 

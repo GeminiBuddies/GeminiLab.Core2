@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using GeminiLab.Core2;
+using GeminiLab.Core2.Collections;
 
 namespace Exam {
     class AssemblyPrinter {

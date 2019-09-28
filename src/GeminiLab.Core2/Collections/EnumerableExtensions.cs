@@ -2,8 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GeminiLab.Core2 {
+namespace GeminiLab.Core2.Collections {
     public static class EnumerableExtensions {
+        public static void Consume<T>(this IEnumerable<T> source) {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            foreach (var x in source) { }
+        }
+
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (action == null) throw new ArgumentNullException(nameof(action));
@@ -11,14 +17,16 @@ namespace GeminiLab.Core2 {
             foreach (var i in source) action(i);
         }
 
+        /*
         public static IEnumerable<T> EvaluateAll<T>(this IEnumerable<T> source) {
             return new List<T>(source);
         }
+        */
 
         public static IEnumerable<T> Union<T>(this IEnumerable<IEnumerable<T>> source) {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            return source.Aggregate((x, y) => x.Union(y));
+            return source.Aggregate(Enumerable.Union);
         }
 
         public static IEnumerable<T> Union<T>(this IEnumerable<IEnumerable<T>> source, IEqualityComparer<T> comparer) {
@@ -30,7 +38,7 @@ namespace GeminiLab.Core2 {
         public static IEnumerable<T> Intersect<T>(this IEnumerable<IEnumerable<T>> source) {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            return source.Aggregate((x, y) => x.Intersect(y));
+            return source.Aggregate(Enumerable.Intersect);
         }
 
         public static IEnumerable<T> Intersect<T>(this IEnumerable<IEnumerable<T>> source, IEqualityComparer<T> comparer) {
@@ -43,7 +51,7 @@ namespace GeminiLab.Core2 {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
             foreach (var ie in source) {
-                if (ie == null) throw new ArgumentOutOfRangeException(nameof(source), "A value in parameter source is null.");
+                if (ie == null) throw new NullReferenceException();
 
                 foreach (var i in ie) yield return i;
             }
@@ -56,21 +64,19 @@ namespace GeminiLab.Core2 {
         }
 
         public static IEnumerable<T> Take<T>(this IEnumerable<T> source, int start, int length) {
-            var en = source.GetEnumerator();
+            // C# dispose it, but ReSharper don't think so
+            // ReSharper disable once GenericEnumeratorNotDisposed
+            using var en = source?.GetEnumerator() ?? throw new ArgumentNullException(nameof(source));
 
             for (int i = 0; i < start; ++i) {
-                if (en.MoveNext()) continue;
-
-                en.Dispose(); yield break;
+                if (!en.MoveNext()) yield break;
             }
 
             for (int i = 0; i < length; ++i) {
                 if (en.MoveNext()) yield return en.Current;
-                else { en.Dispose(); yield break; }
+                else yield break;
             }
         }
-
-        public static IEnumerable<T> Take<T>(this IEnumerable<T> source, int length) => source.Take(0, length);
 
         public static IDictionary<int, T> NumberItems<T>(this IEnumerable<T> source) => source.NumberItems(0);
 

@@ -9,6 +9,15 @@ using Xunit;
 
 namespace XUnitTester.GeminiLab_Core2.Collections {
     public class PriorityQueueTest {
+        internal static ulong Ceil2(ulong v) {
+            unchecked {
+                if ((v & (v - 1)) == 0) return v;
+
+                while ((v & (v - 1)) != 0) v &= (v - 1);
+                return v << 1;
+            }
+        }
+
         [Fact]
         public void PQueueTest() {
             // initializing...
@@ -34,7 +43,7 @@ namespace XUnitTester.GeminiLab_Core2.Collections {
 
             int len = 777 + 1048576 + 1025 * 1023;
             Assert.Equal(len, pq.Count);
-            Assert.Equal((int)GMath.Ceil2((ulong)len), pq.Capacity);
+            Assert.Equal((int)Ceil2((ulong)len), pq.Capacity);
 
             // empty pq.
             for (int i = 0; i < len; ++i) {
@@ -48,7 +57,7 @@ namespace XUnitTester.GeminiLab_Core2.Collections {
             Assert.Throws<InvalidOperationException>(() => { pq.Peek(); });
             Assert.Throws<InvalidOperationException>(() => { pq.Pop(); });
             Assert.Empty(pq.ToArray());
-            Assert.Equal((int)GMath.Ceil2((ulong)len), pq.Capacity);
+            Assert.Equal((int)Ceil2((ulong)len), pq.Capacity);
 
 
             31.Times(() => {
@@ -57,12 +66,12 @@ namespace XUnitTester.GeminiLab_Core2.Collections {
                 list.AddRange(x);
             });
 
-            Assert.Equal((int)GMath.Ceil2((ulong)len), pq.Capacity);
+            Assert.Equal((int)Ceil2((ulong)len), pq.Capacity);
             Assert.Throws<ArgumentOutOfRangeException>(() => { pq.Capacity = PriorityQueue<int>.MinimumItemsLength; });
             
             pq.Clear();
             Assert.Equal(0, pq.Count);
-            Assert.Equal((int)GMath.Ceil2((ulong)len), pq.Capacity);
+            Assert.Equal((int)Ceil2((ulong)len), pq.Capacity);
 
             pq.Reset();
             Assert.Equal(0, pq.Count);
