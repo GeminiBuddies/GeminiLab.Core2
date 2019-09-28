@@ -21,7 +21,7 @@
     <Copyright>Copyright © Gemini Laboratory 2017 - <~ now yyyy ~></Copyright>
     <FileVersion><~file_version~></FileVersion>
     <Version><~full_version~></Version>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <Nullable>enable</Nullable>

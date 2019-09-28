@@ -23,12 +23,14 @@ namespace GeminiLab.Core2.Markup.Json {
         public int Row;
         public int Column;
 
+        /*
         public JsonToken(JsonTokenType type, ReadOnlySpan<char> value, int row, int column) {
             Type = type;
             Value = value;
             Row = row;
             Column = column;
         }
+        */
 
         public override string ToString() {
             return nameof(JsonToken) + $" {{ {Type.ToString()} \"{Value.ToString()}\" at ({Row}, {Column}) }}";

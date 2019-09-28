@@ -16,7 +16,7 @@ namespace GeminiLab.Core2.Markup.Json {
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj is JsonBool b && Equals(b);
+            return (obj is JsonBool b && Equals(b)) || (obj is bool bo && bo == Value);
         }
 
         public override int GetHashCode() {
