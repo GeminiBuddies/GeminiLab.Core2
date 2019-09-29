@@ -7,7 +7,7 @@ namespace GeminiLab.Core2.Markup.Json {
         public string Value { get; }
 
         public JsonString(string value) {
-            Value = value;
+            Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         internal override void Stringify(JsonStringifyOption config, IndentedWriter iw) {
@@ -25,12 +25,14 @@ namespace GeminiLab.Core2.Markup.Json {
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj is JsonString s && Equals(s);
+            return obj switch {
+                JsonString s => Equals(s),
+                string s => s == Value,
+                _ => false,
+            };
         }
 
-        public override int GetHashCode() {
-            return (Value != null ? Value.GetHashCode() : 0);
-        }
+        public override int GetHashCode() => Value.GetHashCode();
 
         public static bool operator ==(JsonString a, JsonString b) => a?.Equals(b) ?? b is null;
         public static bool operator !=(JsonString a, JsonString b) => !(a == b);
