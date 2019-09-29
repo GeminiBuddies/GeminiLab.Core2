@@ -39,10 +39,10 @@ publish:
 exam:
 	@$(dotnet) run -p Exam$(/)Exam.csproj
 
-test: autoproj
-	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:Exclude=[xunit.*]* XUnitTester$(/)XUnitTester.csproj
+test:
+	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:Exclude=[xunit.*]* -v=normal --no-build XUnitTester$(/)XUnitTester.csproj
 
-local_cover: test
+local_cover: all test
 	reportgenerator -reports:.$(/)XUnitTester$(/)coverage.opencover.xml -targetdir:report.ignore
 
 install_local_cover:

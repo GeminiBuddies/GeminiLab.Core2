@@ -15,7 +15,7 @@ namespace GeminiLab.Core2.Random {
             return (int)(min + Next(rng, (uint)(max - min)));
         }
 
-        public static int Next(this IRNG<int> rng, int max) => unchecked((int)Next(rng, (uint) max));
+        public static int Next(this IRNG<int> rng, int max) => rng.Next(0, max);
 
         public static uint Next(this IRNG<int> rng, uint min, uint max) {
             if (min >= max) throw new ArgumentOutOfRangeException(nameof(min));
@@ -59,7 +59,7 @@ namespace GeminiLab.Core2.Random {
             }
         }
 
-        public static void Fill(this IRNG<int> rng, byte[] buffer) => Fill(rng, buffer, 0, buffer.Length);
+        public static void Fill(this IRNG<int> rng, byte[] buffer) => Fill(rng, buffer ?? throw new ArgumentNullException(nameof(buffer)), 0, buffer.Length);
 
         // 4x faster than old one
         public static void Fill(this IRNG<int> rng, byte[] buffer, int start, int count) {
@@ -69,7 +69,7 @@ namespace GeminiLab.Core2.Random {
             var len = buffer.Length;
 
             if (start < 0 || start >= len) throw new ArgumentOutOfRangeException(nameof(start));
-            if (start + count > len) throw new ArgumentOutOfRangeException(nameof(count));
+            if (count < 0 || start + count > len) throw new ArgumentOutOfRangeException(nameof(count));
 
             int end = start + count;
 
@@ -92,7 +92,7 @@ namespace GeminiLab.Core2.Random {
             }
         }
 
-        public static void Fill(this IRNG<ulong> rng, byte[] buffer) => Fill(rng, buffer, 0, buffer.Length);
+        public static void Fill(this IRNG<ulong> rng, byte[] buffer) => Fill(rng, buffer ?? throw new ArgumentNullException(nameof(buffer)), 0, buffer.Length);
 
         public static void Fill(this IRNG<ulong> rng, byte[] buffer, int start, int count) {
             if (rng == null) throw new ArgumentNullException(nameof(rng));
@@ -101,7 +101,7 @@ namespace GeminiLab.Core2.Random {
             var len = buffer.Length;
 
             if (start < 0 || start >= len) throw new ArgumentOutOfRangeException(nameof(start));
-            if (start + count > len) throw new ArgumentOutOfRangeException(nameof(count));
+            if (count < 0 || start + count > len) throw new ArgumentOutOfRangeException(nameof(count));
 
             int end = start + count;
 
@@ -144,7 +144,7 @@ namespace GeminiLab.Core2.Random {
             return rv;
         }
 
-        public static IRNG<ulong> AsU64RNG(this IRNG<int> rng) => new I32RNG2U64RNG(rng);
+        public static IRNG<ulong> AsU64RNG(this IRNG<int> rng) => new I32ToU64RNG(rng);
 
         public static void Shuffle<T>(this T[] array) {
             ShuffleBy(array, DefaultRNG.I32);

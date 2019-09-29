@@ -180,6 +180,7 @@ namespace XUnitTester.GeminiLab_Core2_Random {
         [Fact]
         public void DefaultRNGTests() {
             DefaultRNG.I32.Next();
+            DefaultRNG.U64.Next();
             DefaultRNG.Coin.Next();
             DefaultRNG.Next();
             DefaultRNG.NextU64();

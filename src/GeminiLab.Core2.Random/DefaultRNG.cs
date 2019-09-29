@@ -50,6 +50,11 @@ namespace GeminiLab.Core2.Random {
                 return InnerOne.Next();
             }
         }
+        public static uint NextU32() {
+            lock (InnerOne) {
+                return unchecked((uint)InnerOne.Next());
+            }
+        }
 
         public static ulong NextU64() {
             lock (InnerOne) {

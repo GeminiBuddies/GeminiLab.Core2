@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace GeminiLab.Core2.Random.RNG {
     public sealed class Mt19937X64 : IPRNG<ulong> {
         private const int W = 64;
@@ -129,6 +131,7 @@ namespace GeminiLab.Core2.Random.RNG {
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public sealed class Mt19937S : IPRNG<int> {
         private readonly Mt19937 _gen;
 
@@ -137,15 +140,5 @@ namespace GeminiLab.Core2.Random.RNG {
 
         public void Seed(int seed) => _gen.Seed(unchecked((uint)seed));
         public int Next() => unchecked((int)_gen.Next());
-    }
-
-    public sealed class Mt19937X64S : IPRNG<long> {
-        private readonly Mt19937X64 _gen;
-
-        public Mt19937X64S(long seed) => _gen = new Mt19937X64(unchecked((ulong)seed));
-        public Mt19937X64S() => _gen = new Mt19937X64();
-
-        public void Seed(long seed) => _gen.Seed(unchecked((ulong)seed));
-        public long Next() => unchecked((long)_gen.Next());
     }
 }
