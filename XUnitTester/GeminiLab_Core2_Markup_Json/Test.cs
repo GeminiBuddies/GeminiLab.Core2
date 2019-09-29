@@ -37,6 +37,7 @@ namespace XUnitTester.GeminiLab_Core2_Markup_Json {
             Assert.Equal("{ \"a\": null, \"b\": [ 23.4444, 433336 ], \"ca\": { \"d\": [ true, false, \"ame\", \"冬好き\" ], \"e\": [], \"f\": {} } }", result.ToString(JsonStringifyOption.Inline));
             Assert.Equal("{ \"a\": null, \"b\": [ 23.4444, 433336 ], \"ca\": { \"d\": [ true, false, \"ame\", \"\\u51ac\\u597d\\u304d\" ], \"e\": [], \"f\": {} } }", result.ToString(JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly));
             Assert.Equal("{\"a\":null,\"b\":[23.4444,433336],\"ca\":{\"d\":[true,false,\"ame\",\"\\u51ac\\u597d\\u304d\"],\"e\":[],\"f\":{}}}", result.ToString(JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly | JsonStringifyOption.Compact));
+            Assert.Equal("{\n    \"a\": null,\n    \"b\": [\n        23.4444,\n        433336\n    ],\n    \"ca\": {\n        \"d\": [\n            true,\n            false,\n            \"ame\",\n            \"冬好き\"\n        ],\n        \"e\": [],\n        \"f\": {}\n    }\n}", result.ToString(JsonStringifyOption.None, "\n"));
         }
 
         [Fact]
@@ -48,7 +49,7 @@ namespace XUnitTester.GeminiLab_Core2_Markup_Json {
             Assert.False(boolA == boolC);
             Assert.False(boolA != boolB);
             Assert.True(boolA != boolC);
-            Assert.True((JsonBool)null == (JsonBool)null);
+            Assert.True((JsonBool)null == null);
 
             Assert.True(boolA.Equals((object)boolA));
             Assert.True(boolA.Equals((object)boolB));
@@ -80,6 +81,88 @@ namespace XUnitTester.GeminiLab_Core2_Markup_Json {
             Assert.False(nullA != nullB);
 
             Assert.Equal(0, nullA.GetHashCode());
+        }
+
+        [Fact]
+        public static void JsonNumberMethodsTest() {
+            JsonNumber intA = 233, intB = 666, intC = 666, floatA = 43.25, floatB = 96.625, floatC = 96.625;
+            object objA = "";
+
+            Assert.True(floatA.IsFloat);
+            Assert.True(floatB.IsFloat);
+            Assert.False(intA.IsFloat);
+            Assert.False(intB.IsFloat);
+
+            Assert.True(intB == intC);
+            Assert.False(intB != intC);
+
+            Assert.Equal<double>(233, intA);
+            Assert.Equal<double>(43.25, floatA);
+
+            Assert.True(intB.Equals(intC));
+            Assert.False(intA.Equals(intB));
+            Assert.False(intA.Equals(floatA));
+            Assert.True(floatB.Equals(floatC));
+
+            Assert.True(intB.Equals((object)intB));
+            Assert.True(intB.Equals((object)intC));
+            Assert.False(intB.Equals(objA));
+            Assert.False(intB.Equals((object)null));
+            Assert.False(intB.Equals(null));
+
+            Assert.Equal(intB.ValueInt.GetHashCode(), intB.GetHashCode());
+            Assert.Equal(floatB.ValueFloat.GetHashCode(), floatB.GetHashCode());
+            Assert.Throws<ArgumentOutOfRangeException>(() => new JsonNumber("invalid"));
+        }
+
+        [Fact]
+        public static void JsonArrayMethodsTest() {
+            var arr = new JsonArray();
+            var list = new List<JsonValue>();
+            JsonValue value;
+
+            Assert.False(arr.IsReadOnly);
+
+            value = (JsonString)"aloha oe";
+            arr.Add(value);
+            list.Add(value);
+
+            value = (JsonNumber)4242;
+            arr.Add(value);
+            list.Add(value);
+
+            value = (JsonBool)false;
+            arr.Add(value);
+            list.Add(value);
+
+            value = new JsonNull();
+            arr.Add(value);
+            list.Add(value);
+
+            Assert.Equal(4, arr.Count);
+
+            var varr = new JsonValue[4];
+            arr.CopyTo(varr, 0);
+
+            Assert.Equal(list, varr);
+
+            int ptr = 0;
+            foreach (var v in arr) {
+                Assert.Equal(list[ptr++], v);
+            }
+
+            value = (JsonBool)true;
+            arr[2] = value;
+            Assert.Equal(value, arr[2]);
+            Assert.Equal(2, arr.IndexOf(value));
+            Assert.Contains(value, arr);
+            Assert.True(arr.Remove(value));
+            arr.RemoveAt(2);
+            Assert.Equal(2, arr.Count);
+            arr.Insert(2, value);
+            Assert.Equal(value, arr[2]);
+            arr.Clear();
+            Assert.Empty(arr);
         }
     }
 }

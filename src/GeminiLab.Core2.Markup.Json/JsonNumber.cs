@@ -17,7 +17,7 @@ namespace GeminiLab.Core2.Markup.Json {
             ValueFloat = valueFloat;
         }
 
-        internal JsonNumber(string value) {
+        public JsonNumber(string value) {
             if (int.TryParse(value, out int i)) {
                 IsFloat = false;
                 ValueInt = i;

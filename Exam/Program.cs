@@ -66,6 +66,8 @@ namespace Exam {
             var a = JsonParser.Parse("{ \"123\": [ 1, 2, 4, false, \"狗粮\" ], \"456\": [ true, null, \"レモン\" ] }");
             Console.Write(a.ToString(JsonStringifyOption.Compact | JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly));
             Console.WriteLine("###");
+            Console.Write(a.ToString(JsonStringifyOption.AsciiOnly));
+            Console.WriteLine("###");
 
             return 0;
         }
