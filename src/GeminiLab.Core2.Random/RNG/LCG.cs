@@ -20,11 +20,11 @@ namespace GeminiLab.Core2.Random.RNG {
         public LCG() : this(unchecked((uint)DefaultRNG.Next())) { }
 
         public void Seed(uint seed) {
-            lock (this) _x = seed;
+            _x = seed;
         }
 
         public uint Next() {
-            lock (this) return _x = unchecked(_a * _x + _c);
+            return _x = unchecked(_a * _x + _c);
         }
     }
 
@@ -47,11 +47,11 @@ namespace GeminiLab.Core2.Random.RNG {
         public LCG64() : this(DefaultRNG.NextU64()) { }
 
         public void Seed(ulong seed) {
-            lock (this) _x = seed;
+            _x = seed;
         }
 
         public ulong Next() {
-            lock (this) return _x = unchecked(_a * _x + _c);
+            return _x = unchecked(_a * _x + _c);
         }
     }
 }

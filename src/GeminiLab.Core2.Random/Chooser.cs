@@ -19,9 +19,7 @@ namespace GeminiLab.Core2.Random {
         public Chooser(IEnumerable<TValue> values, IRNG<int> rng) : this(values is IList<TValue> list ? list : values.ToArray(), rng) { }
 
         public TValue Next() {
-            lock (this) {
-                return _values[_rng.Next(_count)];
-            }
+            return _values[_rng.Next(_count)];
         }
     }
 

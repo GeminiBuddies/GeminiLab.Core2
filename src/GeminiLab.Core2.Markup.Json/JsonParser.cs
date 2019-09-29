@@ -92,7 +92,8 @@ namespace GeminiLab.Core2.Markup.Json {
         }
 
         public static JsonValue Parse(string value) {
-            var tokenizer = new JsonTokenizer(new StringReader(value));
+            using var sr = new StringReader(value);
+            var tokenizer = new JsonTokenizer(sr);
             if (tokenizer.GetToken(out var token) != JsonGetTokenError.NoError) throw new Exception();
 
             return ParseJsonValue(tokenizer, token);
