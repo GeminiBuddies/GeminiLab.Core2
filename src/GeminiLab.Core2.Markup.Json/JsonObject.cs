@@ -33,11 +33,13 @@ namespace GeminiLab.Core2.Markup.Json {
             }
             set {
                 if (str == null) throw new ArgumentNullException(nameof(str));
+                if (value == null) throw new ArgumentNullException(nameof(value));
+
                 if (!_values.ContainsKey(str)) {
                     _keyOrder[str] = _keyOrder.Count;
                 }
 
-                _values[str] = value ?? throw new ArgumentNullException(nameof(value));
+                _values[str] = value;
             }
         }
 

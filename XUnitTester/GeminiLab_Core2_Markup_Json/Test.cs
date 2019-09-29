@@ -34,7 +34,7 @@ namespace XUnitTester.GeminiLab_Core2_Markup_Json {
             if (!(rootCaObj.TryGetValue("f", out var rootCaF)) || !(rootCaF is JsonObject rootCaFObj)) { Assert.True(false); return; }
             Assert.Equal(0, rootCaFObj.Count);
 
-            Assert.Equal("{ \"a\": null, \"b\": [ 23.4444, 433336 ], \"ca\": { \"d\": [ true, false, \"ame\", \"冬好き\" ], \"e\": [], \"f\": {} } }", result.ToString(JsonStringifyOption.Inline));
+            Assert.Equal("{ \"a\": null, \"b\": [ 23.4444, 433336 ], \"ca\": { \"d\": [ true, false, \"ame\", \"冬好き\" ], \"e\": [], \"f\": {} } }", result.ToString());
             Assert.Equal("{ \"a\": null, \"b\": [ 23.4444, 433336 ], \"ca\": { \"d\": [ true, false, \"ame\", \"\\u51ac\\u597d\\u304d\" ], \"e\": [], \"f\": {} } }", result.ToString(JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly));
             Assert.Equal("{\"a\":null,\"b\":[23.4444,433336],\"ca\":{\"d\":[true,false,\"ame\",\"\\u51ac\\u597d\\u304d\"],\"e\":[],\"f\":{}}}", result.ToString(JsonStringifyOption.Inline | JsonStringifyOption.AsciiOnly | JsonStringifyOption.Compact));
             Assert.Equal("{\n    \"a\": null,\n    \"b\": [\n        23.4444,\n        433336\n    ],\n    \"ca\": {\n        \"d\": [\n            true,\n            false,\n            \"ame\",\n            \"冬好き\"\n        ],\n        \"e\": [],\n        \"f\": {}\n    }\n}", result.ToString(JsonStringifyOption.None, "\n"));
@@ -123,15 +123,15 @@ namespace XUnitTester.GeminiLab_Core2_Markup_Json {
 
             Assert.False(arr.IsReadOnly);
 
-            value = (JsonString)"aloha oe";
+            value = "aloha oe";
             arr.Add(value);
             list.Add(value);
 
-            value = (JsonNumber)4242;
+            value = 4242;
             arr.Add(value);
             list.Add(value);
 
-            value = (JsonBool)false;
+            value = false;
             arr.Add(value);
             list.Add(value);
 
@@ -151,7 +151,7 @@ namespace XUnitTester.GeminiLab_Core2_Markup_Json {
                 Assert.Equal(list[ptr++], v);
             }
 
-            value = (JsonBool)true;
+            value = 43.3336;
             arr[2] = value;
             Assert.Equal(value, arr[2]);
             Assert.Equal(2, arr.IndexOf(value));
@@ -163,6 +163,79 @@ namespace XUnitTester.GeminiLab_Core2_Markup_Json {
             Assert.Equal(value, arr[2]);
             arr.Clear();
             Assert.Empty(arr);
+        }
+
+        [Fact]
+        public static void JsonObjectMethodsTest() {
+            var obj = new JsonObject();
+
+            obj["keyA"] = true;
+            obj["keyB"] = 123;
+            obj["keyBB"] = "433336";
+
+            Assert.Throws<ArgumentNullException>(() => obj["keyC"] = null);
+            Assert.Throws<ArgumentNullException>(() => obj[(string)null] = "null");
+
+            obj[(JsonString)"keyC"] = "valueC";
+            
+            Assert.Throws<ArgumentNullException>(() => obj[(JsonString)"keyD"] = null);
+            Assert.Throws<ArgumentNullException>(() => obj[(JsonString)null] = "null");
+
+            obj.Append("keyD", new JsonArray(new JsonValue[] { 1, 2, 4, 8 }));
+            obj.Append("keyE", new JsonObject(new[] { new JsonObjectKeyValuePair("subkeyA", new JsonNull()) }));
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => obj.Append("keyD", true));
+            Assert.Throws<ArgumentNullException>(() => obj.Append("keyF", null));
+            Assert.Throws<ArgumentNullException>(() => obj.Append((string)null, "null"));
+
+            Assert.True(obj.ContainsKey("keyD"));
+            Assert.False(obj.ContainsKey("keyF"));
+
+            Assert.Throws<ArgumentNullException>(() => obj.ContainsKey(null));
+
+            Assert.True(obj.TryGetValue("keyD", out var tempD) && tempD is JsonArray);
+            Assert.False(obj.TryGetValue("keyF", out var tempF));
+
+            Assert.True(obj["keyE"] is JsonObject);
+
+            Assert.Throws<ArgumentNullException>(() => obj[(string)null]);
+            Assert.Throws<ArgumentNullException>(() => obj[(JsonString)null]);
+            Assert.Throws<KeyNotFoundException>(() => obj["null"]);
+            Assert.Throws<KeyNotFoundException>(() => obj["null"]);
+
+            Assert.True(obj.TryGetJsonString("keyC", out var resultC) && resultC == "valueC");
+            Assert.False(obj.TryGetJsonString("keyA", out _));
+            Assert.False(obj.TryGetJsonString("keyF", out _));
+
+            Assert.True(obj.TryGetJsonBool("keyA", out var resultA) && resultA);
+            Assert.False(obj.TryGetJsonBool("keyB", out _));
+            Assert.False(obj.TryGetJsonBool("keyF", out _));
+
+            Assert.True(obj.TryGetJsonNumber("keyB", out var resultB) && !resultB.IsFloat && resultB.ValueInt == 123);
+            Assert.False(obj.TryGetJsonNumber("keyA", out _));
+            Assert.False(obj.TryGetJsonNumber("keyF", out _));
+
+            Assert.True(obj.TryGetJsonArray("keyD", out var resultD) && resultD.Count == 4);
+            Assert.False(obj.TryGetJsonArray("keyA", out _));
+            Assert.False(obj.TryGetJsonArray("keyF", out _));
+
+            Assert.True(obj.TryGetJsonObject("keyE", out var resultE) && resultE.Count == 1);
+            Assert.False(obj.TryGetJsonObject("keyA", out _));
+            Assert.False(obj.TryGetJsonObject("keyF", out _));
+
+            Assert.True(obj.TryReadInt("keyB", out var i) && i == 123);
+            Assert.True(obj.TryReadInt("keyBB", out i) && i == 433336);
+            Assert.False(obj.TryReadInt("keyA", out i));
+            Assert.False(obj.TryReadInt("keyF", out i));
+
+            Assert.True(obj.TryRemove("keyA"));
+            Assert.True(obj.TryRemove((JsonString)"keyB"));
+            Assert.False(obj.TryRemove("keyF"));
+            obj.Remove("keyC");
+            obj.Remove((JsonString)"keyD");
+
+            Assert.Throws<ArgumentNullException>(() => obj.TryRemove((string)null));
+            Assert.Throws<KeyNotFoundException>(() => obj.Remove("keyA"));
         }
     }
 }
