@@ -108,7 +108,7 @@ namespace XUnitTester.GeminiLab_Core2.Collections {
             Assert.Throws<ArgumentNullException>(() => { nil2.Intersect().Consume(); });
             Assert.Throws<ArgumentNullException>(() => { nil2.Intersect(EqualityComparer<ulong>.Default).Consume(); });
             Assert.Throws<ArgumentNullException>(() => { nil2.Flatten().Consume(); });
-            Assert.Throws<NullReferenceException>(() => { nilC.Flatten().Consume(); });
+            Assert.Throws<ArgumentOutOfRangeException>(() => { nilC.Flatten().Consume(); });
             Assert.Throws<ArgumentNullException>(() => { nil.RemoveNull().Consume(); });
             Assert.Throws<ArgumentNullException>(() => { nil.Take(1, 2).Consume(); });
             Assert.Throws<ArgumentNullException>(() => { nil.NumberItems().Consume(); });

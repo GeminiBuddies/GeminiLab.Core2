@@ -4,7 +4,7 @@ using GeminiLab.Core2;
 using GeminiLab.Core2.Collections;
 
 namespace Exam {
-    class AssemblyPrinter {
+    public static class AssemblyPrinter {
         public static void PrintType(Type type) {
             if (type.IsVisible) {
                 Exconsole.WriteColor("V", ConsoleColor.Green);

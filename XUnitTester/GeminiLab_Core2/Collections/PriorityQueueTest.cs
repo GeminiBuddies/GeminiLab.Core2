@@ -59,7 +59,6 @@ namespace XUnitTester.GeminiLab_Core2.Collections {
             Assert.Empty(pq.ToArray());
             Assert.Equal((int)Ceil2((ulong)len), pq.Capacity);
 
-
             31.Times(() => {
                 var x = DefaultRNG.I32.Take(33).ToList();
                 pq.AddRange(x);

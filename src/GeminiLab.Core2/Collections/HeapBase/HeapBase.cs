@@ -118,7 +118,6 @@ namespace GeminiLab.Core2.Collections.HeapBase {
         */
         public static void SortHeap<T>(this T[] array, long length) => SortHeap(array, length, false, Comparer<T>.Default);
 
-
         /**
         * <summary>Disassemble a heap into a sorted array with a specified comparer.</summary>
         * <exception cref="ArgumentNullException"/>

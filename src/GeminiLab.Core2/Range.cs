@@ -64,7 +64,7 @@ namespace GeminiLab.Core2 {
                 _used = true;
             } else {
                 int old = Current;
-                Current = unchecked(Current += _step);
+                Current = unchecked(Current + _step);
 
                 // overflowed:      (Current > old) ^ _ascending
                 // end reached:     Current == _end

@@ -53,7 +53,7 @@ namespace GeminiLab.Core2.CommandLineParser {
             var props = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             foreach (var prop in props) {
                 var propType = prop.PropertyType;
-                var optionType = OptionType.Switch;
+                OptionType optionType;
                 
                 if (propType == typeof(bool)) {
                     optionType = OptionType.Switch;

@@ -2,7 +2,7 @@ using GeminiLab.Core2;
 using GeminiLab.Core2.GetOpt;
 
 namespace Exam {
-    class OptGetterTester {
+    public static class OptGetterTester {
         private static string Mix(char c, string s) {
             if (c == '\0') return s ?? "<null>";
             return s == null ? new string(c, 1) : $"{c}|{s}";

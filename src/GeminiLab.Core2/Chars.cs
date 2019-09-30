@@ -5,7 +5,6 @@ using System.Globalization;
 namespace GeminiLab.Core2 {
     [ExcludeFromCodeCoverage]
     public static class Chars {
-
         public static ReadOnlySpan<byte> Latin1Category => new[] {
             // 00
             (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control,
@@ -68,6 +67,5 @@ namespace GeminiLab.Core2 {
         public static bool IsHexadecimalDigit(this char ch) => IsInRange(ch, '0', '9') || IsInRange((char)(ch | 0x20), 'a', 'f');
         public static bool IsHexadecimalDigitUpper(this char ch) => IsInRange(ch, '0', '9') || IsInRange(ch, 'A', 'F');
         public static bool IsHexadecimalDigitLower(this char ch) => IsInRange(ch, '0', '9') || IsInRange(ch, 'a', 'f');
-
     }
 }

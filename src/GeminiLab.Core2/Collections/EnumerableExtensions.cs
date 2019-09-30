@@ -51,7 +51,7 @@ namespace GeminiLab.Core2.Collections {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
             foreach (var ie in source) {
-                if (ie == null) throw new NullReferenceException();
+                if (ie == null) throw new ArgumentOutOfRangeException(nameof(source));
 
                 foreach (var i in ie) yield return i;
             }
