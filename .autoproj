@@ -1,3 +1,5 @@
+<~! def year "<~ now yyyy ~>" ~>
+
 <~! static_counter build_counter ~>
 <~! def build "<~ build_counter ~>" ~>
 <~! def major 1 ~>
@@ -5,7 +7,11 @@
 <~! def patch 0 ~>
 <~! def version "<~major~>.<~minor~>.<~patch~>" ~>
 <~! def file_version "<~major~>.<~minor~>.<~build~>.<~patch~>" ~>
-<~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~ now yyyyMMdd ~>-<~build~>" ~>
+<~~ if eq <~build_type~> dev ~>
+  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~ now yyyyMMdd ~>-<~build~>" ~>
+<~~ else ~>
+  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~ now yyyyMMdd ~>-<~build~>" ~>
+<~~ endif ~>
 
 <~# accept following arguments: proj_name, proj_desc ~>
 <~~ def_block csproj_body ~>
@@ -18,7 +24,7 @@
     <Company>Gemini Laboratory</Company>
     <Product>GeminiLab.Core2</Product>
     <AssemblyVersion><~version~></AssemblyVersion>
-    <Copyright>Copyright © Gemini Laboratory 2017 - <~ now yyyy ~></Copyright>
+    <Copyright>Copyright © Gemini Laboratory 2017 - <~year~></Copyright>
     <FileVersion><~file_version~></FileVersion>
     <Version><~full_version~></Version>
     <LangVersion>8.0</LangVersion>

@@ -9,8 +9,8 @@
     <Product>GeminiLab.Core2</Product>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
-    <FileVersion>1.0.221.0</FileVersion>
-    <Version>1.0.0-dev-20191001-221</Version>
+    <FileVersion>1.0.223.0</FileVersion>
+    <Version>1.0.0-dev-20191001-223</Version>
     <LangVersion>8.0</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
