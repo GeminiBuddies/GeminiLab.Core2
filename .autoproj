@@ -1,4 +1,5 @@
 <~! def year "<~ now yyyy ~>" ~>
+<~! def date yyyyMMdd ~>
 
 <~! static_counter build_counter ~>
 <~! def build "<~ build_counter ~>" ~>
@@ -8,9 +9,9 @@
 <~! def version "<~major~>.<~minor~>.<~patch~>" ~>
 <~! def file_version "<~major~>.<~minor~>.<~build~>.<~patch~>" ~>
 <~~ if eq <~build_type~> dev ~>
-  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~ now yyyyMMdd ~>-<~build~>" ~>
+  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~date~>-<~build~>" ~>
 <~~ else ~>
-  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~ now yyyyMMdd ~>-<~build~>" ~>
+  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~date~>-<~build~>" ~>
 <~~ endif ~>
 
 <~# accept following arguments: proj_name, proj_desc ~>
@@ -33,11 +34,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release' Or '$(Configuration)'=='Publish'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Publish'">
+    <Optimize>true</Optimize>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>..\..\bin\package\</PackageOutputPath>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

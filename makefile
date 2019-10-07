@@ -2,6 +2,8 @@ dotnet ?= dotnet
 mode ?= debug
 autoproj ?= autoproj
 
+branch := $(notdir $(shell git symbolic-ref HEAD))
+
 ifeq ($(OS),Windows_NT)
 	/ := \\
 	os := win
@@ -44,6 +46,3 @@ test:
 
 local_cover: all test
 	reportgenerator -reports:.$(/)XUnitTester$(/)coverage.opencover.xml -targetdir:report.ignore
-
-install_local_cover:
-	dotnet tool install -g dotnet-reportgenerator-globaltool
