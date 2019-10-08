@@ -12,31 +12,24 @@ else
 	os := default
 endif
 
-ifeq ($(mode), debug)
-	mode_str := Debug
-else ifeq ($(mode), release)
-	mode_str := Release
-else ifeq ($(mode), publish)
-	mode_str := Publish
-else
-	mode_str := Error
-endif
+.PHONY: debug release publish autoproj publish exam test install_local_cover
+debug:
+	@echo "building(debug)..."
+	@$(dotnet) build -nologo -c Debug GeminiLab.Core2.sln
 
-.PHONY: all autoproj publish exam test install_local_cover
-all: autoproj
-ifeq ($(mode_str), Error)
-	@echo "unknown mode $(mode)."
-	@exit 1
-else
-	@echo "building for $(mode)..."
-	@$(dotnet) build -nologo -c $(mode_str) GeminiLab.Core2.sln
-endif
+release:
+	@echo "building(release)..."
+	@$(dotnet) build -nologo -c Release GeminiLab.Core2.sln
+
+publish: autoproj
+	@echo "building(publish)..."
+	@$(dotnet) build -nologo -c Publish GeminiLab.Core2.sln
+
+full_release: autoproj release
+	@echo "done"
 
 autoproj:
 	@-$(autoproj)
-
-publish:
-	@$(MAKE) --no-print-directory dotnet=$(dotnet) autoproj=$(autoproj) mode=publish
 
 exam:
 	@$(dotnet) run -p Exam$(/)Exam.csproj

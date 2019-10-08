@@ -9,19 +9,20 @@
     <Product>GeminiLab.Core2</Product>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2019</Copyright>
-    <FileVersion>1.0.223.0</FileVersion>
-    <Version>1.0.0-dev-20191001-223</Version>
+    <FileVersion>1.0.230.0</FileVersion>
+    <Version>1.0.0-dev-20191009-230</Version>
     <LangVersion>8.0</LangVersion>
     <Configurations>Release;Debug;Publish</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release' Or '$(Configuration)'=='Publish'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <Optimize>true</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Publish'">
+    <Optimize>true</Optimize>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>..\..\bin\package\</PackageOutputPath>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

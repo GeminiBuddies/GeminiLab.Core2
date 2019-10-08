@@ -1,5 +1,5 @@
 <~! def year "<~ now yyyy ~>" ~>
-<~! def date yyyyMMdd ~>
+<~! def date "<~ now yyyyMMdd ~>" ~>
 
 <~! static_counter build_counter ~>
 <~! def build "<~ build_counter ~>" ~>
