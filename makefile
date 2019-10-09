@@ -2,8 +2,6 @@ dotnet ?= dotnet
 mode ?= debug
 autoproj ?= autoproj
 
-branch := $(notdir $(shell git symbolic-ref HEAD))
-
 ifeq ($(OS),Windows_NT)
 	/ := \\
 	os := win
@@ -37,5 +35,5 @@ exam:
 test:
 	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:Exclude=[xunit.*]* -v=normal --no-build XUnitTester$(/)XUnitTester.csproj
 
-local_cover: all test
+local_cover: debug test
 	reportgenerator -reports:.$(/)XUnitTester$(/)coverage.opencover.xml -targetdir:report.ignore

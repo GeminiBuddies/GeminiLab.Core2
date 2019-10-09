@@ -1,6 +1,6 @@
 namespace GeminiLab.Core2.Random.RNG {
     public sealed class LCG : IPRNG<uint> {
-        public const uint A = 1664525u, C = 1013904223u;
+        private const uint A = 1664525u, C = 1013904223u;
 
         /* other candidates
         public const uint A = 22695477u, C = 1u;
@@ -29,10 +29,10 @@ namespace GeminiLab.Core2.Random.RNG {
     }
 
     public sealed class LCG64 : IPRNG<ulong> {
-        public const ulong A = 6364136223846793005ul, C = 1442695040888963407ul;
+        private const ulong A = 6364136223846793005ul, C = 1442695040888963407ul;
 
         /* other candidates
-        public const ulong A = 6364136223846793005ul, C = 1ul;
+        private const ulong A = 6364136223846793005ul, C = 1ul;
         */
 
         private readonly ulong _a, _c;

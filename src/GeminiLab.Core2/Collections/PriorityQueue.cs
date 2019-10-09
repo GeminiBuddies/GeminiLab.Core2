@@ -9,7 +9,7 @@ namespace GeminiLab.Core2.Collections {
     // not thread-safe
     // won't implement interfaces like IEnumerable<T>, ICollection<T>, etc.
     public class PriorityQueue<T> {
-        public const int MinimumItemsLength = 8;
+        public static int MinimumItemsLength => 8;
 
         private int _size, _cap;
         private T[] _items;

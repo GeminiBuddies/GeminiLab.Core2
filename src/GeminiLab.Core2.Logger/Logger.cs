@@ -23,22 +23,31 @@ namespace GeminiLab.Core2.Logger {
             _category.Invoke(level, DateTime.Now, message);
         }
 
-        public const int LevelOff = 0x10000;
-        public const int LevelFatal = 0x0c000;
-        public const int LevelError = 0x0a000;
-        public const int LevelWarn = 0x08000;
-        public const int LevelInfo = 0x06000;
-        public const int LevelDebug = 0x04000;
-        public const int LevelTrace = 0x02000;
-        public const int LevelAll = 0x00000;
+        private const int InternalLevelOff = 0x10000;
+        private const int InternalLevelFatal = 0x0c000;
+        private const int InternalLevelError = 0x0a000;
+        private const int InternalLevelWarn = 0x08000;
+        private const int InternalLevelInfo = 0x06000;
+        private const int InternalLevelDebug = 0x04000;
+        private const int InternalLevelTrace = 0x02000;
+        private const int InternalLevelAll = 0x00000;
+
+        public static int LevelOff => InternalLevelOff;
+        public static int LevelFatal => InternalLevelFatal;
+        public static int LevelError => InternalLevelError;
+        public static int LevelWarn => InternalLevelWarn;
+        public static int LevelInfo => InternalLevelInfo;
+        public static int LevelDebug => InternalLevelDebug;
+        public static int LevelTrace => InternalLevelTrace;
+        public static int LevelAll => InternalLevelAll;
 
         public static string LogLevelToString(int level) => level switch {
-            LevelFatal => "Fatal",
-            LevelError => "Error",
-            LevelWarn => "Warn",
-            LevelInfo => "Info",
-            LevelDebug => "Debug",
-            LevelTrace => "Trace",
+            InternalLevelFatal => "Fatal",
+            InternalLevelError => "Error",
+            InternalLevelWarn => "Warn",
+            InternalLevelInfo => "Info",
+            InternalLevelDebug => "Debug",
+            InternalLevelTrace => "Trace",
             _ => $"Level{level}",
         };
     }

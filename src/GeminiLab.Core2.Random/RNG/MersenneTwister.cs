@@ -16,8 +16,8 @@ namespace GeminiLab.Core2.Random.RNG {
         private const int L = 43;
         private const ulong F = 6364136223846793005;
 
-        public const ulong LowerMask = (1ul << R) - 1;
-        public const ulong UpperMask = ~LowerMask;
+        private const ulong LowerMask = (1ul << R) - 1;
+        private const ulong UpperMask = ~LowerMask;
 
         private readonly ulong[] _mt = new ulong[N];
         private ulong _index;
@@ -77,8 +77,8 @@ namespace GeminiLab.Core2.Random.RNG {
         private const int L = 18;
         private const uint F = 1812433253;
 
-        public const uint LowerMask = (1u << R) - 1;
-        public const uint UpperMask = ~LowerMask;
+        private const uint LowerMask = (1u << R) - 1;
+        private const uint UpperMask = ~LowerMask;
 
         private readonly uint[] _mt = new uint[N];
         private uint _index;

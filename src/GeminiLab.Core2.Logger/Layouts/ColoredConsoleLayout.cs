@@ -7,13 +7,15 @@ namespace GeminiLab.Core2.Logger.Layouts {
         private readonly string? _dateFormat;
         private readonly CultureInfo? _culture;
 
+        public ColoredConsoleLayout(): this(culture: null) { }
+
         public ColoredConsoleLayout(string dateFormat) {
             _dateFormat = dateFormat;
             _usingCulture = false;
         }
 
         // null means CultureInfo.CurrentCulture
-        public ColoredConsoleLayout(CultureInfo? culture = null) {
+        public ColoredConsoleLayout(CultureInfo? culture) {
             _culture = culture ?? CultureInfo.CurrentCulture;
             _usingCulture = true;
         }

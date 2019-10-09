@@ -54,7 +54,7 @@ namespace GeminiLab.Core2 {
         public int Current { get; private set; }
         object IEnumerator.Current => Current;
 
-        public void Dispose() { }
+        public void Dispose() { /* nothing to do here */ }
 
         public bool MoveNext() {
             if (_dead) return false;

@@ -43,9 +43,9 @@ namespace GeminiLab.Core2.IO {
             _indentWritten = true;
         }
 
-        public override void Write(char c) {
+        public override void Write(char value) {
             EnsureIndent();
-            _internalWriter.Write(c);
+            _internalWriter.Write(value);
         }
 
         public override void Write(char[] buffer, int index, int count) {

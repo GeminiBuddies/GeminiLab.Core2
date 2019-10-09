@@ -6,14 +6,25 @@ namespace GeminiLab.Core2 {
     // following are things you really need
     [ExcludeFromCodeCoverage]
     public static partial class Exconsole {
-        public static void WriteLineColor(string value, ConsoleColor? foregroundColor = null,
-            ConsoleColor? backgroundColor = null) {
+        public static void WriteLineColor(string value) =>
+            WriteLineColor(value, null, null);
+
+        public static void WriteLineColor(string value, ConsoleColor? foregroundColor) =>
+            WriteLineColor(value, foregroundColor, null);
+
+        public static void WriteLineColor(string value, ConsoleColor? foregroundColor, ConsoleColor? backgroundColor) {
             WriteColor(value, foregroundColor, backgroundColor);
             Console.WriteLine();
         }
 
-        public static void WriteColor(string value, ConsoleColor? foregroundColor = null,
-            ConsoleColor? backgroundColor = null) {
+        public static void WriteColor(string value) =>
+            WriteColor(value, null, null);
+
+        public static void WriteColor(string value, ConsoleColor? foregroundColor) =>
+            WriteColor(value, foregroundColor, null);
+
+
+        public static void WriteColor(string value, ConsoleColor? foregroundColor, ConsoleColor? backgroundColor) {
             var fore = foregroundColor ?? ForegroundColor;
             var back = backgroundColor ?? BackgroundColor;
 
