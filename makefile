@@ -1,6 +1,7 @@
 dotnet ?= dotnet
 mode ?= debug
 autoproj ?= autoproj
+autoproj_option ?= 
 
 ifeq ($(OS),Windows_NT)
 	/ := \\
@@ -10,24 +11,20 @@ else
 	os := default
 endif
 
-.PHONY: debug release publish autoproj publish exam test install_local_cover
-debug:
-	@echo "building(debug)..."
-	@$(dotnet) build -nologo -c Debug GeminiLab.Core2.sln
+.PHONY: develop preview release exam test local_cover
+develop:
+	@echo "building(develop)..."
+	@$(dotnet) build -nologo -c Develop GeminiLab.Core2.sln
+
+preview:
+	@echo "building(preview)..."
+	@-$(autoproj) $(autoproj_option) -- build_type=preview
+	@$(dotnet) build -nologo -c Preview GeminiLab.Core2.sln
 
 release:
 	@echo "building(release)..."
+	@-$(autoproj) $(autoproj_option) -- build_type=release
 	@$(dotnet) build -nologo -c Release GeminiLab.Core2.sln
-
-publish: autoproj
-	@echo "building(publish)..."
-	@$(dotnet) build -nologo -c Publish GeminiLab.Core2.sln
-
-full_release: autoproj release
-	@echo "done"
-
-autoproj:
-	@-$(autoproj)
 
 exam:
 	@$(dotnet) run -p Exam$(/)Exam.csproj
@@ -35,5 +32,5 @@ exam:
 test:
 	@$(dotnet) test -nologo -p:CollectCoverage=true -p:CoverletOutputFormat=opencover -p:Exclude=[xunit.*]* -v=normal --no-build XUnitTester$(/)XUnitTester.csproj
 
-local_cover: debug test
+local_cover: develop test
 	reportgenerator -reports:.$(/)XUnitTester$(/)coverage.opencover.xml -targetdir:report.ignore

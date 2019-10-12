@@ -8,10 +8,10 @@
 <~! def patch 0 ~>
 <~! def version "<~major~>.<~minor~>.<~patch~>" ~>
 <~! def file_version "<~major~>.<~minor~>.<~build~>.<~patch~>" ~>
-<~~ if eq <~build_type~> dev ~>
-  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~date~>-<~build~>" ~>
+<~~ if eq <~build_type~> "preview" ~>
+  <~! def full_version "<~major~>.<~minor~>.<~patch~>-preview-<~date~>-<~build~>" ~>
 <~~ else ~>
-  <~! def full_version "<~major~>.<~minor~>.<~patch~>-dev-<~date~>-<~build~>" ~>
+  <~! def full_version "<~major~>.<~minor~>.<~patch~>" ~>
 <~~ endif ~>
 
 <~# accept following arguments: proj_name, proj_desc ~>
@@ -29,16 +29,12 @@
     <FileVersion><~file_version~></FileVersion>
     <Version><~full_version~></Version>
     <LangVersion>8.0</LangVersion>
-    <Configurations>Release;Debug;Publish</Configurations>
+    <Configurations>Develop;Preview;Release</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Publish'">
+  <PropertyGroup Condition="'$(Configuration)'=='Preview' Or '$(Configuration)'=='Release'">
     <Optimize>true</Optimize>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>..\..\bin\package\</PackageOutputPath>
