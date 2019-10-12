@@ -38,6 +38,7 @@ namespace GeminiLab.Core2.CommandLineParser {
     public delegate bool CommandLineParserErrorHandler(GetOptError error, GetOptResult result);
 
     public static class CommandLineParser<T> {
+        // How to tell analyzers I DO KNOW WHAT I AM DOING??!!
         // ReSharper disable StaticMemberInGenericType
         private static readonly object InternalLock = new object();
         private static CommandLineParserTypeMetaInfo? Info;

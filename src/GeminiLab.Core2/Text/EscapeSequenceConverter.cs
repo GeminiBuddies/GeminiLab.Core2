@@ -31,21 +31,21 @@ namespace GeminiLab.Core2.Text {
             int length = source.Length;
             var sb = new StringBuilder(length / 4); // not so likely to be shorter than this.
 
-            for (int i = 0; i < length; ++i) {
+            int i = 0;
+            while (i < length) {
                 if (source[i] == '\\') {
                     if (i + 1 == length) {
                         sb.Append('\\');
-                        continue;
+                        break;
                     }
 
                     if (source[i + 1] < 128 && DecodeTable[source[i + 1]] < 0xff) {
                         sb.Append((char)DecodeTable[source[i + 1]]);
-                        i += 1;
+                        i += 2;
                     } else if (source[i + 1] == 'u') {
                         if (i + 5 >= length) {
                             sb.Append(source.Slice(i));
-                            i = length - 1;
-                            continue;
+                            break;
                         }
 
                         int unicode = 0;
@@ -59,13 +59,14 @@ namespace GeminiLab.Core2.Text {
 
                         if (unicode >= 0) sb.Append((char) unicode);
                         else sb.Append(source.Slice(i, 6));
-                        i += 5;
+                        i += 6;
                     } else {
                         sb.Append(source.Slice(i, 2));
-                        i += 1;
+                        i += 2;
                     }
                 } else {
                     sb.Append(source[i]);
+                    ++i;
                 }
             }
 

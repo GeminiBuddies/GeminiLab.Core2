@@ -20,9 +20,9 @@ namespace GeminiLab.Core2.Random.RNG {
     public class U32ToI32PRNG<TU32PRNG> : U32ToI32RNG<TU32PRNG>, IPRNG<int> where TU32PRNG : IPRNG<uint>, new() {
         public U32ToI32PRNG(TU32PRNG internalRNG) : base(internalRNG) { }
 
-        public U32ToI32PRNG() : base() { }
+        public U32ToI32PRNG() { }
 
-        public U32ToI32PRNG(int seed) : base() => Seed(seed);
+        public U32ToI32PRNG(int seed) => Seed(seed);
 
         public void Seed(int seed) => InternalRNG.Seed(unchecked((uint)seed));
     }
@@ -64,9 +64,9 @@ namespace GeminiLab.Core2.Random.RNG {
     public class I32ToU32PRNG<TI32PRNG> : I32ToU32RNG<TI32PRNG>, IPRNG<uint> where TI32PRNG : IPRNG<int>, new() {
         public I32ToU32PRNG(TI32PRNG internalRNG) : base(internalRNG) { }
 
-        public I32ToU32PRNG() : base() { }
+        public I32ToU32PRNG() { }
 
-        public I32ToU32PRNG(uint seed) : base() => Seed(seed);
+        public I32ToU32PRNG(uint seed) => Seed(seed);
 
         public void Seed(uint seed) => InternalRNG.Seed(unchecked((int)seed));
     }
@@ -108,9 +108,9 @@ namespace GeminiLab.Core2.Random.RNG {
     public class U64ToI64PRNG<TU64PRNG> : U64ToI64RNG<TU64PRNG>, IPRNG<long> where TU64PRNG : IPRNG<ulong>, new() {
         public U64ToI64PRNG(TU64PRNG internalRNG) : base(internalRNG) { }
 
-        public U64ToI64PRNG() : base() { }
+        public U64ToI64PRNG() { }
 
-        public U64ToI64PRNG(long seed) : base() => Seed(seed);
+        public U64ToI64PRNG(long seed) => Seed(seed);
 
         public void Seed(long seed) => InternalRNG.Seed(unchecked((ulong)seed));
     }
@@ -152,9 +152,9 @@ namespace GeminiLab.Core2.Random.RNG {
     public class I64ToU64PRNG<TI64PRNG> : I64ToU64RNG<TI64PRNG>, IPRNG<ulong> where TI64PRNG : IPRNG<long>, new() {
         public I64ToU64PRNG(TI64PRNG internalRNG) : base(internalRNG) { }
 
-        public I64ToU64PRNG() : base() { }
+        public I64ToU64PRNG() { }
 
-        public I64ToU64PRNG(ulong seed) : base() => Seed(seed);
+        public I64ToU64PRNG(ulong seed) => Seed(seed);
 
         public void Seed(ulong seed) => InternalRNG.Seed(unchecked((long)seed));
     }
@@ -205,9 +205,9 @@ namespace GeminiLab.Core2.Random.RNG {
     public class I32ToU64PRNG<TI32PRNG> : I32ToU64RNG<TI32PRNG>, IPRNG<ulong> where TI32PRNG : IPRNG<int>, new() {
         public I32ToU64PRNG(TI32PRNG internalRNG) : base(internalRNG) { }
 
-        public I32ToU64PRNG() : base() { }
+        public I32ToU64PRNG() { }
 
-        public I32ToU64PRNG(ulong seed) : base() => Seed(seed);
+        public I32ToU64PRNG(ulong seed) => Seed(seed);
 
         public void Seed(ulong seed) => InternalRNG.Seed(unchecked((int)seed));
     }
@@ -258,9 +258,9 @@ namespace GeminiLab.Core2.Random.RNG {
     public class U64ToI32PRNG<TU64PRNG> : U64ToI32RNG<TU64PRNG>, IPRNG<int> where TU64PRNG : IPRNG<ulong>, new() {
         public U64ToI32PRNG(TU64PRNG internalRNG) : base(internalRNG) { }
 
-        public U64ToI32PRNG() : base() { }
+        public U64ToI32PRNG() { }
 
-        public U64ToI32PRNG(int seed) : base() => Seed(seed);
+        public U64ToI32PRNG(int seed) => Seed(seed);
 
         public void Seed(int seed) => InternalRNG.Seed(unchecked((ulong)seed));
     }

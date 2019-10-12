@@ -58,7 +58,7 @@ namespace GeminiLab.Core2 {
 
             for (int i = 0; i < len; ++i) {
                 var chr = content[i];
-                if (chr == EscapeChar && i < len - 1) {
+                if (chr == InternalEscapeChar && i < len - 1) {
                     chr = content[++i];
 
                     if (TryGetColorByChar(chr, out var isFore, out var color)) {
@@ -67,7 +67,7 @@ namespace GeminiLab.Core2 {
                         if (isFore) ForegroundColor = color;
                         else BackgroundColor = color;
                     } else {
-                        if (chr == PopColorChar) {
+                        if (chr == InternalPopColorChar) {
                             if (colorStack.Count > 0) {
                                 FlushBuffer();
 
@@ -75,12 +75,12 @@ namespace GeminiLab.Core2 {
                                 ForegroundColor = fore;
                                 BackgroundColor = back;
                             }
-                        } else if (chr == PushColorChar) {
+                        } else if (chr == InternalPushColorChar) {
                             colorStack.Push((ForegroundColor, BackgroundColor));
-                        } else if (chr == EscapeChar) {
-                            buffer[ptr++] = EscapeChar;
+                        } else if (chr == InternalEscapeChar) {
+                            buffer[ptr++] = InternalEscapeChar;
                         } else {
-                            buffer[ptr++] = EscapeChar;
+                            buffer[ptr++] = InternalEscapeChar;
                             buffer[ptr++] = chr;
                         }
                     }
@@ -93,42 +93,78 @@ namespace GeminiLab.Core2 {
         }
 
         // auxiliary
-        public const char EscapeChar = '@';
-        public const char ForegroundBlack = 'k';
-        public const char ForegroundRed = 'r';
-        public const char ForegroundGreen = 'g';
-        public const char ForegroundBlue = 'b';
-        public const char ForegroundCyan = 'c';
-        public const char ForegroundMagenta = 'm';
-        public const char ForegroundYellow = 'y';
-        public const char ForegroundGray = 'a';
-        public const char ForegroundWhite = 'w';
-        public const char ForegroundDarkRed = 'd';
-        public const char ForegroundDarkGreen = 'e';
-        public const char ForegroundDarkBlue = 'u';
-        public const char ForegroundDarkCyan = 'n';
-        public const char ForegroundDarkMagenta = 't';
-        public const char ForegroundDarkYellow = 'l';
-        public const char ForegroundDarkGray = 'x';
-        public const char BackgroundBlack = 'K';
-        public const char BackgroundRed = 'R';
-        public const char BackgroundGreen = 'G';
-        public const char BackgroundBlue = 'B';
-        public const char BackgroundCyan = 'C';
-        public const char BackgroundMagenta = 'M';
-        public const char BackgroundYellow = 'Y';
-        public const char BackgroundGray = 'A';
-        public const char BackgroundWhite = 'W';
-        public const char BackgroundDarkRed = 'D';
-        public const char BackgroundDarkGreen = 'E';
-        public const char BackgroundDarkBlue = 'U';
-        public const char BackgroundDarkCyan = 'N';
-        public const char BackgroundDarkMagenta = 'T';
-        public const char BackgroundDarkYellow = 'L';
-        public const char BackgroundDarkGray = 'X';
-        public const char PushColorChar = 'v';
-        public const char PopColorChar = '^';
-        
+        private const char InternalEscapeChar = '@';
+        private const char InternalForegroundBlack = 'k';
+        private const char InternalForegroundRed = 'r';
+        private const char InternalForegroundGreen = 'g';
+        private const char InternalForegroundBlue = 'b';
+        private const char InternalForegroundCyan = 'c';
+        private const char InternalForegroundMagenta = 'm';
+        private const char InternalForegroundYellow = 'y';
+        private const char InternalForegroundGray = 'a';
+        private const char InternalForegroundWhite = 'w';
+        private const char InternalForegroundDarkRed = 'd';
+        private const char InternalForegroundDarkGreen = 'e';
+        private const char InternalForegroundDarkBlue = 'u';
+        private const char InternalForegroundDarkCyan = 'n';
+        private const char InternalForegroundDarkMagenta = 't';
+        private const char InternalForegroundDarkYellow = 'l';
+        private const char InternalForegroundDarkGray = 'x';
+        private const char InternalBackgroundBlack = 'K';
+        private const char InternalBackgroundRed = 'R';
+        private const char InternalBackgroundGreen = 'G';
+        private const char InternalBackgroundBlue = 'B';
+        private const char InternalBackgroundCyan = 'C';
+        private const char InternalBackgroundMagenta = 'M';
+        private const char InternalBackgroundYellow = 'Y';
+        private const char InternalBackgroundGray = 'A';
+        private const char InternalBackgroundWhite = 'W';
+        private const char InternalBackgroundDarkRed = 'D';
+        private const char InternalBackgroundDarkGreen = 'E';
+        private const char InternalBackgroundDarkBlue = 'U';
+        private const char InternalBackgroundDarkCyan = 'N';
+        private const char InternalBackgroundDarkMagenta = 'T';
+        private const char InternalBackgroundDarkYellow = 'L';
+        private const char InternalBackgroundDarkGray = 'X';
+        private const char InternalPushColorChar = 'v';
+        private const char InternalPopColorChar = '^';
+
+        public static char EscapeChar => InternalEscapeChar;
+        public static char ForegroundBlack => InternalForegroundBlack;
+        public static char ForegroundRed => InternalForegroundRed;
+        public static char ForegroundGreen => InternalForegroundGreen;
+        public static char ForegroundBlue => InternalForegroundBlue;
+        public static char ForegroundCyan => InternalForegroundCyan;
+        public static char ForegroundMagenta => InternalForegroundMagenta;
+        public static char ForegroundYellow => InternalForegroundYellow;
+        public static char ForegroundGray => InternalForegroundGray;
+        public static char ForegroundWhite => InternalForegroundWhite;
+        public static char ForegroundDarkRed => InternalForegroundDarkRed;
+        public static char ForegroundDarkGreen => InternalForegroundDarkGreen;
+        public static char ForegroundDarkBlue => InternalForegroundDarkBlue;
+        public static char ForegroundDarkCyan => InternalForegroundDarkCyan;
+        public static char ForegroundDarkMagenta => InternalForegroundDarkMagenta;
+        public static char ForegroundDarkYellow => InternalForegroundDarkYellow;
+        public static char ForegroundDarkGray => InternalForegroundDarkGray;
+        public static char BackgroundBlack => InternalBackgroundBlack;
+        public static char BackgroundRed => InternalBackgroundRed;
+        public static char BackgroundGreen => InternalBackgroundGreen;
+        public static char BackgroundBlue => InternalBackgroundBlue;
+        public static char BackgroundCyan => InternalBackgroundCyan;
+        public static char BackgroundMagenta => InternalBackgroundMagenta;
+        public static char BackgroundYellow => InternalBackgroundYellow;
+        public static char BackgroundGray => InternalBackgroundGray;
+        public static char BackgroundWhite => InternalBackgroundWhite;
+        public static char BackgroundDarkRed => InternalBackgroundDarkRed;
+        public static char BackgroundDarkGreen => InternalBackgroundDarkGreen;
+        public static char BackgroundDarkBlue => InternalBackgroundDarkBlue;
+        public static char BackgroundDarkCyan => InternalBackgroundDarkCyan;
+        public static char BackgroundDarkMagenta => InternalBackgroundDarkMagenta;
+        public static char BackgroundDarkYellow => InternalBackgroundDarkYellow;
+        public static char BackgroundDarkGray => InternalBackgroundDarkGray;
+        public static char PushColorChar => InternalPushColorChar;
+        public static char PopColorChar => InternalPopColorChar;
+
         private static bool TryGetColorByChar(char chr, out bool fore, out ConsoleColor color) {
             if (!(('a' <= chr && chr <= 'z') || ('A' <= chr && chr <= 'Z'))) {
                 fore = default;
@@ -139,22 +175,22 @@ namespace GeminiLab.Core2 {
             fore = (chr & 0x20) != 0;
 
             color = (chr | (char)0x20) switch {
-                ForegroundBlack => ConsoleColor.Black,
-                ForegroundRed => ConsoleColor.Red,
-                ForegroundGreen => ConsoleColor.Green,
-                ForegroundBlue => ConsoleColor.Blue,
-                ForegroundCyan => ConsoleColor.Cyan,
-                ForegroundMagenta => ConsoleColor.Magenta,
-                ForegroundYellow => ConsoleColor.Yellow,
-                ForegroundGray => ConsoleColor.Gray,
-                ForegroundWhite => ConsoleColor.White,
-                ForegroundDarkRed => ConsoleColor.DarkRed,
-                ForegroundDarkGreen => ConsoleColor.DarkGreen,
-                ForegroundDarkBlue => ConsoleColor.DarkBlue,
-                ForegroundDarkCyan => ConsoleColor.DarkCyan,
-                ForegroundDarkMagenta => ConsoleColor.DarkMagenta,
-                ForegroundDarkYellow => ConsoleColor.DarkYellow,
-                ForegroundDarkGray => ConsoleColor.DarkGray,
+                InternalForegroundBlack => ConsoleColor.Black,
+                InternalForegroundRed => ConsoleColor.Red,
+                InternalForegroundGreen => ConsoleColor.Green,
+                InternalForegroundBlue => ConsoleColor.Blue,
+                InternalForegroundCyan => ConsoleColor.Cyan,
+                InternalForegroundMagenta => ConsoleColor.Magenta,
+                InternalForegroundYellow => ConsoleColor.Yellow,
+                InternalForegroundGray => ConsoleColor.Gray,
+                InternalForegroundWhite => ConsoleColor.White,
+                InternalForegroundDarkRed => ConsoleColor.DarkRed,
+                InternalForegroundDarkGreen => ConsoleColor.DarkGreen,
+                InternalForegroundDarkBlue => ConsoleColor.DarkBlue,
+                InternalForegroundDarkCyan => ConsoleColor.DarkCyan,
+                InternalForegroundDarkMagenta => ConsoleColor.DarkMagenta,
+                InternalForegroundDarkYellow => ConsoleColor.DarkYellow,
+                InternalForegroundDarkGray => ConsoleColor.DarkGray,
                 _ => (ConsoleColor)(-1),
             };
 

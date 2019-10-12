@@ -74,10 +74,10 @@ namespace GeminiLab.Core2.Markup.Json {
             return _ptr < _len;
         }
 
-        private bool isSpecialChar(char c) => c == '[' || c == ']' || c == '{' || c == '}' || c == ':' || c == ',';
+        private static bool IsSpecialChar(char c) => c == '[' || c == ']' || c == '{' || c == '}' || c == ':' || c == ',';
 
         private bool isLiteralChar(char c) {
-            return !char.IsWhiteSpace(c) && !isSpecialChar(c) && c != '\"';
+            return !char.IsWhiteSpace(c) && !IsSpecialChar(c) && c != '\"';
         }
 
         public JsonGetTokenError GetToken(out JsonToken token) {
@@ -92,7 +92,7 @@ namespace GeminiLab.Core2.Markup.Json {
             int begin = _ptr;
             token.Row = _r;
             token.Column = begin + 1;
-            if (isSpecialChar(c)) {
+            if (IsSpecialChar(c)) {
                 token.Type = c switch {
                     '[' => JsonTokenType.LBracket,
                     ']' => JsonTokenType.RBracket,
