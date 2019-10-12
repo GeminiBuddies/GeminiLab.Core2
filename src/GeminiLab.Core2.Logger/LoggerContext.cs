@@ -7,8 +7,7 @@ namespace GeminiLab.Core2.Logger {
         private readonly Dictionary<string, IAppender> _appenders = new Dictionary<string, IAppender>();
 
         public Logger? GetLogger(string category) {
-            if (!_categories.TryGetValue(category, out var categoryItem)) return null;
-            return new Logger(categoryItem);
+            return _categories.TryGetValue(category, out var categoryItem) ? new Logger(categoryItem) : null;
         }
 
         public void AddCategory(string category) {
@@ -16,14 +15,14 @@ namespace GeminiLab.Core2.Logger {
         }
 
         public void AddAppender(string name, IAppender appender) {
-            _appenders.Add(name, appender);
+            _appenders.Add(name, appender ?? throw new ArgumentNullException(nameof(appender)));
         }
 
         public bool Connect(string category, string appender, params Filter[] filter) {
             if (!_categories.TryGetValue(category, out var categoryItem)) return false;
             if (!_appenders.TryGetValue(appender, out var appenderItem)) return false;
 
-            categoryItem.AddConnection(appenderItem, filter);
+            categoryItem.AddConnection(appenderItem, filter ?? Array.Empty<Filter>());
             return true;
         }
 

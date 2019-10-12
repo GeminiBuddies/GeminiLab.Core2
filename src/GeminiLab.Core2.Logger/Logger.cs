@@ -7,17 +7,17 @@ namespace GeminiLab.Core2.Logger {
             _category = category;
         }
 
-        public void Fatal(string message) => Log(LevelFatal, message);
+        public void Fatal(string message) => Log(InternalLevelFatal, message);
 
-        public void Error(string message) => Log(LevelError, message);
+        public void Error(string message) => Log(InternalLevelError, message);
 
-        public void Warn(string message) => Log(LevelWarn, message);
+        public void Warn(string message) => Log(InternalLevelWarn, message);
 
-        public void Info(string message) => Log(LevelInfo, message);
+        public void Info(string message) => Log(InternalLevelInfo, message);
 
-        public void Debug(string message)  => Log(LevelDebug, message);
+        public void Debug(string message)  => Log(InternalLevelDebug, message);
 
-        public void Trace(string message) => Log(LevelTrace, message);
+        public void Trace(string message) => Log(InternalLevelTrace, message);
 
         public void Log(int level, string message) {
             _category.Invoke(level, DateTime.Now, message);
@@ -41,7 +41,7 @@ namespace GeminiLab.Core2.Logger {
         public static int LevelTrace => InternalLevelTrace;
         public static int LevelAll => InternalLevelAll;
 
-        public static string LogLevelToString(int level) => level switch {
+        internal static string LogLevelToString(int level) => level switch {
             InternalLevelFatal => "Fatal",
             InternalLevelError => "Error",
             InternalLevelWarn => "Warn",
