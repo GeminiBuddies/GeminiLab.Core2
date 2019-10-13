@@ -12,7 +12,9 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(7, yielder.Next());
             Assert.Equal(7, yielder.Next());
             Assert.Equal(7, yielder.Next());
+            Assert.True(yielder.HasNext());
             Assert.Equal(7, yielder.Next());
+            Assert.False(yielder.HasNext());
             Assert.False(yielder.HasNext());
         }
 
@@ -45,7 +47,9 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             var yielder = Yielder.Repeat(() => x += 2).Take(4);
             var filtered = yielder.Filter(v => v % 3 == 0);
             Assert.Equal(3, filtered.Next());
+            Assert.True(filtered.HasNext());
             Assert.Equal(9, filtered.Next());
+            Assert.False(filtered.HasNext());
             Assert.False(filtered.HasNext());
         }
 
@@ -56,7 +60,9 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(1, mapped.Next());
             Assert.Equal(0, mapped.Next());
             Assert.Equal(2, mapped.Next());
+            Assert.True(mapped.HasNext());
             Assert.Equal(1, mapped.Next());
+            Assert.False(mapped.HasNext());
             Assert.False(mapped.HasNext());
         }
 
@@ -66,7 +72,9 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             var selected = yielder.Filter(v => v % 3 < 2).Map(v => v + 4);
             Assert.Equal(7, selected.Next());
             Assert.Equal(11, selected.Next());
+            Assert.True(selected.HasNext());
             Assert.Equal(13, selected.Next());
+            Assert.False(selected.HasNext());
             Assert.False(selected.HasNext());
         }
 
@@ -81,7 +89,9 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(1, aYielder.Next().Num);
             Assert.Equal(3, aYielder.Next().Num);
             Assert.Equal(5, aYielder.Next().Num);
+            Assert.True(aYielder.HasNext());
             Assert.Equal(7, aYielder.Next().Num);
+            Assert.False(aYielder.HasNext());
             Assert.False(aYielder.HasNext());
         }
 
@@ -94,11 +104,14 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(49, skipped.Next());
             Assert.Equal(64, skipped.Next());
             Assert.Equal(81, skipped.Next());
+            Assert.True(skipped.HasNext());
             Assert.Equal(100, skipped.Next());
+            Assert.False(skipped.HasNext());
             Assert.False(skipped.HasNext());
 
             yielder = Yielder.NaturalNumber().Skip(1).Map(v => v * v).Take(10);
             skipped = yielder.Skip(12);
+            Assert.False(skipped.HasNext());
             Assert.False(skipped.HasNext());
         }
 
@@ -111,7 +124,9 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(4, taken.Next());
             Assert.Equal(9, taken.Next());
             Assert.Equal(16, taken.Next());
+            Assert.True(taken.HasNext());
             Assert.Equal(25, taken.Next());
+            Assert.False(taken.HasNext());
             Assert.False(taken.HasNext());
 
             yielder = Yielder.NaturalNumber().Skip(1).Map(v => v * v).Take(6);
@@ -122,7 +137,9 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(9, taken.Next());
             Assert.Equal(16, taken.Next());
             Assert.Equal(25, taken.Next());
+            Assert.True(taken.HasNext());
             Assert.Equal(36, taken.Next());
+            Assert.False(taken.HasNext());
             Assert.False(taken.HasNext());
         }
 
@@ -134,7 +151,18 @@ namespace XUnitTester.GeminiLab_Core2_Yielder {
             Assert.Equal(1, taken.Next());
             Assert.Equal(4, taken.Next());
             Assert.Equal(9, taken.Next());
+            Assert.True(taken.HasNext());
             Assert.Equal(16, taken.Next());
+            Assert.False(taken.HasNext());
+            Assert.False(taken.HasNext());
+
+            yielder = Yielder.NaturalNumber().Skip(1).Map(v => v * v).Take(2);
+            taken = yielder.TakeWhile(v => v < 25);
+
+            Assert.Equal(1, taken.Next());
+            Assert.True(taken.HasNext());
+            Assert.Equal(4, taken.Next());
+            Assert.False(taken.HasNext());
             Assert.False(taken.HasNext());
         }
     }

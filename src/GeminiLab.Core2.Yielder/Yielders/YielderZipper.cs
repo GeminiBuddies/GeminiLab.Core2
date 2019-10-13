@@ -12,8 +12,6 @@ namespace GeminiLab.Core2.Yielder.Yielders {
             _func = func;
         }
 
-        public TR Next() {
-            return _func(_yielderA.Next(), _yielderB.Next());
-        }
+        public TR Next() => _func(_yielderA.Next(), _yielderB.Next());
     }
 }

@@ -5,7 +5,7 @@ using System.Globalization;
 namespace GeminiLab.Core2 {
     [ExcludeFromCodeCoverage]
     public static class Chars {
-        public static ReadOnlySpan<byte> Latin1Category => new[] {
+        private static ReadOnlySpan<byte> Latin1Category => new[] {
             // 00
             (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control, (byte)UnicodeCategory.Control,
             // 10

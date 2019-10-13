@@ -10,12 +10,8 @@ namespace GeminiLab.Core2.Yielder.FiniteYielders {
             _fun = fun;
         }
 
-        public bool HasNext() {
-            return _source.HasNext();
-        }
+        public bool HasNext() => _source.HasNext();
 
-        public TResult Next() {
-            return _fun(_source.Next());
-        }
+        public TResult Next() => _fun(_source.Next());
     }
 }

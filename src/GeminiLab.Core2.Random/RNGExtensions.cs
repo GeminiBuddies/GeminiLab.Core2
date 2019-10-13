@@ -146,6 +146,8 @@ namespace GeminiLab.Core2.Random {
 
         public static IRNG<ulong> AsU64RNG(this IRNG<int> rng) => new I32ToU64RNG(rng);
 
+        public static IRNG<int> AsI32RNG(this IRNG<ulong> rng) => new U64ToI32RNG(rng);
+
         public static void Shuffle<T>(this T[] array) {
             ShuffleBy(array, DefaultRNG.I32);
         }

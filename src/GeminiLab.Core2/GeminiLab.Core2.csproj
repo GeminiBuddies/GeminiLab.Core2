@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <ApplicationIcon/>
-    <Win32Resource/>
+    <ApplicationIcon />
+    <Win32Resource />
     <Description>GeminiLab Corelib. This library contains the most basic parts.</Description>
     <Authors>Gemini Laboratory</Authors>
     <Company>Gemini Laboratory</Company>

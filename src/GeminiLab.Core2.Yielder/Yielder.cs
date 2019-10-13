@@ -2,9 +2,6 @@ using System;
 using GeminiLab.Core2.Yielder.Yielders;
 
 namespace GeminiLab.Core2.Yielder {
-    // return default(TResult) if not accepted
-    internal delegate TResult Selector<in TSource, out TResult>(TSource s, out bool accepted);
-
     public static class Yielder {
         public static IYielder<T> Const<T>(T val) {
             return new ConstYielder<T>(val);
