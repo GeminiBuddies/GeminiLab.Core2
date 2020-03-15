@@ -7,7 +7,7 @@ namespace GeminiLab.Core2.Collections {
         public static void Consume<T>(this IEnumerable<T> source) {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            foreach (var x in source) { }
+            foreach (var x in source) _ = x;
         }
 
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action) {

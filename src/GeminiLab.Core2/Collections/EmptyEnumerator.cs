@@ -11,7 +11,9 @@ namespace GeminiLab.Core2.Collections {
         public T Current => throw new InvalidOperationException();
         object IEnumerator.Current => Current!;
 
-        public void Dispose() { /* nothing to do here */ }
+#pragma warning disable CA1063
+        public void Dispose() { /* as we have nothing to dispose */ }
+#pragma warning restore CA1063
 
         private EmptyEnumerator() { }
 

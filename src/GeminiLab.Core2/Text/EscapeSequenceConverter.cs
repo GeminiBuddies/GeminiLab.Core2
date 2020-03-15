@@ -73,7 +73,9 @@ namespace GeminiLab.Core2.Text {
             return sb.ToString();
         }
 
-        public static string Encode(string source) {
+        public static string Encode(string source) => Encode(source.AsSpan());
+
+        public static string Encode(ReadOnlySpan<char> source) {
             int length = source.Length;
             var sb = new StringBuilder(length);
 
@@ -88,7 +90,9 @@ namespace GeminiLab.Core2.Text {
             return sb.ToString();
         }
 
-        public static string EncodeToAscii(string source) {
+        public static string EncodeToAscii(string source) => EncodeToAscii(source.AsSpan());
+        
+        public static string EncodeToAscii(ReadOnlySpan<char> source) {
             int length = source.Length;
             var sb = new StringBuilder(length);
 

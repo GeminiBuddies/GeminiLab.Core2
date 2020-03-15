@@ -35,10 +35,7 @@ namespace GeminiLab.Core2.Collections {
                 var newCap = GetLegalCapacity(value);
                 if (newCap == _cap) return;
 
-                var newItems = new T[newCap];
-                Array.Copy(_items, newItems, _size);
-                _items = newItems;
-                _cap = newCap;
+                Array.Resize(ref _items, newCap);
             }
         }
 
