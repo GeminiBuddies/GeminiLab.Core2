@@ -36,6 +36,7 @@ namespace GeminiLab.Core2.Collections {
                 if (newCap == _cap) return;
 
                 Array.Resize(ref _items, newCap);
+                _cap = newCap;
             }
         }
 
