@@ -1,0 +1,5 @@
+<~! def proj_name GeminiLab.Core2 ~>
+<~! def proj_desc "This library contains the most basic parts." ~>
+<Project Sdk="Microsoft.NET.Sdk">
+  <~~ ref_block csproj_body ~>
+</Project>

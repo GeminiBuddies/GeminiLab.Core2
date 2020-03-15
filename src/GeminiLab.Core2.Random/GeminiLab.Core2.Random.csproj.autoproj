@@ -1,0 +1,19 @@
+<~! def proj_name GeminiLab.Core2.Random ~>
+<~! def proj_desc "This library contains random number generators." ~>
+<Project Sdk="Microsoft.NET.Sdk">
+  <~~ ref_block csproj_body ~>
+  
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+  </ItemGroup>
+
+  <!-- removed, see InternalEntry.cs
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Csp" Version="4.3.0" />
+  </ItemGroup>
+  -->
+</Project>

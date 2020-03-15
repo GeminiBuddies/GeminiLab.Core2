@@ -1,0 +1,9 @@
+<~! def proj_name GeminiLab.Core2.Yielder ~>
+<~! def proj_desc "This library contains the Yielder Model." ~>
+<Project Sdk="Microsoft.NET.Sdk">
+  <~~ ref_block csproj_body ~>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\GeminiLab.Core2\GeminiLab.Core2.csproj" />
+  </ItemGroup>
+</Project>
