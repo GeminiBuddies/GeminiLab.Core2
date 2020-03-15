@@ -9,8 +9,8 @@
     <Product>GeminiLab.Core2</Product>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <Copyright>Copyright © Gemini Laboratory 2017 - 2020</Copyright>
-    <FileVersion>1.0.239.0</FileVersion>
-    <Version>1.0.0-preview-20200315-239</Version>
+    <FileVersion>1.0.244.0</FileVersion>
+    <Version>1.0.0</Version>
     <LangVersion>8.0</LangVersion>
     <Configurations>Develop;Preview;Release</Configurations>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
@@ -20,7 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)'=='Preview' Or '$(Configuration)'=='Release'">
     <Optimize>true</Optimize>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>..\..\bin\package\1.0.0-preview-20200315-239</PackageOutputPath>
+    <PackageOutputPath>..\..\bin\package\1.0.0</PackageOutputPath>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/GeminiLab/GeminiLab.Core2/</PackageProjectUrl>
